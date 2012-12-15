@@ -1,9 +1,11 @@
 require.config({
 
+    baseUrl: '/',
+
     paths: {
-        jquery: '/vendor/jquery',
-        underscore: '/vendor/underscore',
-        backbone: '/vendor/backbone',
+        jquery: 'vendor/jquery',
+        underscore: 'vendor/underscore',
+        backbone: 'vendor/backbone',
     },
 
     // non-AMD modules
@@ -18,8 +20,8 @@ require.config({
     }
 });
 
-require([], function() {
+require(['src/app'], function(app) {
 
-    console.log('Hello, World!');
+    app.initialize();
 
 });
