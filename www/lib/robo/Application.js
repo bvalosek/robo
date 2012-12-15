@@ -1,11 +1,11 @@
 define(function(require) {
 
-    var Backbone    = require('backbone');
-    var $           = require('jquery');
-    var _           = require('underscore');
+    var Backbone = require('backbone');
+    var $        = require('jquery');
+    var _        = require('underscore');
 
-    var View = require('lib/robo/View');
-    var log = require('lib/robo/log');
+    var View     = require('lib/robo/View');
+    var log      = require('lib/robo/log');
 
     // creating the application
     var Application = function() {
@@ -33,6 +33,10 @@ define(function(require) {
     {
         this.activityManifest = this.activityManifest || [];
         this.activityManifest.push(info);
+
+        // store info back into activity
+        if (info.Activity)
+            info.Activity.prototype.manifest = info;
     };
 
     // fire off

@@ -1,7 +1,7 @@
 define(function(require) {
 
     var TemplateView = require('lib/robo/TemplateView');
-    var log = require('lib/robo/log');
+    var log          = require('lib/robo/log');
 
     var Activity = TemplateView.extend();
 

@@ -1,8 +1,8 @@
 define(function(require) {
 
-    var View = require('lib/robo/View');
+    var View            = require('lib/robo/View');
     var TemplateManager = require('lib/robo/TemplateManager');
-    var log = require('lib/robo/log');
+    var log             = require('lib/robo/log');
 
     var TemplateView = View.extend();
 

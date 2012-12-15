@@ -1,9 +1,9 @@
 define(function(require) {
 
-    var Backbone    = require('backbone');
-    var _           = require('underscore');
+    var Backbone = require('backbone');
+    var _        = require('underscore');
 
-    var log = require('lib/robo/log');
+    var log      = require('lib/robo/log');
 
     // inherit from Backbone style view
     var View = Backbone.View.extend();

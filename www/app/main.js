@@ -22,11 +22,6 @@ require.config({
 });
 
 // make sure to load the app module to initialize
-require(['src/app', 'lib/robo/TemplateView'], function(app, TemplateView) {
+require(['app/MyApp'], function(app) {
 
-    var v =  new TemplateView({
-        template: 'hello'
-    });
-
-    app.window.setView(v);
 });

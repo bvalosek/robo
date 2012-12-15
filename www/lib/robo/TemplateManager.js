@@ -1,7 +1,7 @@
 define(function(require) {
 
-    var $ = require('jquery');
-    var _ = require('underscore');
+    var $   = require('jquery');
+    var _   = require('underscore');
 
     var log = require('lib/robo/log');
 
@@ -33,7 +33,6 @@ define(function(require) {
             log('Could not load template ' + path);
         });
 
-        // return the promise if it really matters
         return promise;
     };
 
