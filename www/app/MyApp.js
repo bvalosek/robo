@@ -6,7 +6,6 @@ define(function(require) {
 
     MyApp.prototype.onCreate = function()
     {
-        console.log('A robo app');
     };
 
     // create the main singleton app object

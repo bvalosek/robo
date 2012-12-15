@@ -21,7 +21,9 @@ require.config({
     }
 });
 
-// make sure to load the app module to initialize
+// boot the app
 require(['lib/robo/bootstrap'], function(app) {
+
+    // run after app has bootstrapped
 
 });
