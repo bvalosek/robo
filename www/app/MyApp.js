@@ -1,6 +1,7 @@
 define(function(require) {
 
-    var Application = require('lib/robo/Application');
+    var Application   = require('lib/robo/Application');
+    var HelloActivity = require('./HelloActivity');
 
     var MyApp = Application.extend();
 

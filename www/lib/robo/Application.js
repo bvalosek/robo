@@ -21,7 +21,6 @@ define(function(require) {
         Backbone.history.start();
 
         this.trigger(Application.ON.START);
-        this.onCreate();
         log('application loaded');
     });
 
@@ -33,11 +32,13 @@ define(function(require) {
         START: 'application:start',
     };
 
-    // register an Activity and all its info
-    Application.prototype.manifestActivity = function(info)
+    // static method to register an activity
+    var _manifest = [];
+    Application.manifestActivity = function(info)
     {
-        this.activityManifest = this.activityManifest || [];
-        this.activityManifest.push(info);
+        _manifest.push(info);
+
+        log('Activity manifested: ' + info.name || info.caption);
 
         // store info back into activity
         if (info.Activity)

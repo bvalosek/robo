@@ -10,6 +10,7 @@ define(function(require) {
     // start the correspoding application
     var App = config.Application || Application;
     Application.instance = new App();
+    Application.instance.onCreate();
 
     // misc
     document.title = config.title || 'Robo';
