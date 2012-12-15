@@ -10,6 +10,10 @@ define(function(require) {
 
     };
 
-    return View;
+    View.prototype.print = function(s)
+    {
+        this.$el.append(s);
+    };
 
+    return View;
 });

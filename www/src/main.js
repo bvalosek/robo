@@ -1,3 +1,4 @@
+// setup our require stuff
 require.config({
 
     baseUrl: '/',
@@ -20,8 +21,9 @@ require.config({
     }
 });
 
+// make sure to load the app module to initialize
 require(['src/app'], function(app) {
 
-    console.log(app);
+    app.window.print('Hello, World!');
 
 });
