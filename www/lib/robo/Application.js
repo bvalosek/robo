@@ -1,9 +1,9 @@
 define(function(require) {
 
-    var $ = require('jquery');
-    var _ = require('underscore');
+    var Backbone    = require('backbone');
+    var $           = require('jquery');
+    var _           = require('underscore');
 
-    var Backbone = require('backbone');
     var View = require('lib/robo/View');
     var log = require('lib/robo/log');
 
@@ -16,7 +16,16 @@ define(function(require) {
         // main view
         this.window = new View({ el: $('body') });
 
+        // setup history and routes
+        Backbone.history.start();
+
+        this.trigger(Application.ON.START);
         log('application loaded');
+    };
+
+    // events
+    Application.ON = {
+        START: 'application:start',
     };
 
     // register an Activity and all its info
@@ -30,6 +39,7 @@ define(function(require) {
     Application.prototype.trigger = function(eventName, opts)
     {
         this._events.trigger(eventName, opts);
+        log('event bus: ' + eventName);
     };
 
     // attach to
