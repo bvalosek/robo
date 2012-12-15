@@ -6,9 +6,10 @@ define(function(require) {
 
     var View     = require('./View');
     var log      = require('./log');
+    var Base     = require('./Base');
 
     // creating the application
-    var Application = function() {
+    var Application = Base.extend(function() {
 
         // setup events
         this._events = _({}).extend(Backbone.Events);
@@ -20,8 +21,12 @@ define(function(require) {
         Backbone.history.start();
 
         this.trigger(Application.ON.START);
+        this.onCreate();
         log('application loaded');
-    };
+    });
+
+    // stash the instance
+    Application.instance = null;
 
     // events
     Application.ON = {
@@ -57,6 +62,9 @@ define(function(require) {
     {
         this._events.off(eventName, fn, context);
     };
+
+    // if we want to do anything else
+    Application.prototype.onCreate = function() {};
 
     return Application;
 });
