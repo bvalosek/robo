@@ -4,8 +4,8 @@ define(function(require) {
     var $        = require('jquery');
     var _        = require('underscore');
 
-    var View     = require('lib/robo/View');
-    var log      = require('lib/robo/log');
+    var View     = require('./View');
+    var log      = require('./log');
 
     // creating the application
     var Application = function() {

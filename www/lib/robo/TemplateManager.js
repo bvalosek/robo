@@ -3,7 +3,7 @@ define(function(require) {
     var $   = require('jquery');
     var _   = require('underscore');
 
-    var log = require('lib/robo/log');
+    var log = require('./log');
 
     // static templates
     var _templates = {};
