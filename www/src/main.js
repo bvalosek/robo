@@ -22,6 +22,6 @@ require.config({
 
 require(['src/app'], function(app) {
 
-    app.initialize();
+    console.log(app);
 
 });
