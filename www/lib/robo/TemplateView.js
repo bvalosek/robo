@@ -23,9 +23,8 @@ define(function(require) {
                 });
 
                 self.$el.html(html);
+                log('rendered ' + self.options.template);
             });
-
-        log('rendered ' + this.options.template);
     };
 
     return TemplateView;

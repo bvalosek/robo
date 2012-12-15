@@ -48,6 +48,7 @@ define(function(require) {
     // cleanup view
     View.prototype.close = function()
     {
+        this.clear();
         this.remove();
         this.unbind();
         this.stopListening();
