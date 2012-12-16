@@ -11,14 +11,13 @@ define(function(require) {
     Activity.prototype.close = function()
     {
         this.onPause();
-        this.onStart();
+        this.onStop();
 
         // close the actual view
-        this.constructor.__super__.close.call(this);
+        TemplateView.prototype.close.call(this);
 
         this.onDestroy();
     }
-
 
     // On instantiation
     Activity.prototype.onCreate = function() {

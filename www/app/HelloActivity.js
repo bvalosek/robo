@@ -4,7 +4,11 @@ define(function(require) {
     var Application  = require('lib/robo/Application');
     var TemplateView = require('lib/robo/TemplateView');
 
-    var HelloActivity = Activity.extend();
+    var HelloActivity = Activity.extend({
+        events: {
+            'click .close' : 'close'
+        }
+    });
 
     // manifest info to app
     Application.manifestActivity({
