@@ -15,7 +15,7 @@ define(function(require) {
 
         // close the actual view
         this.constructor.__super__.close.call(this);
-        
+
         this.onDestroy();
     }
 
@@ -25,7 +25,7 @@ define(function(require) {
         log('onCreate');
     };
 
-    // Called once when about to resume
+    // After creation, when the DOM is setup
     Activity.prototype.onStart = function() {
         log('onStart');
     };
@@ -40,12 +40,12 @@ define(function(require) {
         log('onPause');
     };
 
-    // when stopping
+    // right before the view is removed
     Activity.prototype.onStop = function() {
         log('onStop');
     };
 
-    // right before deleted
+    // after the view is gone and before we're done
     Activity.prototype.onDestroy = function() {
         log('onDestroy');
     };

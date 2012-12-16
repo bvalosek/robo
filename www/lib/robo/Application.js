@@ -57,7 +57,10 @@ define(function(require) {
         a.onCreate();
 
         // singletop for now
-        this.window.setView(a).done(function() { a.onStart(); });
+        this.window.setView(a).done(function() {
+            a.onStart();
+            a.onResume();
+        });
     };
 
     // fire off

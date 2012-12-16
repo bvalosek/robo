@@ -12,6 +12,7 @@ define(function(require) {
         name: 'Hello World',
     });
 
+    // when Activity is loaded
     HelloActivity.prototype.onStart = function()
     {
         this.constructor.__super__.onStart.call(this);
