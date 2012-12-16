@@ -8,7 +8,7 @@ define(function(require) {
     // manifest info to app
     Application.manifestActivity({
         Activity: HelloActivity,
-        name: 'Hello World'
+        name: 'Hello World',
     });
 
     return HelloActivity;

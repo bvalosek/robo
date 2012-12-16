@@ -38,11 +38,26 @@ define(function(require) {
     {
         _manifest.push(info);
 
-        log('Activity manifested: ' + info.name || info.caption);
+        log('new activity manifested: ' + info.name || info.caption);
 
         // store info back into activity
         if (info.Activity)
             info.Activity.prototype.manifest = info;
+    };
+
+    // start an activity
+    Application.prototype.startActivity = function(Activity, opts)
+    {
+        var info = _(_manifest).find(function(x) {
+            return x.Activity === Activity;
+        });
+        log('launching activity: ' + info.name);
+
+        var a = new Activity(opts);
+        a.onCreate();
+
+        // singletop for now
+        this.window.setView(a);
     };
 
     // fire off

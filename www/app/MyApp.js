@@ -5,10 +5,11 @@ define(function(require) {
 
     var MyApp = Application.extend();
 
+    // App entry point
     MyApp.prototype.onCreate = function()
     {
+        this.startActivity(HelloActivity);
     };
 
-    // create the main singleton app object
     return MyApp;
 });

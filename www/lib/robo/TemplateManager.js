@@ -18,7 +18,7 @@ define(function(require) {
         // do request if not already started/finished
         if (!promise) {
             promise = $.ajax({
-                url: '/html/' + path + '.html',
+                url: path + '.html',
                 cache: false
             });
             _templates[path] = promise;
