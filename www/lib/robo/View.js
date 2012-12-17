@@ -54,7 +54,7 @@ define(function(require) {
         this.stopListening();
 
         this.trigger(View.ON.CLOSE);
-        log('closing view ' + this.options.template || this.cid);
+        log('closing view ' + (this.options.template || this.cid));
     };
 
     return View;

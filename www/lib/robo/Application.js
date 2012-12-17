@@ -7,6 +7,7 @@ define(function(require) {
     var View     = require('./View');
     var log      = require('./log');
     var Base     = require('./Base');
+    var Router   = require('./Router');
 
     // creating the application
     var Application = Base.extend(function() {
@@ -18,6 +19,7 @@ define(function(require) {
         this.window = new View({ el: $('body') });
 
         // setup history and routes
+        this.router = new Router(this);
         Backbone.history.start();
 
         this.trigger(Application.ON.START);

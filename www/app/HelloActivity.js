@@ -23,7 +23,8 @@ define(function(require) {
 
         // inflate the view
         this.setView(new TemplateView({
-            template: 'html/hello'
+            template: 'html/hello',
+            className: 'hello-view'
         }));
     };
 
