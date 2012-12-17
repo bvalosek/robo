@@ -42,7 +42,7 @@ define(function(require) {
     // dump append to HTML
     View.prototype.print = function(s)
     {
-        this.$el.append(s);
+        this.$el.append(s + '<br>');
     };
 
     // cleanup view
