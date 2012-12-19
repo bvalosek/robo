@@ -9,8 +9,13 @@ define(function(require) {
     var Base     = require('./Base');
     var Router   = require('./Router');
 
+    // singletone style
+    var _instance = null;
+
     // creating the application
     var Application = Base.extend(function() {
+
+        _instance = this;
 
         // setup events
         this._events = _({}).extend(Backbone.Events);
@@ -19,26 +24,40 @@ define(function(require) {
         this.window = new View({ el: $('body') });
 
         // setup history and routes
-        this.router = new Router(this);
+        this.router = Router.factory(this);
         Backbone.history.start();
 
+        this.onCreate();
         this.trigger(Application.ON.START);
         log('application loaded');
     });
 
     // stash the instance
-    Application.instance = null;
+    Application.getInstance = function()
+    {
+        return _instance;
+    }
 
     // events
     Application.ON = {
         START: 'application:start',
     };
 
-    // static method to register an activity
-    var _manifest = [];
-    Application.manifestActivity = function(info)
+    // gets the current user logged into the app, should be handled else where
+    Application.prototype.getUserId = function()
     {
-        _manifest.push(info);
+        return null;
+    };
+
+    // static method to register an activity
+    Application.prototype.manifestActivity = function(info, key)
+    {
+        this._manifest = this._manifest || {};
+
+        if (key)
+            this._manifest[key] = info;
+        else
+            this._manifest.push(info);
 
         log('new activity manifested: ' + info.name || info.caption);
 
@@ -47,22 +66,71 @@ define(function(require) {
             info.Activity.prototype.manifest = info;
     };
 
+    // convience method for getting activities
+    Application.getActivities = function()
+    {
+        if (!_instance || !_instance._manifest)
+            return {};
+
+        var activities = {};
+        _(_instance._manifest).each(function(x, key) {
+            activities[key] = x.Activity;
+        });
+
+        return activities;
+    };
+
+    // load info from manifest
+    Application.prototype.loadManifest = function(manifest)
+    {
+        var self = this;
+        _(manifest).each(function(x, key) {
+            self.manifestActivity(x, key);
+        });
+
+        this.router.check();
+    };
+
+    Application.prototype.setTitle = function(s)
+    {
+        document.title = s;
+    };
+
+    Application.prototype.getActivityByUrl = function(url)
+    {
+        var info = _(this._manifest).find(function(x) {
+            return url.match(x.url);
+        });
+
+        return info ? info.Activity : null;
+    };
+
     // start an activity
     Application.prototype.startActivity = function(Activity, opts)
     {
-        var info = _(_manifest).find(function(x) {
+        var info = _(this._manifest).find(function(x) {
             return x.Activity === Activity;
         });
+
+        if (!info)
+            throw ('activity not manifested');
+
         log('launching activity: ' + info.name);
+
+        this.setTitle(info.title || info.name);
+        this.router.setUrl(info.baseUrl || '');
 
         var a = new Activity(opts);
         a.onCreate();
 
         // singletop for now
-        this.window.setView(a).done(function() {
-            a.onStart();
-            a.onResume();
-        });
+
+        this.window.appendView(a);
+        this._currentActivity = a;
+
+        // continue lifecycle
+        a.onStart();
+        a.onResume();
     };
 
     // fire off

@@ -1,10 +1,11 @@
 define(function(require) {
 
-    var _            = require('underscore');
-    var TemplateView = require('./TemplateView');
-    var log          = require('./log');
+    var _    = require('underscore');
 
-    var Activity = TemplateView.extend({
+    var View = require('./LazyView');
+    var log  = require('./log');
+
+    var Activity = View.extend({
         className: 'activity'
     });
 
@@ -18,16 +19,17 @@ define(function(require) {
         this.onStop();
 
         // close the actual view
-        TemplateView.prototype.close.call(this);
+        View.prototype.close.call(this);
 
         this.onDestroy();
     };
 
-    // clear out timers
+    // stop all proxy timers
     Activity.prototype._clearTimers = function()
     {
+        var self = this;
         _(this._timers).each(function(t) {
-            log('stopping timer ' + t);
+            self.log('stopping timer ' + t);
             clearInterval(t);
         });
     };
@@ -40,7 +42,7 @@ define(function(require) {
 
         var tId = setInterval(_(fn).bind(context), t);
 
-        log('starting timer ' + tId);
+        this.log('starting timer ' + tId);
 
         this._timers.push(tId);
     };
@@ -54,32 +56,46 @@ define(function(require) {
 
     // On instantiation
     Activity.prototype.onCreate = function() {
-        log('onCreate');
+        this.log('onCreate');
+        this.created = true;
     };
 
     // After creation, when the DOM is setup
-    Activity.prototype.onStart = function() {
-        log('onStart');
+    Activity.prototype.onStart = function()
+    {
+        this.log('onStart');
+
+        if (!this.created)
+            throw 'onCreate not called for Activity';
     };
 
     // called everytime when brought to foreground
-    Activity.prototype.onResume = function() {
-        log('onResume');
+    Activity.prototype.onResume = function()
+    {
+        this.log('onResume');
     };
 
     // when we lose focus
-    Activity.prototype.onPause = function() {
-        log('onPause');
+    Activity.prototype.onPause = function()
+    {
+        this.log('onPause');
     };
 
     // right before the view is removed
-    Activity.prototype.onStop = function() {
-        log('onStop');
+    Activity.prototype.onStop = function()
+    {
+        this.log('onStop');
     };
 
     // after the view is gone and before we're done
-    Activity.prototype.onDestroy = function() {
-        log('onDestroy');
+    Activity.prototype.onDestroy = function()
+    {
+        this.log('onDestroy');
+    };
+
+    Activity.prototype.log = function(s)
+    {
+        log(this.manifest.name + ':' + s);
     };
 
     return Activity;

@@ -1,9 +1,8 @@
 define(function(require) {
 
-    var View            = require('./View');
-    var TemplateManager = require('./TemplateManager');
-    var log             = require('./log');
-    var $               = require('jquery');
+    var View = require('./View');
+    var $    = require('jquery');
+    var _    = require('underscore');
 
     var TemplateView = View.extend();
 
@@ -12,22 +11,20 @@ define(function(require) {
     {
         this.clear();
 
-        var self = this;
+        // html can be set in options or on root
+        var html = this.html || this.options.html;
+        if (html && !this.template) {
+            this.template = _.template(html);
+        }
 
-        // inflate the template into this view
-        if (this.options.template)
-            return new TemplateManager()
-                .get(this.options.template, function(t) {
-                    var html = t({
-                        options: self.options,
-                        model: self.model,
-                        self: self
-                    });
+        // inflate
+        if (this.template) {
+            this.$el.html(this.template({
+                view: this
+            }));
+        }
 
-                    self.$el.html(html);
-                    log('rendered ' + self.options.template);
-                });
-        // otherwise, done
+        // typically return a deferred on render
         return new $.Deferred().resolve();
     };
 

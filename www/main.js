@@ -1,12 +1,23 @@
 // setup our require stuff
 require.config({
 
+    // web root
     baseUrl: '/',
 
+    // aliases
     paths: {
-        jquery: 'vendor/jquery',
-        underscore: 'vendor/underscore',
-        backbone: 'vendor/backbone',
+        jquery             : 'vendor/jquery',
+        underscore         : 'vendor/underscore',
+        backbone           : 'vendor/backbone',
+    },
+
+    // translate module names to where we moved css and less plugins
+    map: {
+        '*': {
+            'css': 'vendor/require-css/css',
+            'less': 'vendor/require-less/less',
+            'text': 'vendor/text'
+        }
     },
 
     // non-AMD modules
@@ -18,12 +29,14 @@ require.config({
             deps: ['underscore'],
             exports: 'Backbone'
         },
+    },
+});
+
+// boot the app on document ready
+require(
+    ['Application', 'manifest'],
+    function(Application, manifest) {
+        var app = new Application();
+        app.loadManifest(manifest);
     }
-});
-
-// boot the app
-require(['lib/robo/bootstrap'], function(app) {
-
-    // run after app has bootstrapped
-
-});
+);

@@ -1,0 +1,26 @@
+.base-activity {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    color: #1b1b1b;
+    background: #fff;
+
+    -webkit-transition: -webkit-transform 0.3s ease, opacity 0.3s ease;
+    -webkit-transform: scale(0.9) translateY(2em);
+    opacity: 0;
+
+    &.open {
+        opacity: 1;
+        -webkit-transform: scale(1);
+    }
+
+    .action-bar {
+        width: 100%;
+        background: #333;
+        color: #ccc;
+        padding: .5em .7em;
+    }
+}
