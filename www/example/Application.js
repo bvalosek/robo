@@ -1,6 +1,6 @@
 define(function(require) {
 
-    var RoboApp           = require('lib/robo/Application');
+    var RoboApp = require('lib/robo/Application');
 
     // styles
     require('less!./res/example.less');

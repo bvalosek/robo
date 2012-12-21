@@ -16,7 +16,7 @@ define(function(require) {
     var _instance = null;
 
     // creating the application
-    var Application = Base.extend(function() {
+    var Application = Base.extend(function(manifest) {
 
         _instance = this;
 
@@ -29,6 +29,9 @@ define(function(require) {
         // setup history and routes
         this.router = Router.factory(this);
         Backbone.history.start();
+
+        if (manifest)
+            this.loadManifest(manifest);
 
         this.onCreate();
         this.trigger(Application.ON.START);
@@ -127,6 +130,8 @@ define(function(require) {
         a.onCreate();
 
         // singletop for now
+        if (this._currentActivity)
+            this._currentActivity.close();
 
         this.window.appendView(a);
         this._currentActivity = a;

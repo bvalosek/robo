@@ -36,7 +36,6 @@ require.config({
 require(
     ['example/Application', 'manifest'],
     function(Application, manifest) {
-        var app = new Application();
-        app.loadManifest(manifest);
+        var app = new Application(manifest);
     }
 );
