@@ -15,6 +15,12 @@ define(function(require, exports) {
             name: 'Another Activity',
             url: /^another.*/,
             baseUrl: 'another'
+        },
+        UglyActivity: {
+            Activity: require('example/UglyActivity'),
+            name: 'Ugly Activity',
+            url: /^ugly.*/,
+            baseUrl: 'ugly'
         }
     });
 });
