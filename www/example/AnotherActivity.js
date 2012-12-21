@@ -1,7 +1,5 @@
 define(function(require) {
 
-    var Application = require('lib/robo/Application');
-
     var HelloView   = require('./HelloView');
     var Activity    = require('./BaseActivity');
 

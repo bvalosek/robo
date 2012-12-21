@@ -34,7 +34,7 @@ require.config({
 
 // boot the app on document ready
 require(
-    ['Application', 'manifest'],
+    ['example/Application', 'manifest'],
     function(Application, manifest) {
         var app = new Application();
         app.loadManifest(manifest);

@@ -9,6 +9,9 @@ define(function(require) {
     var Base     = require('./Base');
     var Router   = require('./Router');
 
+    // basic less
+    require('less!./res/base.less');
+
     // singletone style
     var _instance = null;
 
