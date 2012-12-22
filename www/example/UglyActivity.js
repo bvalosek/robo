@@ -1,13 +1,16 @@
 define(function(require) {
-    var Activity = require('lib/robo/Activity');
 
-    var UglyActivity = Activity.extend();
+    var Activity = require('robo/Activity');
 
-    UglyActivity.prototype.onStart = function()
+    var _        = require('underscore');
+
+    var Ugly = Activity.extend();
+
+    Ugly.prototype.onStart = function()
     {
-        Activity.prototype.onStart.call(this);
         this.print('Hello, World!');
+        setTimeout(_(this.close).bind(this), 1000);
     };
 
-    return UglyActivity;
+    return Ugly;
 });

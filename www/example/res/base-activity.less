@@ -1,0 +1,27 @@
+@import '../../style/theme.css';
+
+.base-activity {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    font-family: "Segoe UI Light",Arial,Helvetica,Tahoma,sans-serif;
+
+    background: #fff;
+
+    -webkit-transition: -webkit-transform 0.3s ease, opacity 0.3s ease;
+    -webkit-transform: scale(0.9);
+
+    &.open {
+        -webkit-transform: scale(1);
+    }
+
+    .content {
+        position: absolute;
+        top: 0em;
+        bottom: 0em;
+        left: 0em;
+        right: 0em;
+    }
+}

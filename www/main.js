@@ -1,4 +1,3 @@
-// setup our require stuff
 require.config({
 
     // web root
@@ -6,17 +5,21 @@ require.config({
 
     // aliases
     paths: {
-        jquery             : 'vendor/jquery',
-        underscore         : 'vendor/underscore',
-        backbone           : 'vendor/backbone',
+        'robo'         : 'lib/robo',
+
+        'jquery'       : 'vendor/jquery',
+        'backbone'     : 'vendor/backbone',
+        'underscore'   : 'vendor/underscore',
+        'text'         : 'vendor/text',
+        'require-css'  : 'vendor/require-css',
+        'require-less' : 'vendor/require-less'
     },
 
-    // translate module names to where we moved css and less plugins
+    // request translations
     map: {
         '*': {
-            'css': 'vendor/require-css/css',
-            'less': 'vendor/require-less/less',
-            'text': 'vendor/text'
+            'css'  : 'require-css/css',
+            'less' : 'require-less/less',
         }
     },
 
@@ -25,17 +28,33 @@ require.config({
         'underscore': {
             exports: '_'
         },
-        'backbone': {
-            deps: ['underscore'],
-            exports: 'Backbone'
-        },
     },
+
+    // build opts
+    out                     : 'main.built.js',
+    name                    : 'main',
+    include                 : ['css', 'manifest', 'require-css/normalize'],
+    seperateCss             : true,
+
+    optimize                : 'uglify2',
+
+    preserveLicenseComments : false,
+
+    // don't include less stuff
+    excludeShallow: [
+        'require-css/css-builder',
+        'require-less/lessc-server',
+        'require-less/lessc'
+    ]
 });
 
-// boot the app on document ready
 require(
-    ['example/Application', 'manifest'],
+
+    // initial modules to load
+    ['example/SampleApplication', 'manifest'],
+
+    // kick it off
     function(Application, manifest) {
-        var app = new Application(manifest);
+        new Application(manifest);
     }
 );

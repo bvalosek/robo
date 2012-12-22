@@ -2,25 +2,17 @@ define(function(require, exports) {
 
     var _ = require('underscore');
 
-    // load all of the activities we'll need
+    // load all of the activities we'll need against the exports proxy object
+    // so we don't have to worry about it actually being loaded at startup
     _(exports).extend({
-        ExampleActivity: { 
+        ExampleActivity: {
             Activity: require('example/ExampleActivity'),
             name: 'Example Activity',
-            url: /^$|^example.*/,
-            baseUrl: 'example'
-        },
-        AnotherActivity: { 
-            Activity: require('example/AnotherActivity'),
-            name: 'Another Activity',
-            url: /^another.*/,
-            baseUrl: 'another'
+            url: /^$/
         },
         UglyActivity: {
             Activity: require('example/UglyActivity'),
             name: 'Ugly Activity',
-            url: /^ugly.*/,
-            baseUrl: 'ugly'
         }
     });
 });

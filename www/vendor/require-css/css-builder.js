@@ -97,16 +97,18 @@ define(['require', './normalize'], function(req, normalize) {
     
     //add to the buffer
     var css = loadFile(fileUrl);
-    if (parse)
-      css = parse(css);
 
     //make file url absolute
-    if (fileUrl.substr(0, 1) != '/')
-      fileUrl = '/' + fileUrl;
+    //if (fileUrl.substr(0, 1) != '/')
+    //  fileUrl = '/' + fileUrl;
 
     //normalize all css to the base url - as the common path reference
     //for injection we then only need one normalization from the base url
     css = normalize(css, fileUrl, baseUrl);
+
+    // parse if necessary
+    if (parse)
+      css = parse(css);
     
     return css;
   }
@@ -182,9 +184,7 @@ define(['require', './normalize'], function(req, normalize) {
       css = escape(compress(css));
       
       //derive the absolute path for the normalize helper
-      var normalizeParts = req.toUrl('css').substr(baseUrl.length - 1).split('/');
-      normalizeParts[normalizeParts.length - 1] = 'normalize';
-      var normalizeName = normalizeParts.join('/');
+      var normalizeName = normalize.convertURIBase('normalize.js', req.toUrl('./normalize.js'), require.toUrl('.'));
       
       //the code below overrides async require functionality to ensure instant layer css injection
       //it then runs normalization and injection

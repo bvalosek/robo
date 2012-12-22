@@ -33,8 +33,13 @@ define(function(require) {
         if (manifest)
             this.loadManifest(manifest);
 
+        // setup trigger for resize
+        var self = this;
+        $(window).resize(_.debounce(function() {
+            self.trigger(Application.ON.RESIZE);
+        }, 500));
+
         this.onCreate();
-        this.trigger(Application.ON.START);
         log('application loaded');
     });
 
@@ -46,8 +51,16 @@ define(function(require) {
 
     // events
     Application.ON = {
-        START: 'application:start',
+        WINDOW_EMPTY: 'application:window-empty',
+        RESIZE: 'application:resize'
     };
+
+    Application.ACTIVITY_LAUNCH_MODE = {
+        STANDARD        : 1,
+        SINGLE_TOP      : 2,
+        SINGLE_INSTANCE : 3
+    };
+
 
     // gets the current user logged into the app, should be handled else where
     Application.prototype.getUserId = function()
@@ -119,26 +132,99 @@ define(function(require) {
         });
 
         if (!info)
-            throw ('activity not manifested');
+            throw new Error('activity must be added in manifest.js');
 
-        log('launching activity: ' + info.name);
+        this._addActivity(Activity, opts);
+    };
 
-        this.setTitle(info.title || info.name);
-        this.router.setUrl(info.baseUrl || '');
+    // manage the stack
+    Application.prototype._addActivity = function(Activity, opts)
+    {
+        if (!this._activityStack)
+            this._activityStack = [];
+        var stack = this._activityStack;
 
-        var a = new Activity(opts);
-        a.onCreate();
+        var activity;
 
-        // singletop for now
-        if (this._currentActivity)
-            this._currentActivity.close();
+        // how to launch
+        switch (Activity.prototype.manifest.launchMode) {
+            case Application.ACTIVITY_LAUNCH_MODE.SINGLE_TOP:
+                break;
+            case Application.ACTIVITY_LAUNCH_MODE.SINGLE_INSTANCE:
+                break;
+            case Application.ACTIVITY_LAUNCH_MODE.STANDARD:
+            default:
+                this.asTopActivity(function() { this.onPause() });
 
-        this.window.appendView(a);
-        this._currentActivity = a;
+                // create the new activity and add to DOM
+                log('launching new activity: ' + Activity.prototype.manifest.name);
+                activity = new Activity(opts);
+                activity.onCreate();
+                stack.push(activity);
+                this.window.appendView(activity);
+                activity.onStart();
 
-        // continue lifecycle
-        a.onStart();
-        a.onResume();
+                // process close event
+                var self = this;
+                activity.once(View.ON.HIDE, function() {
+                    self._stopActivity(activity);
+                });
+
+                break;
+        }
+
+        // cleanup stack if needed
+        if (stack.length > 5) {
+            var a = stack.shift();
+            a.close();
+        }
+
+        log('stack.length=' + stack.length);
+        this._resumeActivity(activity);
+    };
+
+    Application.prototype.getTopActivity = function()
+    {
+        if (!this._activityStack)
+            return;
+        return this._activityStack[this._activityStack.length - 1];
+    };
+
+    // run an arbitrary function in the context of the top activity
+    Application.prototype.asTopActivity = function(fn)
+    {
+        var a = this.getTopActivity();
+
+        if (!a)
+            return;
+
+        _(fn).bind(a)();
+    };
+
+    // properly resume
+    Application.prototype._resumeActivity = function(activity)
+    {
+        this.setTitle(activity.manifest.name || '');
+        this.router.setUrl(activity.manifest.baseUrl || '');
+
+        activity.onResume();
+    };
+
+    // finish up properly and resume any previous activities
+    Application.prototype._stopActivity = function(activity)
+    {
+        for (var n = 0; n < this._activityStack.length; n++)
+        {
+            if (this._activityStack[n] === activity) {
+                this._activityStack.splice(n, 1);
+
+                // resume the lower window
+                if (!this._activityStack.length)
+                    this.trigger(Application.ON.WINDOW_EMPTY);
+                else
+                    this._resumeActivity(this.getTopActivity());
+            }
+        }
     };
 
     // fire off

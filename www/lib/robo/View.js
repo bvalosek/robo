@@ -69,12 +69,13 @@ define(function(require) {
     // cleanup view
     View.prototype.close = function()
     {
+        this.trigger(View.ON.CLOSE);
+
         this.clear();
         this.remove();
         this.unbind();
         this.stopListening();
 
-        this.trigger(View.ON.CLOSE);
         log('closing view ' + (this.options.template || this.cid));
     };
 

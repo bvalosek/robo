@@ -5,6 +5,8 @@ define(function(require) {
     var View = require('./LazyView');
     var log  = require('./log');
 
+    require('less!./res/activity.less');
+
     var Activity = View.extend({
         className: 'activity'
     });
@@ -66,19 +68,23 @@ define(function(require) {
         this.log('onStart');
 
         if (!this.created)
-            throw 'onCreate not called for Activity';
+            throw new Error('onCreate not called for Activity');
     };
 
     // called everytime when brought to foreground
     Activity.prototype.onResume = function()
     {
         this.log('onResume');
+
+        this.$el.removeClass('activity-pause');
     };
 
     // when we lose focus
     Activity.prototype.onPause = function()
     {
         this.log('onPause');
+
+        this.$el.addClass('activity-pause');
     };
 
     // right before the view is removed
@@ -95,7 +101,7 @@ define(function(require) {
 
     Activity.prototype.log = function(s)
     {
-        log(this.manifest.name + ':' + s);
+        log(this.manifest.name + '[' + this.cid + ']:' + s);
     };
 
     return Activity;
