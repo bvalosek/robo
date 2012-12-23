@@ -42,6 +42,16 @@ define(function(require) {
         return view.render();
     };
 
+    // just track a view -- e.g. when it's already exists on the DOM
+    View.prototype.addChild = function(view)
+    {
+        var container = this.getContainerView();
+        container._views = container._views || [];
+        container._views.push(view);
+
+        return view.render();
+    };
+
     // set a single view
     View.prototype.setView = function(view)
     {
