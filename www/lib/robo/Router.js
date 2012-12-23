@@ -10,11 +10,11 @@ define(function(require) {
         }
     });
 
-    // create a router in the context of some app
-    Router.factory = function(context)
+    // create a router in the context of ActivityManager
+    Router.factory = function(managerContext)
     {
         var r = new Router();
-        r.context = context;
+        r.context = managerContext;
 
         return r;
     };
