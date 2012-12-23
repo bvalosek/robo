@@ -1,4 +1,4 @@
-define(['require', './normalize'], function(req, normalize) {
+define(['require', 'normalize'], function(req, normalize) {
   var baseUrl = require.toUrl('.');
   
   var cssAPI = {};
@@ -185,6 +185,9 @@ define(['require', './normalize'], function(req, normalize) {
       
       //derive the absolute path for the normalize helper
       var normalizeName = normalize.convertURIBase('normalize.js', req.toUrl('./normalize.js'), require.toUrl('.'));
+
+      // override above behavior in order to prevent async load on built file
+      normalizeName = 'normalize';
       
       //the code below overrides async require functionality to ensure instant layer css injection
       //it then runs normalization and injection
