@@ -8,8 +8,8 @@ require.config({
         'robo'         : 'lib/robo',
 
         'jquery'       : 'vendor/jquery',
-        'backbone'     : 'vendor/backbone',
         'underscore'   : 'vendor/underscore',
+        'backbone'     : 'vendor/backbone',
         'text'         : 'vendor/text',
         'require-css'  : 'vendor/require-css',
         'require-less' : 'vendor/require-less'
@@ -23,18 +23,10 @@ require.config({
         }
     },
 
-    // non-AMD modules
-    shim: {
-        'underscore': {
-            exports: '_'
-        },
-    },
-
     // build opts
     out                     : 'main.built.js',
     name                    : 'main',
     include                 : ['css', 'manifest', 'require-css/normalize'],
-    seperateCss             : true,
 
     optimize                : 'uglify2',
 
