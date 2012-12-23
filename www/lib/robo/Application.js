@@ -8,6 +8,7 @@ define(function(require) {
     var log             = require('./log');
     var Base            = require('./Base');
     var ActivityManager = require('./ActivityManager');
+    var AboutActivity   = require('./about/AboutActivity');
 
     // basic less
     require('less!./res/base.less');
@@ -31,6 +32,9 @@ define(function(require) {
 
         if (manifest)
             this.activityManager.loadManifest(manifest);
+
+        // add our own activites
+        this.manifestAbout();
 
         // setup trigger for resize
         var self = this;
@@ -88,6 +92,16 @@ define(function(require) {
     Application.prototype.off = function(eventName, fn, context)
     {
         this._events.off(eventName, fn, context);
+    };
+
+    Application.prototype.manifestAbout = function()
+    {
+        this.activityManager.manifestActivity({
+            Activity: AboutActivity,
+            name: 'About Robo',
+            url: /^about-robo/,
+            baseUrl: 'about-robo'
+        });
     };
 
     // if we want to do anything else

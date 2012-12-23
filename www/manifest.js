@@ -8,7 +8,8 @@ define(function(require, exports) {
         ExampleActivity: {
             Activity: require('example/ExampleActivity'),
             name: 'Example Activity',
-            url: /^$/
+            url: /^$/,
+            baseUrl: 'example'
         },
         UglyActivity: {
             Activity: require('example/UglyActivity'),

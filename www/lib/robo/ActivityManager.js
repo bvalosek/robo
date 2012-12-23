@@ -34,13 +34,15 @@ define(function(require) {
         if (key)
             this._manifest[key] = info;
         else
-            this._manifest.push(info);
+            this._manifest[info.name] = info;
 
-        log('new activity manifested: ' + info.name || info.caption || '[NO NAME]');
+        log('new activity manifested: ' + info.name);
 
         // store info back into activity
         if (info.Activity)
             info.Activity.prototype.manifest = info;
+
+        this.router.check();
     };
 
     // convience method for getting activity classes
@@ -54,21 +56,18 @@ define(function(require) {
         return activities;
     };
 
-    // load info from manifest
     ActivityManager.prototype.loadManifest = function(manifest)
     {
         var self = this;
         _(manifest).each(function(x, key) {
             self.manifestActivity(x, key);
         });
-
-        this.router.check();
     };
 
     ActivityManager.prototype.getActivityByUrl = function(url)
     {
         var info = _(this._manifest).find(function(x) {
-            return url.match(x.url);
+            return x.url && url.match(x.url);
         });
 
         return info ? info.Activity : null;
