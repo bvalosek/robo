@@ -132,7 +132,7 @@ define(function(require) {
         });
 
         // global bind
-        this.bindKeys('ctrl-shift-/', function() {
+        this.bindKeys('defmod-shift-/', function() {
             this.showAbout();
         });
     };
