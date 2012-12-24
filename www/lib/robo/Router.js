@@ -6,7 +6,7 @@ define(function(require) {
 
     var Router = Backbone.Router.extend({
         routes: {
-            '*url' : 'router'
+            '*url' : '_router'
         }
     });
 
@@ -22,18 +22,49 @@ define(function(require) {
     // force a re-look at the hash
     Router.prototype.check = function()
     {
-        this.router(window.document.location.hash);
+        this._router(window.document.location.hash, true);
+    };
+
+    // normalize the url
+    Router.prototype.normalize = function(url)
+    {
+        return (url || '').replace(/^#?!?\/?/,'');
+    };
+
+    Router.prototype._router = function(url, ignoreCrumb)
+    {
+        var url = this.normalize(url);
+
+        var matches = url.match(/^([0-9a-f\-]{36})?\/?(.*)$/);
+
+        var crumb   = matches[1];
+        var url     = matches[2];
+
+        if (crumb && !ignoreCrumb)
+            this.crumbRouter(crumb, url);
+        else
+            this.urlRouter(url, crumb);
     };
 
     // launch Activity based on URL
-    Router.prototype.router = function(url)
+    Router.prototype.urlRouter = function(url, crumb)
     {
-        url = url.replace(/^#?!?\/?/,'');
+        log('url route:' + url);
 
         var Activity = this.context.getActivityByUrl(url);
 
         if (Activity)
             this.context.startActivity(Activity);
+    };
+
+    // if we've got a crumb
+    Router.prototype.crumbRouter = function(crumb, url)
+    {
+        log('crumb route:' + url);
+
+        if (!this.context.goToCrumb(crumb)) {
+            log('invalid crumb, maybe hit forward, who knows');
+        }
     };
 
     Router.prototype.setUrl = function(url)

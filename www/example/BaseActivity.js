@@ -8,7 +8,8 @@ define(function(require) {
     require('less!./res/base-activity');
 
     var BaseActivity = Activity.extend({
-        className : 'base-activity reactive-geometry',
+        // className : 'base-activity reactive-geometry',
+        className : 'base-activity',
         html      : require('text!./res/base-activity.html')
     });
 
@@ -17,7 +18,7 @@ define(function(require) {
         Activity.prototype.onStart.call(this);
 
         // reactive geometry
-        new Geometry({$w: this.$el }).updateBaseSize();
+        // new Geometry({$w: this.$el }).updateBaseSize();
 
         // switch over to using content for adding views
         this.setContainerViewByElement(this.$('.content'));

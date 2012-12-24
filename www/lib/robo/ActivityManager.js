@@ -1,11 +1,12 @@
 define(function(require) {
 
-    var Router = require('./Router');
-    var Base   = require('./Base');
-    var View   = require('./View');
-    var log    = require('./log');
+    var Router  = require('./Router');
+    var Base    = require('./Base');
+    var View    = require('./View');
+    var log     = require('./log');
+    var helpers = require('./helpers');
 
-    var _      = require('underscore');
+    var _       = require('underscore');
 
     // stash the app and setup a new router
     var ActivityManager = Base.extend(function(context) {
@@ -41,8 +42,6 @@ define(function(require) {
         // store info back into activity
         if (info.Activity)
             info.Activity.prototype.manifest = info;
-
-        this.router.check();
     };
 
     // convience method for getting activity classes
@@ -62,6 +61,8 @@ define(function(require) {
         _(manifest).each(function(x, key) {
             self.manifestActivity(x, key);
         });
+
+        this.router.check();
     };
 
     ActivityManager.prototype.getActivityByUrl = function(url)
@@ -71,6 +72,26 @@ define(function(require) {
         });
 
         return info ? info.Activity : null;
+    };
+
+    ActivityManager.prototype.goToCrumb = function(crumb)
+    {
+        var index = 0;
+        var activity = _(this._activityStack).find(function(x, n) {
+            index = n;
+            return x.crumb === crumb;
+        });
+
+        if (!activity)
+            return false;
+
+        // clear stack above crumb, and resume
+        var toClose = this._activityStack.slice(index + 1);
+        _(toClose).each(function(x) { x.close(); });
+
+        this._resumeActivity(activity);
+
+        return true;
     };
 
     // start an activity
@@ -113,6 +134,9 @@ define(function(require) {
                 this.context.window.appendView(activity);
                 activity.onStart();
 
+                // set crumb
+                activity.crumb = helpers.guid();
+
                 // process close event
                 var self = this;
                 activity.once(View.ON.HIDE, function() {
@@ -128,7 +152,6 @@ define(function(require) {
             a.close();
         }
 
-        log('stack.length=' + stack.length);
         this._resumeActivity(activity);
     };
 
@@ -154,7 +177,13 @@ define(function(require) {
     ActivityManager.prototype._resumeActivity = function(activity)
     {
         this.context.setTitle(activity.manifest.name || '');
-        this.router.setUrl(activity.manifest.baseUrl || '');
+
+        var url = activity.manifest.baseUrl || '';
+        if (activity.crumb)
+            url = activity.crumb + '/' + url;
+
+        this.router.setUrl(url);
+        log('stack size=' + this._activityStack.length);
 
         activity.onResume();
     };
