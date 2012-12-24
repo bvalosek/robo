@@ -2,7 +2,60 @@
 
 .robo-about-view {
     .fill-parent;
+    .clearfix;
+    .vertical-scroll;
     background: #222;
     color: #e8e8e8;
     font-family: 'Segoe UI Light','Helvetica','Arial','sans-serif';
+    font-weight: 300;
+
+    header {
+        background: #e8e8e8;
+        color: #1b1b1b;
+        padding: 2em;
+        height: 10em;
+
+        h1 {
+            font-size: 4em;
+        }
+
+        .stuff {
+            float: left;
+        }
+
+        .back {
+            float: right;
+            font-size: 3em;
+            color: #aaa;
+            text-align: right;
+            width: 20%;
+            clear: none;
+            cursor: pointer;
+
+            &:hover {
+                color: #666;
+            }
+        }
+    }
+
+    .licenses {
+        padding: 2em;
+
+        blockquote {
+            padding: 1em;
+            font-size: 1.9em;
+            text-align: center;
+            color: #fff;
+        }
+
+        p {
+            margin: 0 0 1em 0;
+        }
+
+        .apps {
+            li {
+                list-style-type:none;
+            }
+        }
+    }
 }

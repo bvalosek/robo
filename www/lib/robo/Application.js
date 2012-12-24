@@ -94,6 +94,11 @@ define(function(require) {
         this._events.off(eventName, fn, context);
     };
 
+    Application.prototype.showAbout = function()
+    {
+        this.startActivity(AboutActivity);
+    };
+
     Application.prototype.manifestAbout = function()
     {
         this.activityManager.manifestActivity({

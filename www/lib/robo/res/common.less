@@ -8,6 +8,7 @@
 
 .fill-parent {
     position: absolute;
+    overflow: hidden;
     top: 0;
     left: 0;
     right: 0;
@@ -43,3 +44,15 @@
         font-size: 0;
     }
 }
+
+.vertical-scroll {
+    .clearfix;
+    overflow: hidden;
+    overflow-y: auto;
+
+    ::-webkit-scrollbar {
+        width: 0em;
+    }
+}
+
+

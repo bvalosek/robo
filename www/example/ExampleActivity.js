@@ -9,9 +9,15 @@ define(function(require) {
         events: {
             'click .close' : 'close',
             'click .ugly'  : 'showUgly',
-            'click .push'  : 'showAnother'
+            'click .push'  : 'showAnother',
+            'click .about' : 'showAbout'
         }
     });
+
+    ExampleActivity.prototype.showAbout = function()
+    {
+        Application.getInstance().showAbout();
+    };
 
     ExampleActivity.prototype.showUgly = function()
     {

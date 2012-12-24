@@ -8,7 +8,7 @@ define(function(require, exports) {
         ExampleActivity: {
             Activity: require('example/ExampleActivity'),
             name: 'Example Activity',
-            url: /^$/,
+            url: /^$|^example.*$/,
             baseUrl: 'example'
         },
         UglyActivity: {
