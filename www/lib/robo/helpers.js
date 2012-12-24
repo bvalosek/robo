@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     var _       = require('underscore');
     var helpers = {};
 
-    function S4() {
+    var S4 = function() {
         return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
     };
 

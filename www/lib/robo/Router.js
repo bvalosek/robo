@@ -33,12 +33,12 @@ define(function(require) {
 
     Router.prototype._router = function(url, ignoreCrumb)
     {
-        var url = this.normalize(url);
+        url = this.normalize(url);
 
         var matches = url.match(/^([0-9a-f\-]{36})?\/?(.*)$/);
 
-        var crumb   = matches[1];
-        var url     = matches[2];
+        var crumb = matches[1];
+        url       = matches[2];
 
         if (crumb && !ignoreCrumb)
             this.crumbRouter(crumb, url);

@@ -54,7 +54,7 @@ define(function(require) {
     Application.getInstance = function()
     {
         return _instance;
-    }
+    };
 
     // events
     Application.ON = {
@@ -77,7 +77,7 @@ define(function(require) {
             return _instance.activityManager.getActivities();
 
         return {};
-    }
+    };
 
     // app-global key bind
     Application.prototype.bindKeys = function(keys, fn)

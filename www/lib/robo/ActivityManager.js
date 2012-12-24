@@ -125,8 +125,9 @@ define(function(require) {
             case ActivityManager.LAUNCH_MODE.SINGLE_INSTANCE:
                 break;
             case ActivityManager.LAUNCH_MODE.STANDARD:
+                break;
             default:
-                this.asTopActivity(function() { this.onPause() });
+                this.asTopActivity(function() { this.onPause(); });
 
                 // create the new activity and add to DOM
                 log('launching new activity: ' + Activity.prototype.manifest.name);

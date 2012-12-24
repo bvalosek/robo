@@ -68,7 +68,7 @@ define(function(require) {
 
         _(container._views).each(function(v) { v.close(); });
         container._views = [];
-    }
+    };
 
     // dump append to HTML
     View.prototype.print = function(s)

@@ -22,7 +22,7 @@ define(function(require) {
             // propagate extender
             Child.extend = makeExtender(Child);
             return Child;
-        }
+        };
     };
 
     Base.extend = makeExtender(Base);

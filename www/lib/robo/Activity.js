@@ -67,7 +67,7 @@ define(function(require) {
     Activity.prototype.unbindKeys = function()
     {
         this.context.keyManager.clearKeys(this);
-    }
+    };
 
     // On instantiation
     Activity.prototype.onCreate = function() {
