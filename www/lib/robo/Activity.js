@@ -81,9 +81,7 @@ define(function(require) {
     {
         this.log('onStart');
 
-        this.bindKeys('ctrl-i', function() {
-            this.log('KEYS!');
-        });
+        this.bindKeys('esc', this.close);
 
         if (!this.created)
             throw new Error('onCreate not called for Activity');

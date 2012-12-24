@@ -79,12 +79,23 @@ define(function(require) {
         return {};
     }
 
+    // app-global key bind
+    Application.prototype.bindKeys = function(keys, fn)
+    {
+        this.keyManager.addKey(keys, this, fn);
+    };
+
     // general function to determine if a context (activity or app) is
     // active/visible etc
     Application.prototype.isActiveContext = function(context)
     {
         if (context === this.activityManager.getTopActivity())
             return true;
+
+        if (context === this)
+            return true;
+
+        return false;
     };
 
     // fire off
@@ -118,6 +129,11 @@ define(function(require) {
             name: 'About Robo',
             url: /^about-robo/,
             baseUrl: 'about-robo'
+        });
+
+        // global bind
+        this.bindKeys('ctrl-shift-/', function() {
+            this.showAbout();
         });
     };
 
