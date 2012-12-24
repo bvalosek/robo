@@ -37,6 +37,8 @@ define(function(require) {
         else
             this._manifest[info.name] = info;
 
+        info.id = helpers.guid();
+
         log('new activity manifested: ' + info.name);
 
         // store info back into activity
@@ -130,6 +132,7 @@ define(function(require) {
                 log('launching new activity: ' + Activity.prototype.manifest.name);
                 activity = new Activity(opts);
                 activity.onCreate();
+                activity.context = this.context;
                 stack.push(activity);
                 this.context.window.appendView(activity);
                 activity.onStart();

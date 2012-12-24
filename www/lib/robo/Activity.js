@@ -17,6 +17,7 @@ define(function(require) {
         this.onPause();
 
         this._clearTimers();
+        this.unbindKeys();
 
         this.onStop();
 
@@ -56,16 +57,33 @@ define(function(require) {
         this.setInterval(fn, t, context);
     };
 
+    // a function called when this activiy is active, cleaned up auto on close,
+    // and called in the context of activity
+    Activity.prototype.bindKeys = function(keys, fn)
+    {
+        this.context.keyManager.addKey(keys, this, fn);
+    };
+
+    Activity.prototype.unbindKeys = function()
+    {
+        this.context.keyManager.clearKeys(this);
+    }
+
     // On instantiation
     Activity.prototype.onCreate = function() {
         this.log('onCreate');
         this.created = true;
+
     };
 
     // After creation, when the DOM is setup
     Activity.prototype.onStart = function()
     {
         this.log('onStart');
+
+        this.bindKeys('ctrl-i', function() {
+            this.log('KEYS!');
+        });
 
         if (!this.created)
             throw new Error('onCreate not called for Activity');

@@ -8,6 +8,7 @@ define(function(require) {
     var log             = require('./log');
     var Base            = require('./Base');
     var ActivityManager = require('./ActivityManager');
+    var KeyManager      = require('./KeyManager');
     var AboutActivity   = require('./about/AboutActivity');
 
     // basic less
@@ -26,6 +27,9 @@ define(function(require) {
 
         // main view
         this.window = new View({ el: $('body') });
+
+        // shortcut keys
+        this.keyManager = new KeyManager(this);
 
         // setup history and routes
         this.activityManager = new ActivityManager(this);
@@ -74,6 +78,14 @@ define(function(require) {
 
         return {};
     }
+
+    // general function to determine if a context (activity or app) is
+    // active/visible etc
+    Application.prototype.isActiveContext = function(context)
+    {
+        if (context === this.activityManager.getTopActivity())
+            return true;
+    };
 
     // fire off
     Application.prototype.trigger = function(eventName, opts)
