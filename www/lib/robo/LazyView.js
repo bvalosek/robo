@@ -19,7 +19,9 @@ define(function(require) {
 
         var self = this;
         _.defer(function() {
-            self.$el.addClass('open');
+            self.$el
+                .addClass('open')
+                .addClass('opened');
         });
 
         return TemplateView.prototype.render.call(this);
@@ -28,7 +30,9 @@ define(function(require) {
     // only actually remove from DOM after a bit
     LazyView.prototype.close = function()
     {
-        this.$el.removeClass('open');
+        this.$el
+            .removeClass('open')
+            .addClass('closed');
 
         this.trigger(View.ON.HIDE);
 

@@ -9,7 +9,7 @@ define(function(require, exports, module) {
 
     helpers.guid = function()
     {
-        return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+        return (S4()+S4()+'-'+S4()+'-'+S4()+'-'+S4()+'-'+S4()+S4()+S4());
     };
 
     // add to ret object

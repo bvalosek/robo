@@ -63,7 +63,8 @@ define(function(require) {
         log('crumb route:' + url);
 
         if (!this.context.goToCrumb(crumb)) {
-            log('invalid crumb, maybe hit forward, who knows');
+            log('invalid crumb, routing as url');
+            this.urlRouter(url, crumb);
         }
     };
 

@@ -13,9 +13,6 @@ define(function(require) {
         this.context = context;
 
         this._manifest = {};
-
-        this.router = Router.factory(this);
-        Backbone.history.start();
     });
 
     // events
@@ -28,6 +25,12 @@ define(function(require) {
         STANDARD        : 1,
         SINGLE_TOP      : 2,
         SINGLE_INSTANCE : 3
+    };
+
+    ActivityManager.prototype.startRouting = function()
+    {
+        this.router = Router.factory(this);
+        Backbone.history.start();
     };
 
     ActivityManager.prototype.manifestActivity = function(info, key)
@@ -63,8 +66,6 @@ define(function(require) {
         _(manifest).each(function(x, key) {
             self.manifestActivity(x, key);
         });
-
-        this.router.check();
     };
 
     ActivityManager.prototype.getActivityByUrl = function(url)
@@ -189,7 +190,19 @@ define(function(require) {
         this.router.setUrl(url);
         log('stack size=' + this._activityStack.length);
 
+        this.dumpStack();
         activity.onResume();
+    };
+
+    // debug output the activity stack
+    ActivityManager.prototype.dumpStack = function()
+    {
+        var s = 'stack dump: ';
+        _(this._activityStack).each(function(x) {
+            s += ('[' + x.manifest.name + ':' + x.cid + '] ');
+        });
+
+        log(s);
     };
 
     // finish up properly and resume any previous activities

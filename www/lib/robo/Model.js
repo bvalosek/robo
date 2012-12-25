@@ -3,17 +3,15 @@ define(function(require) {
     var Backbone    = require('backbone');
     var _           = require('underscore');
 
-    var Application = require('./Application');
     var log         = require('./log');
     var Collection  = require('./Collection');
 
     var Model = Backbone.Model.extend();
 
     // create the collection object as well
-    var _extend = Model.extend;
     Model.extend = function(opts)
     {
-        var M =  _extend.apply(this, arguments);
+        var M =  Backbone.Model.extend.apply(this, arguments);
 
         // Create corresponding collection class
         M.Collection = Collection.extend({
@@ -34,18 +32,6 @@ define(function(require) {
             self.dirty = false;
         });
         return d;
-    };
-
-    // generate API url with user ID if the app provides
-    Model.prototype.url = function()
-    {
-        var url     = Backbone.Model.prototype.url.call(this);
-        var context = Application.getInstance();
-
-        if (context && context.getUserId())
-            url += '?userId=' + context.getUserId();
-
-        return url;
     };
 
     return Model;

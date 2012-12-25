@@ -11,6 +11,17 @@ define(function(require) {
         className: 'activity'
     });
 
+    Activity.STATE = {
+        NONE    : -1,
+        CREATE  : 1,
+        START   : 2,
+        RESUME  : 3,
+        PAUSE   : 4,
+        STOP    : 5,
+        DESTROY : 6,
+        DEAD    : 7
+    };
+
     // override close behavior
     Activity.prototype.close = function()
     {
@@ -72,7 +83,7 @@ define(function(require) {
     // On instantiation
     Activity.prototype.onCreate = function() {
         this.log('onCreate');
-        this.created = true;
+        this.currentState = Activity.STATE.CREATE;
 
     };
 
@@ -81,10 +92,12 @@ define(function(require) {
     {
         this.log('onStart');
 
+        if (this.currentState != Activity.STATE.CREATE)
+            throw new Error('Must call onCreate before onStart');
+
         this.bindKeys('esc', this.close);
 
-        if (!this.created)
-            throw new Error('onCreate not called for Activity');
+        this.currentState = Activity.STATE.START;
     };
 
     // called everytime when brought to foreground
@@ -92,7 +105,13 @@ define(function(require) {
     {
         this.log('onResume');
 
+        if (this.currentState != Activity.STATE.START &&
+            this.currentState != Activity.STATE.PAUSE)
+                throw new Error('onResume called from invalid state');
+
         this.$el.removeClass('activity-pause');
+
+        this.currentState = Activity.STATE.RESUME;
     };
 
     // when we lose focus
@@ -100,19 +119,34 @@ define(function(require) {
     {
         this.log('onPause');
 
+        if (this.currentState != Activity.STATE.RESUME &&
+            this.currentState != Activity.STATE.PAUSE)
+            throw new Error('onResume must be called before onPause');
+
         this.$el.addClass('activity-pause');
+        this.currentState = Activity.STATE.PAUSE;
     };
 
     // right before the view is removed
     Activity.prototype.onStop = function()
     {
         this.log('onStop');
+
+        if (this.currentState != Activity.STATE.PAUSE)
+            throw new Error('onPause must be called before onStop');
+
+        this.currentState = Activity.STATE.STOP;
     };
 
     // after the view is gone and before we're done
     Activity.prototype.onDestroy = function()
     {
         this.log('onDestroy');
+
+        if (this.currentState != Activity.STATE.STOP)
+            throw new Error('onStop must be called before onDestroy');
+
+        this.currentState = Activity.DESTROY;
     };
 
     Activity.prototype.log = function(s)

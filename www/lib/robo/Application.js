@@ -37,8 +37,9 @@ define(function(require) {
         if (manifest)
             this.activityManager.loadManifest(manifest);
 
-        // add our own activites
+        // add our own activites and start routing
         this.manifestAbout();
+        this.activityManager.startRouting();
 
         // setup trigger for resize
         var self = this;
