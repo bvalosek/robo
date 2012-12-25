@@ -25,7 +25,14 @@ define(function(require) {
     // override close behavior
     Activity.prototype.close = function()
     {
-        this.onPause();
+        if (this.currentState < Activity.STATE.PAUSE)
+            this.onPause();
+
+        // if already stopped -- don't need this
+        if (this.currentState > Activity.STATE.PAUSE)
+            return;
+
+        console.log('current state=' + this.currentState);
 
         this._clearTimers();
         this.unbindKeys();
@@ -36,6 +43,7 @@ define(function(require) {
         View.prototype.close.call(this);
 
         this.onDestroy();
+        this.currentState = Activity.STATE.DEAD;
     };
 
     // stop all proxy timers
