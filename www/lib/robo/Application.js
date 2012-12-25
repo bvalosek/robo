@@ -11,8 +11,9 @@ define(function(require) {
     var KeyManager      = require('./KeyManager');
     var AboutActivity   = require('./about/AboutActivity');
 
-    // basic less
+    // less files
     require('less!./res/base.less');
+    require('less!font-awesome/font-awesome.less');
 
     // singletone style
     var _instance = null;
