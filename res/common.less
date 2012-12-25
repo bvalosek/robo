@@ -1,10 +1,15 @@
-.border-box-sizing {
+// since this is included frequently, it should only include things compiled
+// out of final CSS (such as mixins or variables
+
+@import 'animation';
+
+.border-box-sizing() {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
 
-.fill-parent {
+.fill-parent() {
     position: absolute;
     overflow: hidden;
     top: 0;
@@ -13,7 +18,7 @@
     bottom: 0;
 }
 
-.no-select {
+.no-select() {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -22,17 +27,15 @@
     user-select: none;
 }
 
-.block-disable {
-    opacity: 0;
+.block-disable() {
     pointer-events: none;
 }
 
-.block-enable {
-    opacity: 1;
+.block-enable() {
     pointer-events: auto;
 }
 
-.clearfix {
+.clearfix() {
     &:after {
         clear: both;
         content: ".";
@@ -43,14 +46,9 @@
     }
 }
 
-.vertical-scroll {
+.vertical-scroll() {
     .clearfix;
     overflow: hidden;
     overflow-y: auto;
-
-    ::-webkit-scrollbar {
-        width: 0em;
-    }
 }
-
 

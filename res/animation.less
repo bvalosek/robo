@@ -1,0 +1,37 @@
+// slide up or down
+.horizontalSlide(@delta: -1em) {
+    -webkit-transform: translateY(@delta);
+    -webkit-transition: -webkit-transform 0.3s cubic-bezier(0,1,0.2,1);
+
+    .opened & {
+        -webkit-transform: translateY(0);
+    }
+}
+
+// fade in + slide up or down
+.horizontalPeek(@delta: -1em) {
+    opacity: 0;
+    -webkit-transform: translateY(@delta);
+    -webkit-transition: -webkit-transform 0.3s cubic-bezier(0,1,0.2,1),
+        opacity 0.3s ease;
+
+    .opened & {
+        opacity: 1;
+        -webkit-transform: translateY(0);
+    }
+}
+
+// start at delta Y and slide to - delta
+.horizontalSlideInAndOut(@delta: 100%) {
+
+    -webkit-transition: -webkit-transform 0.5s cubic-bezier(0,1,0.2,1);
+    -webkit-transform: translateX(@delta);
+
+    &.opened {
+        -webkit-transform: translateX(0);
+    }
+
+    &.closed {
+        -webkit-transform: translateX(-@delta);
+    }
+}

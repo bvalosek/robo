@@ -6,6 +6,7 @@ define(function(require) {
     require('less!./about.less');
 
     var About = Activity.extend({
+        className: 'robo-about-activity',
         events: {
             'click .back' : 'close'
         }
