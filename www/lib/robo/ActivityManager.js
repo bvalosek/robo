@@ -40,8 +40,6 @@ define(function(require) {
         else
             this._manifest[info.name] = info;
 
-        info.id = helpers.guid();
-
         log('new activity manifested: ' + info.name);
 
         // store info back into activity
@@ -82,7 +80,7 @@ define(function(require) {
         var index = 0;
         var activity = _(this._activityStack).find(function(x, n) {
             index = n;
-            return x.crumb === crumb;
+            return x.cid === crumb;
         });
 
         if (!activity)
@@ -139,9 +137,6 @@ define(function(require) {
                 this.context.window.appendView(activity);
                 activity.onStart();
 
-                // set crumb
-                activity.crumb = helpers.guid();
-
                 // process close event
                 var self = this;
                 activity.once(View.ON.HIDE, function() {
@@ -175,7 +170,7 @@ define(function(require) {
         if (!a)
             return;
 
-        _(fn).bind(a)();
+        fn.call(a);
     };
 
     // properly resume
@@ -184,8 +179,7 @@ define(function(require) {
         this.context.setTitle(activity.manifest.name || '');
 
         var url = activity.manifest.baseUrl || '';
-        if (activity.crumb)
-            url = activity.crumb + '/' + url;
+        url = activity.cid + '/' + url;
 
         this.router.setUrl(url);
         log('stack size=' + this._activityStack.length);

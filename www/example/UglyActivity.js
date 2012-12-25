@@ -8,6 +8,8 @@ define(function(require) {
 
     Ugly.prototype.onStart = function()
     {
+        Activity.prototype.onStart.call(this);
+
         this.print('Hello, World!');
         setTimeout(_(this.close).bind(this), 1000);
     };

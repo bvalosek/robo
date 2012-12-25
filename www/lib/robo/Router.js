@@ -35,7 +35,8 @@ define(function(require) {
     {
         url = this.normalize(url);
 
-        var matches = url.match(/^([0-9a-f\-]{36})?\/?(.*)$/);
+        // var matches = url.match(/^([0-9a-f\-]{36})?\/?(.*)$/);
+        var matches = url.match(/^(view[0-9]+)?\/?(.*)$/);
 
         var crumb = matches[1];
         url       = matches[2];

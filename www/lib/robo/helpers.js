@@ -7,11 +7,11 @@ define(function(require, exports, module) {
         return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
     };
 
-    helpers.guid = function()
+    helpers.newGuid = function()
     {
         return (S4()+S4()+'-'+S4()+'-'+S4()+'-'+S4()+'-'+S4()+S4()+S4());
     };
 
     // add to ret object
-    _(exports).extend(helpers);
+    return helpers;
 });
