@@ -11,6 +11,8 @@ define(function(require) {
     var KeyManager      = require('./KeyManager');
     var AboutActivity   = require('./about/AboutActivity');
 
+    var manifest        = require('manifest');
+
     // less files
     require('less!./res/base.less');
 
@@ -18,7 +20,7 @@ define(function(require) {
     var _instance = null;
 
     // creating the application
-    var Application = Base.extend(function(manifest) {
+    var Application = Base.extend(function() {
 
         _instance = this;
 
@@ -27,6 +29,7 @@ define(function(require) {
 
         // main view
         this.window = new View({ el: $('body') });
+        this.window.$el.html('');
 
         // shortcut keys
         this.keyManager = new KeyManager(this);
