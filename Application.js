@@ -13,7 +13,6 @@ define(function(require) {
 
     // less files
     require('less!./res/base.less');
-    require('less!font-awesome/font-awesome.less');
 
     // singletone style
     var _instance = null;
