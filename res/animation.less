@@ -1,5 +1,6 @@
+
 // slide up or down
-.horizontalSlide(@delta: -1em) {
+.passiveHorizontalSlide(@delta: -1em) {
     -webkit-transform: translateY(@delta);
     -webkit-transition: -webkit-transform 0.3s cubic-bezier(0,1,0.2,1);
 
@@ -9,7 +10,7 @@
 }
 
 // fade in + slide up or down
-.horizontalPeek(@delta: -1em) {
+.passiveHorizontalPeek(@delta: -1em) {
     opacity: 0;
     -webkit-transform: translateY(@delta);
     -webkit-transition: -webkit-transform 0.3s cubic-bezier(0,1,0.2,1),
@@ -22,7 +23,7 @@
 }
 
 // start at delta Y and slide to - delta
-.horizontalSlideInAndOut(@delta: 100%) {
+.activeHorizontalSlideInAndOut(@delta: 100%) {
 
     -webkit-transition: -webkit-transform 0.5s cubic-bezier(0,1,0.2,1);
     -webkit-transform: translateX(@delta);
