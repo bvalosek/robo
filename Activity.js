@@ -1,13 +1,15 @@
 define(function(require) {
 
-    var _    = require('underscore');
+    var _        = require('underscore');
 
-    var View = require('./LazyView');
-    var log  = require('./log');
+    var View     = require('./View');
+    var LazyView = require('./LazyView');
+    var log      = require('./log');
 
+    // stylez
     require('less!./res/activity.less');
 
-    var Activity = View.extend({
+    var Activity = LazyView.extend({
         className: 'activity'
     });
 
@@ -20,6 +22,15 @@ define(function(require) {
         STOP    : 5,
         DESTROY : 6,
         DEAD    : 7
+    };
+
+    Activity.ON = {
+        CREATE: 'robo-activity:create',
+        START: 'robo-activity:create',
+        RESUME: 'robo-activity:create',
+        PAUSE: 'robo-activity:create',
+        STOP: 'robo-activity:create',
+        DESTROY: 'robo-activity:create'
     };
 
     // override close behavior
@@ -40,7 +51,7 @@ define(function(require) {
         this.onStop();
 
         // close the actual view
-        View.prototype.close.call(this);
+        LazyView.prototype.close.call(this);
 
         this.onDestroy();
         this.currentState = Activity.STATE.DEAD;
@@ -76,6 +87,11 @@ define(function(require) {
         this.setInterval(fn, t, context);
     };
 
+    Activity.prototype.claimKeyFocus = function()
+    {
+        this.context.setKeysContext(this);
+    };
+
     // a function called when this activiy is active, cleaned up auto on close,
     // and called in the context of activity
     Activity.prototype.bindKeys = function(keys, fn)
@@ -88,9 +104,30 @@ define(function(require) {
         this.context.keyManager.clearKeys(this);
     };
 
+    // create a view on the root element, steal key focus
+    Activity.prototype.appendExternalView = function(view)
+    {
+        view.listenTo(this, View.ON.HIDE, view.close);
+
+        this.$el.addClass(view.className + '-showing');
+
+
+        this.listenTo(view, View.ON.HIDE, function() {
+            this.$el.removeClass(view.className + '-showing');
+            this.claimKeyFocus();
+        });
+
+        this.context.bindKeysToContext(view, 'esc', view.close);
+        this.context.setKeysContext(view);
+
+        return this.context.window.appendView(view);
+    };
+
     // On instantiation
     Activity.prototype.onCreate = function() {
         this.log('onCreate');
+        this.trigger(Activity.ON.CREATE);
+
         this.currentState = Activity.STATE.CREATE;
 
     };
@@ -99,6 +136,7 @@ define(function(require) {
     Activity.prototype.onStart = function()
     {
         this.log('onStart');
+        this.trigger(Activity.ON.START);
 
         if (this.currentState != Activity.STATE.CREATE)
             throw new Error('Must call onCreate before onStart');
@@ -112,12 +150,15 @@ define(function(require) {
     Activity.prototype.onResume = function()
     {
         this.log('onResume');
+        this.trigger(Activity.ON.RESUME);
 
         if (this.currentState != Activity.STATE.START &&
             this.currentState != Activity.STATE.PAUSE)
                 throw new Error('onResume called from invalid state');
 
         this.$el.removeClass('activity-pause');
+
+        this.context.setKeysContext(this);
 
         this.currentState = Activity.STATE.RESUME;
     };
@@ -126,6 +167,7 @@ define(function(require) {
     Activity.prototype.onPause = function()
     {
         this.log('onPause');
+        this.trigger(Activity.ON.PAUSE);
 
         if (this.currentState != Activity.STATE.RESUME &&
             this.currentState != Activity.STATE.PAUSE)
@@ -139,6 +181,7 @@ define(function(require) {
     Activity.prototype.onStop = function()
     {
         this.log('onStop');
+        this.trigger(Activity.ON.STOP);
 
         if (this.currentState != Activity.STATE.PAUSE)
             throw new Error('onPause must be called before onStop');
@@ -150,6 +193,7 @@ define(function(require) {
     Activity.prototype.onDestroy = function()
     {
         this.log('onDestroy');
+        this.trigger(Activity.ON.DESTROY);
 
         if (this.currentState != Activity.STATE.STOP)
             throw new Error('onStop must be called before onDestroy');

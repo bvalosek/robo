@@ -75,12 +75,9 @@ define(function(require) {
         return this.activityManager.startActivity(Activity, opts);
     };
 
-    Application.getActivities = function()
+    Application.prototype.getActivities = function()
     {
-        if (_instance)
-            return _instance.activityManager.getActivities();
-
-        return {};
+        return this.activityManager.getActivities();
     };
 
     // app-global key bind
@@ -89,15 +86,28 @@ define(function(require) {
         this.keyManager.addKey(keys, this, fn);
     };
 
+    // bind to arbitrary context
+    Application.prototype.bindKeysToContext = function(context, keys, fn)
+    {
+        this.keyManager.addKey(keys, context, fn);
+    };
+
+    // set the current keys context
+    Application.prototype.setKeysContext = function(c)
+    {
+        this._keyContext = c;
+        log('key context changed to ' + (c.cid || '[no cid]'));
+    };
+
     // general function to determine if a context (activity or app) is
     // active/visible etc
     Application.prototype.isActiveContext = function(context)
     {
-        if (context === this.activityManager.getTopActivity())
-            return true;
-
         if (context === this)
             return true;
+
+        if (this._keyContext)
+            return this._keyContext === context;
 
         return false;
     };

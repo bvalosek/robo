@@ -5,6 +5,7 @@ define(function(require) {
 
     var Base    = require('./Base');
     var log     = require('./log');
+    var View    = require('./View');
 
     var KeyManager = Base.extend(function(context) {
         this.context = context;
@@ -28,6 +29,10 @@ define(function(require) {
             log(keys + ' already bound for this context');
             return;
         }
+
+        // unbind on close if we can
+        if(context.bind)
+            context.bind(View.ON.HIDE, _(this.clearKeys).bind(this, context));
 
         // add this bad boy
         actions.push({ context: context, fn: fn });
