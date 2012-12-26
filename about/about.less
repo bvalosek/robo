@@ -2,10 +2,6 @@
 
 .robo-about-activity {
     .fill-parent;
-
-    font-family: 'Roboto';
-    font-weight: 100;
-
     .activeHorizontalSlideInAndOut(100%);
 }
 
@@ -13,59 +9,67 @@
     .fill-parent;
     .clearfix;
     .vertical-scroll;
+
+    font-family: 'Roboto','Segoe UI Light',Helvetica,Arial,sans-serif;
+    font-weight: 100;
+
     background: #222;
     color: #e8e8e8;
-    font-family: 'Segoe UI Light','Helvetica','Arial','sans-serif';
-    font-weight: 300;
-
 
     header {
-        background: #e8e8e8;
-        color: #1b1b1b;
+        .passiveHorizontalPeek;
+        .transition-delay(0.3s);
         padding: 2em;
-        height: 10em;
+
+        .tagline {
+            color: #999;
+            font-size: 1.2em;
+        }
 
         h1 {
-            font-size: 4em;
-        }
-
-        .stuff {
-            float: left;
-        }
-
-        .back {
-            float: right;
-            font-size: 3em;
-            color: #aaa;
-            text-align: right;
-            width: 20%;
-            clear: none;
-            cursor: pointer;
-
-            &:hover {
-                color: #666;
-            }
+            font-weight: 100;
+            font-size: 6em;
+            color: #67f;
         }
     }
 
-    .licenses {
-        padding: 2em;
-
-        blockquote {
-            padding: 1em;
-            font-size: 1.9em;
-            text-align: center;
-            color: #fff;
-        }
+    .content {
+        .clearfix;
 
         p {
             margin: 0 0 1em 0;
+            line-height: 1.5em;
         }
 
-        .apps {
+        h2 {
+            font-weight: 100;
+            font-size: 1.8em;
+            color: #fff;
+            margin: 0 0 1em 0;
+        }
+
+        ul {
+            margin: 2em 2em;
+            line-height: 1.5em;
+            list-style-type: none;
+
             li {
-                list-style-type:none;
             }
         }
+
+        .panel {
+            .passiveHorizontalPeek;
+            .transition-delay(0.4s);
+
+            padding: 2em;
+            width: 50%;
+            float: left;
+        }
+
+        .licenses {
+
+            font-size: 1.1em;
+        }
     }
+
 }
