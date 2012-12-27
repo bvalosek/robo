@@ -12,7 +12,7 @@ define(function(require) {
 
     var manifest        = require('manifest');
 
-    var SYS_CHORD = 'defmod-shift-/ ';
+    var SYS_CHORD = '';
 
     // less files
     require('less!./res/base.less');

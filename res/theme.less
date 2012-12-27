@@ -13,3 +13,19 @@
     color: @fg-color;
     background: @bg-color;
 }
+
+.push-background(@delta, @check-color: @bg-color) {
+    background: contrast(
+        @check-color,
+        darken(@check-color, @delta),
+        lighten(@check-color, @delta)
+    );
+}
+
+.push-color(@delta, @check-color: @fg-color) {
+    color: contrast(
+        @check-color,
+        darken(@check-color, @delta),
+        lighten(@check-color, @delta)
+    );
+}

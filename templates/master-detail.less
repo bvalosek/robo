@@ -9,18 +9,35 @@
         bottom: 0;
         left: 0;
         width: @masterWidth;
-        background: darken(@bg-color, 3%);
+
+        .push-background(3%);
+
+        .back-button {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 0.5em 0.3em;
+            .big-font();
+
+            i {
+                cursor: pointer;
+                opacity: 0.5;
+                &:hover {
+                    opacity: 0.8;
+                }
+            }
+        }
 
         h1 {
             font-size: 3.1em;
         }
 
         .header {
-            padding: 1em 2em;
+            padding: 2em 5em;
         }
 
         .content {
-            padding: 0 2em;
+            padding: 0 5em;
         }
     }
 
@@ -33,7 +50,7 @@
         background: @bg-color;
 
         .content {
-            padding: 2em 4em 2em 2em;
+            padding: 2em 5em 2em 2em;
         }
     }
 }

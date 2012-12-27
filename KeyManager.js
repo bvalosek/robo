@@ -20,7 +20,11 @@ define(function(require) {
 
         // nothing has been bound for this key combo
         if (!actions) {
-            keymage(keys, this.handlerFactory(keys), {preventDefault:true});
+            keymage(
+                keys,
+                this.handlerFactory(keys)
+            );
+
             actions = this._keyMap[keys] = [];
         }
 
