@@ -1,7 +1,10 @@
 // since this is included frequently, it should only include things compiled
-// out of final CSS (such as mixins or variables
+// out of final CSS (such as mixins or variables)
+
+// this goes for all imported files under as well
 
 @import 'animation';
+@import 'theme';
 
 .border-box-sizing() {
     -webkit-box-sizing: border-box;
@@ -27,6 +30,14 @@
     user-select: none;
 }
 
+.box-reset() {
+    .no-select;
+    .border-box-sizing;
+    padding: 0;
+    margin: 0;
+    cursor: default;
+}
+
 .block-disable() {
     pointer-events: none;
 }
@@ -35,7 +46,7 @@
     pointer-events: auto;
 }
 
-.clearfix() {
+.clear-fix() {
     &:after {
         clear: both;
         content: ".";
@@ -47,7 +58,7 @@
 }
 
 .vertical-scroll() {
-    .clearfix;
+    .clear-fix;
     overflow: hidden;
     overflow-y: auto;
 }

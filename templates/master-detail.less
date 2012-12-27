@@ -1,0 +1,39 @@
+@import 'base-activity';
+
+.master-detail-template(@masterWidth: 30em) {
+    .robo-base-activity;
+
+    .master {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: @masterWidth;
+        background: darken(@bg-color, 3%);
+
+        h1 {
+            font-size: 3.1em;
+        }
+
+        .header {
+            padding: 1em 2em;
+        }
+
+        .content {
+            padding: 0 2em;
+        }
+    }
+
+    .detail {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: @masterWidth;
+        right: 0;
+        background: @bg-color;
+
+        .content {
+            padding: 2em 4em 2em 2em;
+        }
+    }
+}

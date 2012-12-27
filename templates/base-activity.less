@@ -1,0 +1,28 @@
+@import '../res/common';
+@import '../res/typography';
+
+@import '../../../vendor/android-roboto/font';
+
+.robo-base-activity {
+    .block-disable;
+    .fill-parent;
+
+    .light-theme;
+
+    .base-typography;
+
+    .active-horizontal-slide-in-out;
+
+    * {
+        .box-reset;
+    }
+
+    // activity states
+    &.open {
+        .block-enable;
+    }
+
+    &.activity-pause {
+        .block-disable;
+    }
+}

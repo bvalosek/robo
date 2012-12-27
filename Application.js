@@ -9,9 +9,10 @@ define(function(require) {
     var Base            = require('./Base');
     var ActivityManager = require('./ActivityManager');
     var KeyManager      = require('./KeyManager');
-    var AboutActivity   = require('./about/AboutActivity');
 
     var manifest        = require('manifest');
+
+    var SYS_CHORD = 'defmod-shift-/ ';
 
     // less files
     require('less!./res/base.less');
@@ -23,6 +24,7 @@ define(function(require) {
     var Application = Base.extend(function() {
 
         _instance = this;
+        this.onCreate();
 
         // setup events
         this._events = _({}).extend(Backbone.Events);
@@ -37,20 +39,22 @@ define(function(require) {
         // setup history and routes
         this.activityManager = new ActivityManager(this);
 
-        if (manifest)
-            this.activityManager.loadManifest(manifest);
-
-        // add our own activites and start routing
-        this.manifestAbout();
-        this.activityManager.startRouting();
-
         // setup trigger for resize
         var self = this;
-        $(window).resize(_.debounce(function() {
+        this.window.$el.resize(_.debounce(function() {
             self.trigger(Application.ON.RESIZE);
         }, 500));
 
-        this.onCreate();
+
+        // add user and system activites
+        this.manifestSystemActivities();
+        this.activityManager.loadManifest(manifest);
+        this.onStart();
+
+        // get the party started
+        this.activityManager.startRouting();
+        this.onResume();
+
         log('application loaded');
     });
 
@@ -81,7 +85,7 @@ define(function(require) {
     };
 
     // app-global key bind
-    Application.prototype.bindKeys = function(keys, fn)
+    Application.prototype.bindGlobalKeys = function(keys, fn)
     {
         this.keyManager.addKey(keys, this, fn);
     };
@@ -131,28 +135,43 @@ define(function(require) {
         this._events.off(eventName, fn, context);
     };
 
-    Application.prototype.showAbout = function()
-    {
-        this.startActivity(AboutActivity);
-    };
-
-    Application.prototype.manifestAbout = function()
+    // built-in activites
+    Application.prototype.manifestSystemActivities = function()
     {
         this.activityManager.manifestActivity({
-            Activity: AboutActivity,
+            Activity: require('./activities/About'),
             name: 'About Robo',
-            url: /^about-robo/,
-            baseUrl: 'about-robo'
+            hotkey: SYS_CHORD + 'i',
+            baseUrl: 'about-robo',
+            url: /^about-robo$/
         });
 
-        // global bind
-        this.bindKeys('defmod-shift-/', function() {
-            this.showAbout();
+        this.activityManager.manifestActivity({
+            Activity: require('./activities/TypeDemo'),
+            name: 'Robo Typography Demo',
+            hotkey: SYS_CHORD + 't',
+            baseUrl: 'typography-robo',
+            url: /^typography-robo$/
         });
+
+        this.activityManager.manifestActivity({
+            Activity: require('./activities/UglyDemo'),
+            name: 'Robo Ugly Demo',
+            hotkey: SYS_CHORD + 'u',
+            baseUrl: 'ugly-robo',
+            url: /^ugly-robo$/
+        });
+
     };
 
-    // if we want to do anything else
+    // instantiation
     Application.prototype.onCreate = function() {};
+
+    // after we've setup, before we start routing
+    Application.prototype.onStart = function() {};
+
+    // after we've started routing
+    Application.prototype.onResume = function() {};
 
     // gets the current user logged into the app, should be handled else where
     Application.prototype.getUserId = function() { };

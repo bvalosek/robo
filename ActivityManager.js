@@ -40,7 +40,19 @@ define(function(require) {
         else
             this._manifest[info.name] = info;
 
+        // global hotkey to launch
+        if (info.hotkey) {
+            this.context.bindGlobalKeys(info.hotkey, function() {
+                this.startActivity(info.Activity);
+            });
+        }
+
         log('new activity manifested: ' + info.name);
+
+        // check urls
+        if (info.baseUrl && (!info.baseUrl.match(info.url) || !info.url))
+            log('WARNING: Route for activity is not 2-way');
+
 
         // store info back into activity
         if (info.Activity)
@@ -208,10 +220,12 @@ define(function(require) {
                 this._activityStack.splice(n, 1);
 
                 // resume the lower window
-                if (!this._activityStack.length)
+                if (!this._activityStack.length) {
                     this.context.trigger(ActivityManager.ON.WINDOW_EMPTY);
-                else
+                    this.router.setUrl('');
+                } else {
                     this._resumeActivity(this.getTopActivity());
+                }
             }
         }
     };
