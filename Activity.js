@@ -5,6 +5,7 @@ define(function(require) {
     var View     = require('./View');
     var LazyView = require('./LazyView');
     var log      = require('./log');
+    var Geometry = require('./Geometry');
 
     // stylez
     require('less!./res/activity.less');
@@ -42,8 +43,6 @@ define(function(require) {
         // if already stopped -- don't need this
         if (this.currentState > Activity.STATE.PAUSE)
             return;
-
-        console.log('current state=' + this.currentState);
 
         this._clearTimers();
         this.unbindKeys();
@@ -160,6 +159,8 @@ define(function(require) {
         this.$el.removeClass('activity-pause');
 
         this.context.setKeysContext(this);
+
+        Geometry.updateActivity(this);
     };
 
     // when we lose focus

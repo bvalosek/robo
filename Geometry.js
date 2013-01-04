@@ -2,7 +2,6 @@ define(function(require) {
 
     var Base        = require('./Base');
     var log         = require('./log');
-    var Application = require('./Application');
 
     var $           = require('jquery');
 
@@ -15,7 +14,7 @@ define(function(require) {
         });
 
         // hardcoded magic numbers
-        var FONT_RATIO     = 22 / 640;
+        var FONT_RATIO     = 16 / 640;
         var ASPECT_RATIO   = 2;
 
         // calcs
@@ -30,12 +29,18 @@ define(function(require) {
 
         // how much to scale text
         var val;
-        if (this.screen.width / ASPECT_RATIO < this.screen.height) {
+        if (opts.preserveX) {
             val = this.screen.width / ASPECT_RATIO;
-            log('guessing preseveX geometry');
+            log('explicit preserveX');
+        } else if (opts.preserveY) {
+            val = this.screen.height / ASPECT_RATIO;
+            log('explicit preserveY');
+        } else if (this.screen.width / ASPECT_RATIO < this.screen.height) {
+            val = this.screen.width / ASPECT_RATIO;
+            log('guessing preserveX geometry');
         } else {
             val = this.screen.height / ASPECT_RATIO;
-            log('guessing preseveY geometry');
+            log('guessing preserveY geometry');
         }
 
         this.baseTextSize = val * FONT_RATIO;
@@ -45,6 +50,18 @@ define(function(require) {
     Geometry.ON =
     {
         SET: 'geometry:set'
+    };
+
+    // update for an activity
+    Geometry.updateActivity = function(activity)
+    {
+        var m = activity.manifest;
+        if (activity.$el.hasClass('reactive-geometry'))
+            new Geometry({
+                $w: activity.$el,
+                preserveX: m.screen ? m.screen.preserveX : false,
+                preserveY: m.screen ? m.screen.preserveY : false
+            }).updateBaseSize();
     };
 
     // update base size for an entire selector
@@ -59,8 +76,6 @@ define(function(require) {
     Geometry.prototype.updateBaseSize = function()
     {
         this.screen.$el.css('font-size', this.baseTextSize + 'px');
-        Application.getInstance().trigger(
-            Geometry.ON.SET, this.baseTextSize);
         return this;
     };
 

@@ -8,7 +8,7 @@ define(function(require) {
 
     // setup events
     var About = Activity.extend({
-        className: 'robo-about-activity'
+        className: 'reactive-geometry robo-about-activity'
     });
 
     // inflate view

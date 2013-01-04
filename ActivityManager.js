@@ -7,12 +7,14 @@ define(function(require) {
     var helpers = require('./helpers');
 
     var _       = require('underscore');
+    var $       = require('jquery');
 
     // stash the app and setup a new router
     var ActivityManager = Base.extend(function(context) {
-        this.context = context;
+        this.context         = context;
 
-        this._manifest = {};
+        this._manifest       = {};
+        this._verifyActivity = null;
     });
 
     // events
@@ -70,6 +72,11 @@ define(function(require) {
         return activities;
     };
 
+    ActivityManager.prototype.getStack = function()
+    {
+        return this._activityStack;
+    };
+
     ActivityManager.prototype.loadManifest = function(manifest)
     {
         var self = this;
@@ -107,6 +114,13 @@ define(function(require) {
         return true;
     };
 
+    // set a verifier function that returns a deferred object when logged in
+    // that either resolves or fails
+    ActivityManager.prototype.setAuthenticator = function(fn)
+    {
+        this._verifyActivity = fn;
+    };
+
     // start an activity
     ActivityManager.prototype.startActivity = function(Activity, opts)
     {
@@ -117,7 +131,17 @@ define(function(require) {
         if (!info)
             throw new Error('activity must be added in manifest.js');
 
-        this._addActivity(Activity, opts);
+        if (info.secure && this._verifyActivity) {
+            log('activity is secure, checking verification...');
+
+            $.when(this._verifyActivity(info))
+            .then(_(function() {
+                log('verified');
+                this._addActivity(Activity, opts);
+            }).bind(this));
+        } else {
+            this._addActivity(Activity, opts);
+        }
     };
 
     // manage the stack

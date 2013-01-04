@@ -31,7 +31,6 @@ define(function(require) {
 
         // main view
         this.window = new View({ el: $('body') });
-        this.window.$el.html('');
 
         // shortcut keys
         this.keyManager = new KeyManager(this);
@@ -41,21 +40,30 @@ define(function(require) {
 
         // setup trigger for resize
         var self = this;
-        this.window.$el.resize(_.debounce(function() {
+        $(window).resize(_.debounce(function() {
             self.trigger(Application.ON.RESIZE);
         }, 500));
-
 
         // add user and system activites
         this.manifestSystemActivities();
         this.activityManager.loadManifest(manifest);
-        this.onStart();
 
-        // get the party started
-        this.activityManager.startRouting();
-        this.onResume();
+        // get the party started when we're done
+        var d = this.onStart();
+        var doStart = _(function() {
+            log('application loaded');
+            this.window.$el.html('');
+            this.activityManager.startRouting();
+            this.onResume();
+            log('application started');
+        }).bind(this);
 
-        log('application loaded');
+        if (d && d.done) {
+            log('waiting for application to finish loading...');
+            d.done(doStart);
+        } else
+            doStart();
+
     });
 
     // stash the instance
@@ -66,7 +74,8 @@ define(function(require) {
 
     // events
     Application.ON = {
-        RESIZE: 'application:resize'
+        RESIZE: 'application:resize',
+        LOGIN: 'application:login'
     };
 
     Application.prototype.setTitle = function(s)
@@ -161,7 +170,6 @@ define(function(require) {
             baseUrl: 'ugly-robo',
             url: /^ugly-robo$/
         });
-
     };
 
     // instantiation

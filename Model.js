@@ -3,7 +3,6 @@ define(function(require) {
     var Backbone    = require('backbone');
     var _           = require('underscore');
 
-    var log         = require('./log');
     var Collection  = require('./Collection');
 
     var Model = Backbone.Model.extend();
@@ -13,24 +12,31 @@ define(function(require) {
     {
         var M =  Backbone.Model.extend.apply(this, arguments);
 
-        // Create corresponding collection class
-        M.Collection = Collection.extend({
-            url: opts.urlRoot,
-            model: M
-        });
+        if(opts && opts.urlRoot) {
+            M.Collection = Collection.extend({
+                url: opts.urlRoot,
+                model: M
+            });
+        }
 
         return M;
     };
 
-    // override backbone server method here
+    Model.prototype.setDirty = function()
+    {
+        this._dirty = true;
+    };
+
+    // a bit of custom behavior
     Model.prototype.sync = function(method, model, opts)
     {
-        // call the method and claer dirty when done
-        var self = this;
+        this._dirty = true;
         var d = Backbone.sync.call(this, method, this, opts);
-        d.done(function() {
-            self.dirty = false;
-        });
+
+        d.done(_(function() {
+            this._dirty = false;
+        }).bind(this));
+
         return d;
     };
 
