@@ -6,6 +6,16 @@ define(function(require) {
 
     var TemplateView = View.extend();
 
+    // special stuff
+    TemplateView.prototype.initialize = function(opts)
+    {
+        this._env = {};
+        if (!opts)
+            return;
+
+        _(this._env).extend(opts.fn, opts.data);
+    };
+
     // render HTML based on a template
     TemplateView.prototype.render = function()
     {
@@ -17,11 +27,11 @@ define(function(require) {
             this.template = _.template(html);
         }
 
+        var opts = _({ view: this }).extend(this._env);
+
         // inflate
         if (this.template) {
-            this.$el.html(this.template({
-                view: this
-            }));
+            this.$el.html(this.template(opts));
         }
 
         // typically return a deferred on render

@@ -62,6 +62,8 @@ define(function(require) {
                 preserveX: m.screen ? m.screen.preserveX : false,
                 preserveY: m.screen ? m.screen.preserveY : false
             }).updateBaseSize();
+
+            activity.$('.textfill').textfill({ maxFontPixels: 500});
     };
 
     // update base size for an entire selector

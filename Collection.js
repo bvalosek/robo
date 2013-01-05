@@ -5,6 +5,12 @@ define(function(require) {
 
     var Collection = Backbone.Collection.extend();
 
+    // convenience method
+    Collection.prototype.search = function(searchOptions)
+    {
+        return this.fetch({ data: searchOptions });
+    };
+
     // poor naming to avoid collision with new backbone method
     Collection.prototype.updateAll = function(options)
     {

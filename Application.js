@@ -55,6 +55,7 @@ define(function(require) {
             this.window.$el.html('');
             this.activityManager.startRouting();
             this.onResume();
+            this.watchIdle();
             log('application started');
         }).bind(this);
 
@@ -75,7 +76,50 @@ define(function(require) {
     // events
     Application.ON = {
         RESIZE: 'application:resize',
-        LOGIN: 'application:login'
+        LOGIN: 'application:login',
+        IDLE_START: 'application:idle-start',
+        IDLE_END: 'application:idle-end'
+    };
+
+    Application.prototype.watchIdle = function()
+    {
+        this._isIdle   = false;
+        this._idleTime = 0;
+
+        // reset idle timer everytime the mouse moves
+        $(window).mousemove(_(function() {
+            this._idleTime = 0;
+
+            if (this._isIdle) {
+                this._isIdle = false;
+                this.stopIdle();
+            }
+
+        }).bind(this));
+
+        // increment idle timer every second
+        setInterval(_(function() {
+            this._idleTime++;
+
+            if (this._idleTime == 5) {
+                this._isIdle = true;
+                this.startIdle();
+            }
+        }).bind(this), 1000);
+    };
+
+    Application.prototype.stopIdle = function()
+    {
+        log('app is no longer idle');
+        var a = this.activityManager.getTopActivity();
+        if (a) a.onIdleStop();
+    };
+
+    Application.prototype.startIdle = function()
+    {
+        log('app is now idle');
+        var a = this.activityManager.getTopActivity();
+        if (a) a.onIdleStart();
     };
 
     Application.prototype.setTitle = function(s)

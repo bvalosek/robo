@@ -46,6 +46,7 @@ define(function(require) {
 
         this._clearTimers();
         this.unbindKeys();
+        this.context.off(null, null, this);
 
         this.onStop();
 
@@ -182,6 +183,9 @@ define(function(require) {
     {
         this.setState(Activity.ON.DESTROY, [Activity.ON.STOP]);
     };
+
+    Activity.prototype.onIdleStop = function() { };
+    Activity.prototype.onIdleStart = function() { };
 
     Activity.prototype.log = function(s)
     {
