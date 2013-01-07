@@ -37,7 +37,16 @@ define(function(require) {
         // setup trigger for resize
         var self = this;
         $(window).resize(_.debounce(function() {
+            self._resizing = false;
             self.trigger(Application.ON.RESIZE);
+        }, 500));
+
+        $(window).resize(_.throttle(function() {
+            if (self._resizing)
+                return;
+
+            self._resizing = true;
+            self.trigger(Application.ON.RESIZE_START);
         }, 500));
 
         // get the party started when we're done
@@ -68,6 +77,7 @@ define(function(require) {
     // events
     Application.ON = {
         RESIZE: 'application:resize',
+        RESIZE_START: 'application:resize-start',
         LOGIN: 'application:login',
         IDLE_START: 'application:idle-start',
         IDLE_END: 'application:idle-end'
@@ -91,6 +101,9 @@ define(function(require) {
 
         // increment idle timer every second
         setInterval(_(function() {
+            if (this._resizing)
+                return;
+
             this._idleTime++;
 
             if (this._idleTime == 5) {
