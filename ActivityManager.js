@@ -170,8 +170,11 @@ define(function(require) {
                 activity.onCreate();
                 activity.context = this.context;
                 stack.push(activity);
-                this.context.window.appendView(activity);
-                activity.onStart();
+                this.context.window.appendView(activity)
+                    .done(function() {
+                        activity.bindStaticViews();
+                        activity.onStart();
+                    });
 
                 // process close event
                 var self = this;

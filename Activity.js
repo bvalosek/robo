@@ -36,11 +36,11 @@ define(function(require) {
 
     Activity.ON = {
         CREATE: 'robo-activity:create',
-        START: 'robo-activity:create',
-        RESUME: 'robo-activity:create',
-        PAUSE: 'robo-activity:create',
-        STOP: 'robo-activity:create',
-        DESTROY: 'robo-activity:create'
+        START: 'robo-activity:start',
+        RESUME: 'robo-activity:resume',
+        PAUSE: 'robo-activity:pause',
+        STOP: 'robo-activity:stop',
+        DESTROY: 'robo-activity:destroy'
     };
 
     // override close behavior
@@ -192,6 +192,24 @@ define(function(require) {
     {
         this.setState(Activity.ON.DESTROY, [Activity.ON.STOP]);
     };
+
+    // find any views in the DOM we've already setup
+    Activity.prototype.bindStaticViews = function()
+    {
+        // find all views and pre-setup
+        var activity = this;
+        this.$('[data-robo-view]').each(function() {
+            var $el = $(this);
+            var name = $el.data('robo-view');
+
+            activity.log('adding static view: ' + name);
+
+            var v = new View({ el: $el });
+            activity.addChild(v);
+            activity[name] = v;
+        });
+    };
+
 
     Activity.prototype.onIdleStop = function() { };
     Activity.prototype.onIdleStart = function() { };
