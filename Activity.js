@@ -23,17 +23,6 @@ define(function(require) {
         return LazyView.extend.call(this, opts);
     };
 
-    Activity.STATE = {
-        NONE    : -1,
-        CREATE  : 1,
-        START   : 2,
-        RESUME  : 3,
-        PAUSE   : 4,
-        STOP    : 5,
-        DESTROY : 6,
-        DEAD    : 7
-    };
-
     Activity.ON = {
         CREATE: 'robo-activity:create',
         START: 'robo-activity:start',
@@ -46,12 +35,8 @@ define(function(require) {
     // override close behavior
     Activity.prototype.close = function()
     {
-        if (this.currentState < Activity.STATE.PAUSE)
+        if (this.currentState != Activity.ON.PAUSE)
             this.onPause();
-
-        // if already stopped -- don't need this
-        if (this.currentState > Activity.STATE.PAUSE)
-            return;
 
         this._clearTimers();
         this.unbindKeys();
@@ -63,7 +48,7 @@ define(function(require) {
         LazyView.prototype.close.call(this);
 
         this.onDestroy();
-        this.currentState = Activity.STATE.DEAD;
+        this.currentState = Activity.ON.DEAD;
     };
 
     // stop all proxy timers
