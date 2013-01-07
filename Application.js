@@ -47,7 +47,7 @@ define(function(require) {
 
             self._resizing = true;
             self.trigger(Application.ON.RESIZE_START);
-        }, 500));
+        }, 100));
 
         // get the party started when we're done
         var d = this.onStart();
