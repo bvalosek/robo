@@ -150,6 +150,7 @@ define(function(require) {
     Activity.prototype.onResume = function()
     {
         this.setState(Activity.ON.RESUME, [Activity.ON.START, Activity.ON.PAUSE]);
+        this.onIdleStop();
 
         this.$el.removeClass('activity-pause');
 
@@ -196,8 +197,14 @@ define(function(require) {
     };
 
 
-    Activity.prototype.onIdleStop = function() { };
-    Activity.prototype.onIdleStart = function() { };
+    Activity.prototype.onIdleStop = function()
+    {
+        this.$el.removeClass('idle');
+    };
+    Activity.prototype.onIdleStart = function()
+    {
+        this.$el.addClass('idle');
+    };
 
     Activity.prototype.log = function(s)
     {
