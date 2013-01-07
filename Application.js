@@ -10,10 +10,6 @@ define(function(require) {
     var ActivityManager = require('./ActivityManager');
     var KeyManager      = require('./KeyManager');
 
-    var manifest        = require('manifest');
-
-    var SYS_CHORD = '';
-
     // less files
     require('less!./res/base.less');
 
@@ -43,10 +39,6 @@ define(function(require) {
         $(window).resize(_.debounce(function() {
             self.trigger(Application.ON.RESIZE);
         }, 500));
-
-        // add user and system activites
-        this.manifestSystemActivities();
-        this.activityManager.loadManifest(manifest);
 
         // get the party started when we're done
         var d = this.onStart();
@@ -186,34 +178,6 @@ define(function(require) {
     Application.prototype.off = function(eventName, fn, context)
     {
         this._events.off(eventName, fn, context);
-    };
-
-    // built-in activites
-    Application.prototype.manifestSystemActivities = function()
-    {
-        this.activityManager.manifestActivity({
-            Activity: require('./activities/About'),
-            name: 'About Robo',
-            hotkey: SYS_CHORD + 'i',
-            baseUrl: 'about-robo',
-            url: /^about-robo$/
-        });
-
-        this.activityManager.manifestActivity({
-            Activity: require('./activities/TypeDemo'),
-            name: 'Robo Typography Demo',
-            hotkey: SYS_CHORD + 't',
-            baseUrl: 'typography-robo',
-            url: /^typography-robo$/
-        });
-
-        this.activityManager.manifestActivity({
-            Activity: require('./activities/UglyDemo'),
-            name: 'Robo Ugly Demo',
-            hotkey: SYS_CHORD + 'u',
-            baseUrl: 'ugly-robo',
-            url: /^ugly-robo$/
-        });
     };
 
     // instantiation

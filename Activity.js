@@ -14,6 +14,15 @@ define(function(require) {
         className: 'robo-activity'
     });
 
+    Activity.extend = function(opts)
+    {
+        // append classname instead of overwriting
+        if (opts && opts.className)
+            opts.className = 'robo-activity ' + opts.className;
+
+        return LazyView.extend.call(this, opts);
+    };
+
     Activity.STATE = {
         NONE    : -1,
         CREATE  : 1,

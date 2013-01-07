@@ -5,6 +5,8 @@ define(function(require) {
 
     var $           = require('jquery');
 
+    require('jquery-textfill');
+
     var Geometry = Base.extend(function(opts) {
 
         opts = _(opts).defaults({
