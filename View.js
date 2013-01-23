@@ -26,10 +26,14 @@ define(function(require) {
             childOpts = childOpts || {};
 
             var Child = _extend.call(this, childOpts);
-            Child.prototype.className = (childOpts.className || '')
-                + (Parent.prototype.className
-                    ? ' ' + Parent.prototype.className
-                    : '');
+
+            // construct inherited DOM class names
+            var parentClassName = Parent.prototype.className;
+            var className = childOpts.className || '';
+
+            className += parentClassName ? ' ' + parentClassName : '';
+
+            Child.prototype.className = className;
 
             // propagate extender
             Child.extend = makeExtender(Child);
