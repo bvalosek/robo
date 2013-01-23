@@ -6,7 +6,10 @@
       "backbone": "github:amdjs/backbone/0.9.10",
       "text": "github:requirejs/text/2.0.4",
       "require-less": "github:guybedford/require-less/master",
-      "keymage": "github:piranha/keymage/master"
+      "keymage": "github:piranha/keymage/master",
+      "underscore": "github:amdjs/underscore/1.4.3",
+      "require-css": "github:guybedford/require-css/master",
+      "require": "github:jrburke/requirejs/2.1.3"
     }
   }
 }
