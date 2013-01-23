@@ -6,7 +6,7 @@ define(function(require) {
     var log          = require('./log');
     var Geometry     = require('./Geometry');
 
-    // stylez
+    // base activity styles
     require('less!./res/activity.less');
 
     var Activity = DeferredView.extend({
