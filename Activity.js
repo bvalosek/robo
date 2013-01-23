@@ -13,15 +13,6 @@ define(function(require) {
         className: 'robo-activity'
     });
 
-    Activity.extend = function(opts)
-    {
-        // append classname instead of overwriting
-        if (opts && opts.className)
-            opts.className = 'robo-activity ' + opts.className;
-
-        return DeferredView.extend.call(this, opts);
-    };
-
     Activity.ON = {
         CREATE: 'robo-activity:create',
         START: 'robo-activity:start',

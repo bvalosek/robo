@@ -5,7 +5,9 @@ define(function(require) {
 
     var log      = require('./log');
 
-    var View = Backbone.View.extend();
+    var View = Backbone.View.extend({
+        className: 'view'
+    });
 
     // events
     View.ON = {
@@ -13,16 +15,29 @@ define(function(require) {
         CLOSE: 'view:close'
     };
 
-    // cat together classes for views instead of getting clobbered by className
-    // property
-    View.extend = function(opts)
+    // properly setup the child extended
+    var makeExtender = function(Parent)
     {
-        // append classname instead of overwriting
-        if (opts && opts.className)
-            opts.className = 'robo-view ' + opts.className;
+        // capture old extend
+        var _extend = Parent.extend;
 
-        return Backbone.View.extend.call(this, opts);
+        return function(childOpts)
+        {
+            childOpts = childOpts || {};
+
+            var Child = _extend.call(this, childOpts);
+            Child.prototype.className = (childOpts.className || '')
+                + (Parent.prototype.className
+                    ? ' ' + Parent.prototype.className
+                    : '');
+
+            // propagate extender
+            Child.extend = makeExtender(Child);
+            return Child;
+        };
     };
+
+    View.extend = makeExtender(View);
 
     // return the view that we append child views to
     // Override used e.g. templating

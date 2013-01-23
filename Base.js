@@ -8,9 +8,6 @@ define(function(require) {
         {
             Child = Child || Parent;
 
-            // access to original methods
-            Child.__super__ = Parent.prototype;
-
             // setup proto chain
             var ctor = function() {};
             ctor.prototype = Parent.prototype;
