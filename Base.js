@@ -1,7 +1,5 @@
 define(function(require) {
-    var _ = require('underscore');
 
-    // empty constructor
     Base = function() {};
 
     var makeExtender = function(Parent)

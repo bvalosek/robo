@@ -5,15 +5,15 @@ define(function(require) {
     var _            = require('underscore');
 
     var CLOSE_DELAY = 1000;
-    var CLASS_NAME  = 'robo-lazy-view';
+    var CLASS_NAME  = 'robo-deferred-view';
 
-    require('less!./res/lazy-view.less');
+    require('less!./res/deferred-view.less');
 
-    var LazyView = TemplateView.extend();
+    var DeferredView = TemplateView.extend();
 
     // add the "open" class once the UI thread ends and the element shows up in
     // the DOM
-    LazyView.prototype.render = function()
+    DeferredView.prototype.render = function()
     {
         this.$el.addClass(CLASS_NAME);
 
@@ -28,7 +28,7 @@ define(function(require) {
     };
 
     // only actually remove from DOM after a bit
-    LazyView.prototype.close = function()
+    DeferredView.prototype.close = function()
     {
         this.$el
             .removeClass('open')
@@ -42,5 +42,5 @@ define(function(require) {
         }, CLOSE_DELAY);
     };
 
-    return LazyView;
+    return DeferredView;
 });

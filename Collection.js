@@ -14,19 +14,23 @@ define(function(require) {
     // poor naming to avoid collision with new backbone method
     Collection.prototype.updateAll = function(options)
     {
-        if (this._dirty)
-            return new $.Deferred().resolve();
+        var update = new $.Deferred();
 
+        if (this._dirty)
+            return update.resolve();
+
+        // create a shallow copy of the main collection, but make sure to shuck
+        // of any bindings we may have gotten along with it
         var fresh = _(this).clone();
         fresh.off();
 
         // update the clone collection, then do a smart merge when we're done
-        var update = new $.Deferred();
-        fresh.fetch(options).done(_(function() {
+        fresh.fetch(options)
+        .done(function() {
             var ids = [];
 
             // add new
-            fresh.each(_(function(m) {
+            fresh.each(function(m) {
                 var exisiting = this.get(m.id);
 
                 var hasChanged = exisiting ?
@@ -39,7 +43,7 @@ define(function(require) {
                 }
 
                 ids.push(m.id);
-            }).bind(this));
+            }.bind(this));
 
             // remove missing
             this.remove(this.filter(function(x) {
@@ -52,7 +56,7 @@ define(function(require) {
             this.totalResults = fresh.totalResults;
 
             update.resolve();
-        }).bind(this));
+        }.bind(this));
 
         return update;
     };

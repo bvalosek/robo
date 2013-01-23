@@ -1,16 +1,15 @@
 define(function(require) {
 
-    var _        = require('underscore');
-
-    var View     = require('./View');
-    var LazyView = require('./LazyView');
-    var log      = require('./log');
-    var Geometry = require('./Geometry');
+    var _            = require('underscore');
+    var View         = require('./View');
+    var DeferredView = require('./DeferredView');
+    var log          = require('./log');
+    var Geometry     = require('./Geometry');
 
     // stylez
     require('less!./res/activity.less');
 
-    var Activity = LazyView.extend({
+    var Activity = DeferredView.extend({
         className: 'robo-activity'
     });
 
@@ -20,7 +19,7 @@ define(function(require) {
         if (opts && opts.className)
             opts.className = 'robo-activity ' + opts.className;
 
-        return LazyView.extend.call(this, opts);
+        return DeferredView.extend.call(this, opts);
     };
 
     Activity.ON = {
@@ -45,7 +44,7 @@ define(function(require) {
         this.onStop();
 
         // close the actual view
-        LazyView.prototype.close.call(this);
+        DeferredView.prototype.close.call(this);
 
         this.onDestroy();
         this.currentState = Activity.ON.DEAD;
@@ -67,7 +66,7 @@ define(function(require) {
         this._timers = this._timers || [];
         context = context || this;
 
-        var tId = setInterval(_(fn).bind(context), t);
+        var tId = setInterval(fn.bind(context), t);
 
         this.log('starting timer ' + tId);
 

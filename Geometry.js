@@ -2,10 +2,7 @@ define(function(require) {
 
     var Base        = require('./Base');
     var log         = require('./log');
-
     var $           = require('jquery');
-
-    require('jquery-textfill');
 
     var Geometry = Base.extend(function(opts) {
 
@@ -64,8 +61,6 @@ define(function(require) {
                 preserveX: m.screen ? m.screen.preserveX : false,
                 preserveY: m.screen ? m.screen.preserveY : false
             }).updateBaseSize();
-
-            activity.$('.textfill').textfill({ maxFontPixels: 500});
     };
 
     // update base size for an entire selector

@@ -1,7 +1,6 @@
 define(function(require) {
 
     var Backbone    = require('backbone');
-
     var log         = require('./log');
 
     var Router = Backbone.Router.extend({
@@ -19,36 +18,30 @@ define(function(require) {
         return r;
     };
 
-    // force a re-look at the hash
-    Router.prototype.check = function()
-    {
-        this._router(window.document.location.hash, true);
-    };
-
     // normalize the url
     Router.prototype.normalize = function(url)
     {
         return (url || '').replace(/^#?!?\/?/,'');
     };
 
-    Router.prototype._router = function(url, ignoreCrumb)
+    // what actually routes from the url event
+    Router.prototype._router = function(url)
     {
         url = this.normalize(url);
 
-        // var matches = url.match(/^([0-9a-f\-]{36})?\/?(.*)$/);
         var matches = url.match(/^(view[0-9]+)?\/?(.*)$/);
 
         var crumb = matches[1];
-        url       = matches[2];
+        url = matches[2];
 
-        if (crumb && !ignoreCrumb)
+        if (crumb)
             this.crumbRouter(crumb, url);
         else
-            this.urlRouter(url, crumb);
+            this.urlRouter(url);
     };
 
     // launch Activity based on URL
-    Router.prototype.urlRouter = function(url, crumb)
+    Router.prototype.urlRouter = function(url)
     {
         log('url route:' + url);
 
@@ -58,7 +51,7 @@ define(function(require) {
             this.context.startActivity(Activity);
     };
 
-    // if we've got a crumb
+    // try to find activity based on crumb, fall back to URL
     Router.prototype.crumbRouter = function(crumb, url)
     {
         log('crumb route:' + url);
@@ -69,6 +62,7 @@ define(function(require) {
         }
     };
 
+    // crunch bang
     Router.prototype.setUrl = function(url)
     {
         this.navigate('!/' + url);

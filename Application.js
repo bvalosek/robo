@@ -3,7 +3,6 @@ define(function(require) {
     var Backbone        = require('backbone');
     var $               = require('jquery');
     var _               = require('underscore');
-
     var View            = require('./View');
     var log             = require('./log');
     var Base            = require('./Base');
@@ -13,13 +12,9 @@ define(function(require) {
     // less files
     require('less!./res/base.less');
 
-    // singletone style
-    var _instance = null;
-
     // creating the application
     var Application = Base.extend(function() {
 
-        _instance = this;
         this.onCreate();
 
         // setup events
@@ -51,14 +46,14 @@ define(function(require) {
 
         // get the party started when we're done
         var d = this.onStart();
-        var doStart = _(function() {
+        var doStart = function() {
             log('application loaded');
             this.window.$el.html('');
             this.activityManager.startRouting();
             this.onResume();
             this.watchIdle();
             log('application started');
-        }).bind(this);
+        }.bind(this);
 
         if (d && d.done) {
             log('waiting for application to finish loading...');
@@ -67,12 +62,6 @@ define(function(require) {
             doStart();
 
     });
-
-    // stash the instance
-    Application.getInstance = function()
-    {
-        return _instance;
-    };
 
     // events
     Application.ON = {
@@ -89,7 +78,7 @@ define(function(require) {
         this._idleTime = 0;
 
         // reset idle timer everytime the mouse moves
-        $(window).mousemove(_(function() {
+        $(window).mousemove(function() {
             this._idleTime = 0;
 
             if (this._isIdle) {
@@ -97,10 +86,10 @@ define(function(require) {
                 this.stopIdle();
             }
 
-        }).bind(this));
+        }.bind(this));
 
         // increment idle timer every second
-        setInterval(_(function() {
+        setInterval(function() {
             if (this._resizing)
                 return;
 
@@ -110,7 +99,7 @@ define(function(require) {
                 this._isIdle = true;
                 this.startIdle();
             }
-        }).bind(this), 1000);
+        }.bind(this), 1000);
     };
 
     Application.prototype.stopIdle = function()

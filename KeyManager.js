@@ -2,7 +2,6 @@ define(function(require) {
 
     var _       = require('underscore');
     var keymage = require('keymage');
-
     var Base    = require('./Base');
     var log     = require('./log');
     var View    = require('./View');
@@ -61,7 +60,7 @@ define(function(require) {
     // combo that may come up
     KeyManager.prototype.handlerFactory = function(keys)
     {
-        return _(function() {
+        return function() {
             log('keys pressed: ' + keys);
 
             // figure out what action we want by context
@@ -71,7 +70,7 @@ define(function(require) {
                     x.fn.call(x.context);
             });
 
-        }).bind(this);
+        }.bind(this);
     };
 
     return KeyManager;

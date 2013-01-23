@@ -5,13 +5,23 @@ define(function(require) {
 
     var log      = require('./log');
 
-    // inherit from Backbone style view
     var View = Backbone.View.extend();
 
     // events
     View.ON = {
         HIDE: 'view:hide',
         CLOSE: 'view:close'
+    };
+
+    // cat together classes for views instead of getting clobbered by className
+    // property
+    View.extend = function(opts)
+    {
+        // append classname instead of overwriting
+        if (opts && opts.className)
+            opts.className = 'robo-view ' + opts.className;
+
+        return Backbone.View.extend.call(this, opts);
     };
 
     // return the view that we append child views to
@@ -70,7 +80,7 @@ define(function(require) {
         container._views = [];
     };
 
-    // dump append to HTML
+    // dumb append to HTML
     View.prototype.print = function(s)
     {
         this.getContainerView().$el.append(s + '<br>');

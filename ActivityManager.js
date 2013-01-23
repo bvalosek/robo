@@ -4,8 +4,6 @@ define(function(require) {
     var Base    = require('./Base');
     var View    = require('./View');
     var log     = require('./log');
-    var helpers = require('./helpers');
-
     var _       = require('underscore');
     var $       = require('jquery');
 
@@ -16,6 +14,8 @@ define(function(require) {
         this._manifest       = {};
         this._verifyActivity = null;
     });
+
+    var MAX_STACK_SIZE = 5;
 
     // events
     ActivityManager.ON = {
@@ -35,6 +35,7 @@ define(function(require) {
         Backbone.history.start();
     };
 
+    // manifest an Activity's info so we can access it in the app
     ActivityManager.prototype.manifestActivity = function(info, key)
     {
         if (key)
@@ -65,7 +66,7 @@ define(function(require) {
     ActivityManager.prototype.getActivities = function()
     {
         var activities = {};
-        _(this._manifest).each(function(x, key) {
+        this._manifest.forEach(function(x, key) {
             activities[key] = x.Activity;
         });
 
@@ -77,6 +78,7 @@ define(function(require) {
         return this._activityStack;
     };
 
+    // bring up an array-like of manifests
     ActivityManager.prototype.loadManifest = function(manifest)
     {
         var self = this;
@@ -85,6 +87,7 @@ define(function(require) {
         });
     };
 
+    // try to match on a manifested Activity's url
     ActivityManager.prototype.getActivityByUrl = function(url)
     {
         var info = _(this._manifest).find(function(x) {
@@ -94,6 +97,7 @@ define(function(require) {
         return info ? info.Activity : null;
     };
 
+    // crumbs used for handling when the user presses back
     ActivityManager.prototype.goToCrumb = function(crumb)
     {
         var index = 0;
@@ -107,7 +111,7 @@ define(function(require) {
 
         // clear stack above crumb, and resume
         var toClose = this._activityStack.slice(index + 1);
-        _(toClose).each(function(x) { x.close(); });
+        toClose.forEach(function(x) { x.close(); });
 
         this._resumeActivity(activity);
 
@@ -121,7 +125,7 @@ define(function(require) {
         this._verifyActivity = fn;
     };
 
-    // start an activity
+    // start an activity by class constructor
     ActivityManager.prototype.startActivity = function(Activity, opts)
     {
         var info = _(this._manifest).find(function(x) {
@@ -135,16 +139,17 @@ define(function(require) {
             log('activity is secure, checking verification...');
 
             $.when(this._verifyActivity(info))
-            .then(_(function() {
+            .then(function() {
                 log('verified');
                 this._addActivity(Activity, opts);
-            }).bind(this));
+            }.bind(this));
         } else {
             this._addActivity(Activity, opts);
         }
     };
 
-    // manage the stack
+    // manage the stack -- called after we've determined we're ready to
+    // actually add the activity
     ActivityManager.prototype._addActivity = function(Activity, opts)
     {
         if (!this._activityStack)
@@ -164,12 +169,14 @@ define(function(require) {
             default:
                 this.asTopActivity(function() { this.onPause(); });
 
-                // create the new activity and add to DOM
+                // create the new activity
                 log('launching new activity: ' + Activity.prototype.manifest.name);
                 activity = new Activity(opts);
-                activity.onCreate();
                 activity.context = this.context;
+                activity.onCreate();
                 stack.push(activity);
+
+                // render + add to DOM
                 this.context.window.appendView(activity)
                     .done(function() {
                         activity.bindStaticViews();
@@ -177,16 +184,15 @@ define(function(require) {
                     });
 
                 // process close event
-                var self = this;
                 activity.once(View.ON.HIDE, function() {
-                    self._stopActivity(activity);
-                });
+                    this._stopActivity(activity);
+                }.bind(this));
 
                 break;
         }
 
-        // cleanup stack if needed
-        if (stack.length > 5) {
+        // cleanup stack if getting too big
+        if (stack.length > MAX_STACK_SIZE) {
             var a = stack.shift();
             a.close();
         }
@@ -231,7 +237,7 @@ define(function(require) {
     ActivityManager.prototype.dumpStack = function()
     {
         var s = 'stack dump: ';
-        _(this._activityStack).each(function(x) {
+        this._activityStack.forEach(function(x) {
             s += ('[' + x.manifest.name + ':' + x.cid + '] ');
         });
 
