@@ -44,11 +44,10 @@ define(function(require) {
     // stop all proxy timers
     Activity.prototype._clearTimers = function()
     {
-        var self = this;
-        _(this._timers).each(function(t) {
-            self.log('stopping timer ' + t);
+        this._timers.forEach(function(t) {
+            this.log('stopping timer ' + t);
             clearInterval(t);
-        });
+        }.bind(this));
     };
 
     // proxy the timer management
@@ -185,7 +184,6 @@ define(function(require) {
             activity[name] = v;
         });
     };
-
 
     Activity.prototype.onIdleStop = function()
     {

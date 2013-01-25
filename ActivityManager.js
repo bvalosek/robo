@@ -81,10 +81,9 @@ define(function(require) {
     // bring up an array-like of manifests
     ActivityManager.prototype.loadManifest = function(manifest)
     {
-        var self = this;
         _(manifest).each(function(x, key) {
-            self.manifestActivity(x, key);
-        });
+            this.manifestActivity(x, key);
+        }.bind(this));
     };
 
     // try to match on a manifested Activity's url

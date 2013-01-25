@@ -30,19 +30,18 @@ define(function(require) {
         this.activityManager = new ActivityManager(this);
 
         // setup trigger for resize
-        var self = this;
         $(window).resize(_.debounce(function() {
-            self._resizing = false;
-            self.trigger(Application.ON.RESIZE);
-        }, 500));
+            this._resizing = false;
+            this.trigger(Application.ON.RESIZE);
+        }.bind(this), 500));
 
         $(window).resize(_.throttle(function() {
-            if (self._resizing)
+            if (this._resizing)
                 return;
 
-            self._resizing = true;
-            self.trigger(Application.ON.RESIZE_START);
-        }, 100));
+            this._resizing = true;
+            this.trigger(Application.ON.RESIZE_START);
+        }.bind(this), 100));
 
         // get the party started when we're done
         var d = this.onStart();
