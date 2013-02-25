@@ -111,6 +111,11 @@ define(function(require, exports, module) {
         // the extend method
         if (this.constructor) {
             this.constructor.extend = makeExtender(this.constructor);
+
+            // let mixin function like this
+            this.constructor.mixin = function() {
+                return this.extend().mixin.apply(this, arguments);
+            };
         }
 
     };

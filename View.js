@@ -4,11 +4,10 @@ define(function(require, exports, module) {
     var compose      = require('./compose');
     var Base         = require('robo/Base');
 
-    var View = Base.extend(function()
+    var View = Base.mixin(asRenderable).extend(function()
     {
         this.setupView();
-    }).mixin(asRenderable);
-
+    });
 
     return View;
 });
