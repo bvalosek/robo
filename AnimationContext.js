@@ -1,0 +1,42 @@
+define(function(require, exports, module) {
+
+    var Base = require('./Base');
+
+    var MS_THRESHOLD = 17;
+
+    var AnimationContext = Base.extend(function() {
+        this._queue = [];
+    });
+
+    AnimationContext.prototype.queue = function(fn)
+    {
+        this._queue.push(fn);
+        if (!this._running) {
+            this._running = true;
+            requestAnimationFrame(this._runQueue.bind(this));
+        }
+    };
+
+    AnimationContext.prototype._runQueue = function()
+    {
+        var t = new Date().getTime();
+
+        while(this._queue.length) {
+            var f = this._queue.splice(0, 1);
+            f[0]();
+
+            var d = new Date().getTime() - t;
+
+            if (d > MS_THRESHOLD)
+                break;
+        }
+
+        if (!this._queue.length)
+            this._running = false;
+        else
+            requestAnimationFrame(this._runQueue.bind(this));
+
+    };
+
+    return AnimationContext;
+});

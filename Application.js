@@ -1,197 +1,77 @@
-define(function(require) {
+define(function(require, exports, module) {
 
-    var Backbone        = require('backbone');
-    var $               = require('jquery');
-    var _               = require('underscore');
-    var View            = require('./View');
-    var log             = require('./log');
-    var Base            = require('./Base');
-    var ActivityManager = require('./ActivityManager');
-    var KeyManager      = require('./KeyManager');
+    var Base           = require('./Base');
+    var View           = require('./View');
+    var asCompositable = require('./mixins/asCompositable');
+    var withEvents     = require('./mixins/withEvents');
+    var Backbone       = require('backbone');
 
-    // less files
-    require('less!./res/base.less');
-
-    // creating the application
     var Application = Base.extend(function() {
-
         this.onCreate();
 
-        // setup events
-        this._events = _({}).extend(Backbone.Events);
+        this.window = new View()
+            .setElement('body')
+            .mixin(asCompositable);
 
-        // main view
-        this.window = new View({ el: $('body') });
-
-        // shortcut keys
-        this.keyManager = new KeyManager(this);
-
-        // setup history and routes
-        this.activityManager = new ActivityManager(this);
-
-        // setup trigger for resize
-        $(window).resize(_.debounce(function() {
-            this._resizing = false;
-            this.trigger(Application.ON.RESIZE);
-        }.bind(this), 500));
-
-        $(window).resize(_.throttle(function() {
-            if (this._resizing)
-                return;
-
-            this._resizing = true;
-            this.trigger(Application.ON.RESIZE_START);
-        }.bind(this), 100));
-
-        // get the party started when we're done
         var d = this.onStart();
-        var doStart = function() {
-            log('application loaded');
-            this.window.$el.html('');
-            this.activityManager.startRouting();
+
+        // how we resume
+        var postStart = function() {
             this.onResume();
-            this.watchIdle();
-            log('application started');
+
+            // set that glob
+            window.theApp = this;
         }.bind(this);
 
-        if (d && d.done) {
-            log('waiting for application to finish loading...');
-            d.done(doStart);
-        } else
-            doStart();
-
+        // if application is still starting
+        if (d && d.then)
+            d.then(postStart);
+        else
+            postStart();
     });
 
-    // events
-    Application.ON = {
-        RESIZE: 'application:resize',
-        RESIZE_START: 'application:resize-start',
-        LOGIN: 'application:login',
-        IDLE_START: 'application:idle-start',
-        IDLE_END: 'application:idle-end'
+    // proxy events to the window renderable
+    Application.prototype.on = function(eventName, fn, context)
+    {
+
+        var f = fn.bind(context || this);
+        return this.window.on(eventName, function() {
+            f(arguments[1]);
+        });
     };
 
-    Application.prototype.watchIdle = function()
+    // clobber trigger and pipe events via dom
+    Application.prototype.trigger = function()
     {
-        this._isIdle   = false;
-        this._idleTime = 0;
+        return this.window.trigger.apply(this.window.trigger, arguments);
+    };
 
-        // reset idle timer everytime the mouse moves
-        $(window).mousemove(function() {
-            this._idleTime = 0;
+    // will start routing immediately based on current URL
+    Application.prototype.startRouter = function(RouterClass)
+    {
+        this.router = new RouterClass(this);
+        Backbone.history.start({ pushState: true });
+    };
 
-            if (this._isIdle) {
-                this._isIdle = false;
-                this.stopIdle();
-            }
+    // add a view to the overall DOM and add a class so we can alter the other
+    // parts of the screen
+    Application.prototype.addPopup = function(view)
+    {
+        var cName = view.getClassName() + '-open';
 
+        this.window.addView(view);
+        this.window.addClass(cName);
+
+        // remove the popup flag when it closes
+        view.on('close', function() {
+            this.window.removeClass(cName);
         }.bind(this));
-
-        // increment idle timer every second
-        setInterval(function() {
-            if (this._resizing)
-                return;
-
-            this._idleTime++;
-
-            if (this._idleTime == 5) {
-                this._isIdle = true;
-                this.startIdle();
-            }
-        }.bind(this), 1000);
     };
 
-    Application.prototype.stopIdle = function()
-    {
-        log('app is no longer idle');
-        var a = this.activityManager.getTopActivity();
-        if (a) a.onIdleStop();
-    };
-
-    Application.prototype.startIdle = function()
-    {
-        log('app is now idle');
-        var a = this.activityManager.getTopActivity();
-        if (a) a.onIdleStart();
-    };
-
-    Application.prototype.setTitle = function(s)
-    {
-        document.title = s;
-    };
-
-    Application.prototype.startActivity = function(Activity, opts)
-    {
-        return this.activityManager.startActivity(Activity, opts);
-    };
-
-    Application.prototype.getActivities = function()
-    {
-        return this.activityManager.getActivities();
-    };
-
-    // app-global key bind
-    Application.prototype.bindGlobalKeys = function(keys, fn)
-    {
-        this.keyManager.addKey(keys, this, fn);
-    };
-
-    // bind to arbitrary context
-    Application.prototype.bindKeysToContext = function(context, keys, fn)
-    {
-        this.keyManager.addKey(keys, context, fn);
-    };
-
-    // set the current keys context
-    Application.prototype.setKeysContext = function(c)
-    {
-        this._keyContext = c;
-        log('key context changed to ' + (c.cid || '[no cid]'));
-    };
-
-    // general function to determine if a context (activity or app) is
-    // active/visible etc
-    Application.prototype.isActiveContext = function(context)
-    {
-        if (context === this)
-            return true;
-
-        if (this._keyContext)
-            return this._keyContext === context;
-
-        return false;
-    };
-
-    // fire off
-    Application.prototype.trigger = function(eventName, opts)
-    {
-        this._events.trigger(eventName, opts);
-        log('event bus: ' + eventName);
-    };
-
-    // attach to
-    Application.prototype.bind = function(eventName, fn, context)
-    {
-        this._events.on(eventName, fn, context);
-    };
-
-    // clear events
-    Application.prototype.off = function(eventName, fn, context)
-    {
-        this._events.off(eventName, fn, context);
-    };
-
-    // instantiation
+    // lifecycle
     Application.prototype.onCreate = function() {};
-
-    // after we've setup, before we start routing
-    Application.prototype.onStart = function() {};
-
-    // after we've started routing
+    Application.prototype.onStart  = function() {};
     Application.prototype.onResume = function() {};
-
-    // gets the current user logged into the app, should be handled else where
-    Application.prototype.getUserId = function() { };
 
     return Application;
 });
