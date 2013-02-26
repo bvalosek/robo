@@ -51,6 +51,8 @@ define(function(require, exports, module) {
         };
     };
 
+    // Given some constructor function Parent, return a function that extends
+    // itself
     var makeExtender = function(Parent)
     {
         return function(Child)
@@ -61,9 +63,8 @@ define(function(require, exports, module) {
             // stuff we want hanging off the prototype + constructor
             if (Child && !_(Child).isFunction()) {
                 proto = _(Child).omit('constructor');
-                Child = Child.hasOwnProperty('constructor')
-                    ? Child.constructor
-                    : null;
+                Child = Child.hasOwnProperty('constructor') ?
+                    Child.constructor : null;
             }
 
             // by default child calls parent constructor
