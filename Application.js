@@ -6,9 +6,18 @@ define(function(require, exports, module) {
     var withEvents     = require('./mixins/withEvents');
     var Backbone       = require('backbone');
 
-    var Application = Base.extend({
+    // singleton context
+    var _context;
+
+    var Application = Base.mixin(withEvents).extend({
 
         constructor: function() {
+            if (_context)
+                throw new Error('Can only instantiate one Application object');
+
+            // stash context
+            _context = this;
+
             this.onCreate();
 
             this.window = new View()
@@ -27,22 +36,6 @@ define(function(require, exports, module) {
                 d.then(postStart);
             else
                 postStart();
-        },
-
-        // proxy events to the window renderable
-        on: function(eventName, fn, context)
-        {
-            var f = fn.bind(context || this);
-
-            return this.window.on(eventName, function() {
-                f(arguments[1]);
-            });
-        },
-
-        // clobber trigger and pipe events via dom
-        trigger: function()
-        {
-            return this.window.trigger.apply(this.window.trigger, arguments);
         },
 
         // will start routing immediately based on current URL
@@ -72,6 +65,11 @@ define(function(require, exports, module) {
         onStart  : function() {},
         onResume : function() {}
     });
+
+    Application.instance = function()
+    {
+        return _context;
+    };
 
     return Application;
 });

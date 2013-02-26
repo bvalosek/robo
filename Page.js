@@ -48,11 +48,16 @@ define(function(require, exports, module) {
             return v;
         },
 
-        // delegate an event to the root View and bind the callback to the correct
-        // context
-        delegate: function(selector, eventName, method)
+        // delegate events to the root node, binding to the page's context
+        delegateEvents: function(events)
         {
-            return this.root.delegate(selector, eventName, method, this);
+            var bound = {};
+
+            _(events).each(function(fn, selector) {
+                bound[selector] = fn.bind(this);
+            }.bind(this));
+
+            this.root.delegateEvents(bound);
         },
 
         // convenient access to the page root

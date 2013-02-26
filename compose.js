@@ -82,19 +82,26 @@ define(function(require, exports, module) {
             if (proto)
                 _(Child.prototype).extend(proto);
 
+            // create a mixin function on the new class
+            Child.mixin = function() {
+                return includeMixin(Child, _(arguments).toArray());
+            };
+
             // nice.
             Child.Super = Parent;
 
-            // dat mixin
-            Child.mixin = function() {
-                mixin(Child.prototype, _(arguments).toArray());
-                return Child;
-            };
-
-            // propagate extender
             Child.extend = makeExtender(Child);
             return Child;
         };
+    };
+
+    // mixin that targets a class, making sure to call an empty extend to get a
+    // new proto and not clobber the base
+    var includeMixin = function(Base, mixinArgs)
+    {
+        var M = Base.extend();
+        mixin(M.prototype, mixinArgs);
+        return M;
     };
 
     // return as a new constructor function ("class") that is subclass of
@@ -104,7 +111,7 @@ define(function(require, exports, module) {
         return makeExtender(Parent)(Child);
     };
 
-    // self mixin
+    // seed mixin -- only used to setup the Base object more than likely
     var withCompose = function()
     {
         // could be overwritten below if we're a constructor
@@ -115,10 +122,9 @@ define(function(require, exports, module) {
         if (this.constructor) {
             this.constructor.extend = makeExtender(this.constructor);
 
-            // let mixin function like this
             this.constructor.mixin = function() {
-                return this.extend().mixin.apply(this, arguments);
-            };
+                return includeMixin(this, _(arguments).toArray());
+            }.bind(this.constructor);
         }
 
     };
