@@ -61,7 +61,9 @@ define(function(require, exports, module) {
             // stuff we want hanging off the prototype + constructor
             if (Child && !_(Child).isFunction()) {
                 proto = _(Child).omit('constructor');
-                Child = Child.constructor;
+                Child = Child.hasOwnProperty('constructor')
+                    ? Child.constructor
+                    : null;
             }
 
             // by default child calls parent constructor

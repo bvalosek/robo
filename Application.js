@@ -20,9 +20,6 @@ define(function(require, exports, module) {
             // how we resume
             var postStart = function() {
                 this.onResume();
-
-                // set that glob
-                window.theApp = this;
             }.bind(this);
 
             // if application is still starting
@@ -35,8 +32,8 @@ define(function(require, exports, module) {
         // proxy events to the window renderable
         on: function(eventName, fn, context)
         {
-
             var f = fn.bind(context || this);
+
             return this.window.on(eventName, function() {
                 f(arguments[1]);
             });
