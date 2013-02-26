@@ -3,12 +3,48 @@ define(function(require, exports, module) {
     var asRenderable = require('./mixins/asRenderable');
     var compose      = require('./compose');
     var Base         = require('robo/Base');
+    var Backbone     = require('backbone');
 
-    var View = Base.mixin(asRenderable).extend({
+    // create BackboneView object that has the compose.js goodies baked in
+    var BackboneView = Backbone.View.extend();
+    compose.mixin(BackboneView.prototype, compose.withCompose);
 
-        constructor: function()
+    // new View object that is robo-like but extending from backbone.js
+    var View = BackboneView.extend({
+
+        // opts.silent = no event fired
+        close: function(opts)
         {
-            this.setupView();
+            opts = opts || {};
+
+            if (!opts.silent)
+                this.trigger('close');
+
+            this.remove();
+            this.off();
+            this.stopListening();
+
+            return this;
+        },
+
+        // erase the HTML
+        clearHtml: function()
+        {
+            this.$el.html('');
+            return this;
+        },
+
+        setElement: function()
+        {
+            View.Super.prototype.setElement.apply(this, arguments);
+            return this;
+        },
+
+        // dumbly print out to the DOM
+        print: function(s)
+        {
+            this.$el.html(this.$el.html() + s + '<br>');
+            return this;
         }
 
     });
