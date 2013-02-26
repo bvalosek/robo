@@ -7,58 +7,64 @@ define(function(require, exports, module) {
     var withEvents       = require('./mixins/withEvents');
     var _                = require('underscore');
 
-    var Page = Base.extend(function()
-    {
-        this.onCreate();
+    var Page = Base.mixin(withEvents).extend({
 
-        this.animationContext = new AnimationContext();
+        constructor: function()
+        {
+            this.onCreate();
 
-        // when dom loads, try to find a dump and chumped data
-        $(function() {
+            this.animationContext = new AnimationContext();
 
-            // defer until the call stack is empty to make sure whatever is
-            // creating us can finish
-            _(function() {
-                if (window.page)
-                    this.data = window.page;
+            // when dom loads, try to find a dump and chumped data
+            $(function() {
 
-                // base view
-                this.root = new View().setElement($('.content div').first());
+                // defer until the call stack is empty to make sure whatever is
+                // creating us can finish
+                _(function() {
+                    if (window.page)
+                        this.data = window.page;
 
-                this.onStart(this.data);
-            }.bind(this)).defer();
+                    // base view
+                    this.root = new View()
+                        .setElement($('.content div')
+                        .first());
 
-        }.bind(this));
-    }).mixin(withEvents);
+                    this.onStart(this.data);
+                }.bind(this)).defer();
 
-    Page.prototype.setTitle = function(s)
-    {
-        document.title = s;
-    };
+            }.bind(this));
+        },
 
-    // pre-populate with animation context
-    Page.prototype.animationFactory = function(Renderable)
-    {
-        var v = new Renderable();
-        v.animationContext = this.animationContext;
-        return v;
-    };
+        setTitle: function(s)
+        {
+            document.title = s;
+        },
 
-    // delegate an event to the root View and bind the callback to the correct
-    // context
-    Page.prototype.delegate = function(selector, eventName, method)
-    {
-        return this.root.delegate(selector, eventName, method, this);
-    };
+        // pre-populate with animation context
+        animationFactory: function(Renderable)
+        {
+            var v = new Renderable();
+            v.animationContext = this.animationContext;
+            return v;
+        },
 
-    // convenient access to the page root
-    Page.prototype.$ = function()
-    {
-        return this.root.$.apply(this.root, arguments);
-    };
+        // delegate an event to the root View and bind the callback to the correct
+        // context
+        delegate: function(selector, eventName, method)
+        {
+            return this.root.delegate(selector, eventName, method, this);
+        },
 
-    Page.prototype.onCreate = function() {};
-    Page.prototype.onStart = function() {};
+        // convenient access to the page root
+        $: function()
+        {
+            return this.root.$.apply(this.root, arguments);
+        },
+
+        onCreate: function() {},
+        onStart: function() {}
+
+    });
 
     return Page;
 });
