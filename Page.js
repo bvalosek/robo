@@ -34,6 +34,15 @@ define(function(require, exports, module) {
             }.bind(this));
         },
 
+        // defer a binding until the call stack clears taht sets a jquery on
+        // ready callback
+        onReady: function(fn)
+        {
+            _(function() {
+                $(fn.bind(this));
+            }.bind(this)).defer();
+        },
+
         setTitle: function(s)
         {
             document.title = s;
