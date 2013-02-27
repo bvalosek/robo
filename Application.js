@@ -5,6 +5,7 @@ define(function(require, exports, module) {
     var asCompositable = require('./mixins/asCompositable');
     var withEvents     = require('./mixins/withEvents');
     var Backbone       = require('backbone');
+    var log            = require('./log');
 
     // singleton context
     var _context;
@@ -15,19 +16,24 @@ define(function(require, exports, module) {
             if (_context)
                 throw new Error('Can only instantiate one Application object');
 
+            log('app booted');
+
             // stash context
             _context = this;
 
             this.onCreate();
+            log('app created');
 
             this.window = new View()
                 .setElement('body')
                 .mixin(asCompositable);
 
+            log('app starting...');
             var d = this.onStart();
 
             // how we resume
             var postStart = function() {
+                log('app done starting');
                 this.onResume();
             }.bind(this);
 

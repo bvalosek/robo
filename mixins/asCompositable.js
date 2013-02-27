@@ -56,6 +56,12 @@ define(function(require, exports, module) {
             return this;
         };
 
+        this.setView = function(view)
+        {
+            this.closeViews();
+            this.addView(view);
+        };
+
         // render all child views as well
         this.render = compose.wrap(this.render, function(render) {
             render();
