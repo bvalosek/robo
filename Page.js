@@ -1,18 +1,17 @@
 define(function(require, exports, module) {
 
-    var Base             = require('./Base');
     var View             = require('./View');
     var AnimationContext = require('./AnimationContext');
     var $                = require('jquery');
-    var withEvents       = require('./mixins/withEvents');
     var _                = require('underscore');
 
-    var Page = Base.mixin(withEvents).extend({
+    var Page = View.extend({
 
         constructor: function()
         {
-            this.onCreate();
+            Page.Super.call(this);
 
+            // keep track of a single animation context
             this.animationContext = new AnimationContext();
 
             // when dom loads, try to find a dump and chumped data
@@ -25,11 +24,11 @@ define(function(require, exports, module) {
                         this.data = window.page;
 
                     // base view
-                    this.root = new View()
-                        .setElement($('.content div')
-                        .first());
+                    this.setElement($('.content div').first());
 
+                    // start the page with any dump n chump
                     this.onStart(this.data);
+
                 }.bind(this)).defer();
 
             }.bind(this));
@@ -40,33 +39,15 @@ define(function(require, exports, module) {
             document.title = s;
         },
 
-        // pre-populate with animation context
-        animationFactory: function(Renderable)
+        // create a view-like object with the animation context pre-set
+        viewFactory: function(Renderable)
         {
             var v = new Renderable();
             v.animationContext = this.animationContext;
             return v;
         },
 
-        // delegate events to the root node, binding to the page's context
-        delegateEvents: function(events)
-        {
-            var bound = {};
-
-            _(events).each(function(fn, selector) {
-                bound[selector] = fn.bind(this);
-            }.bind(this));
-
-            this.root.delegateEvents(bound);
-        },
-
-        // convenient access to the page root
-        $: function()
-        {
-            return this.root.$.apply(this.root, arguments);
-        },
-
-        onCreate: function() {},
+        // called once page has loaded
         onStart: function() {}
 
     });

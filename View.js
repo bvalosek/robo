@@ -48,6 +48,21 @@ define(function(require, exports, module) {
             return this;
         },
 
+        // delegate a single event, potentially can break since it relies on
+        // undocumented backbone patterns
+        delegate: function(selector, event, method)
+        {
+            var eventName = event + '.delegateEvents' + this.cid;
+            method = method.bind(this);
+
+            if (selector === '')
+                this.$el.bind(eventName, method);
+            else
+                this.$el.delegate(selector, eventName, method);
+
+            return this;
+        },
+
         delegateEvents: function()
         {
             View.Super.prototype.delegateEvents.apply(this, arguments);
