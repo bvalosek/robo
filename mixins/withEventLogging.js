@@ -2,6 +2,7 @@ define(function(require, exports, module) {
 
     var compose = require('../compose');
     var log     = require('../log');
+    var _       = require('underscore');
 
     // mixin to output any triggered events
     var withEventLogging = function()
@@ -16,6 +17,7 @@ define(function(require, exports, module) {
             var data = args[1];
 
             log(this.getTag() + ' -> ' + eventName);
+
             trigger.apply(this, args);
         });
 

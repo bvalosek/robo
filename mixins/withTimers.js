@@ -2,42 +2,28 @@ define(function(require, exports, module) {
 
     var compose = require('../compose');
     var log     = require('../log');
+    var Timer   = require('../Timer');
 
     // keep track of timers on an object, clear them out on close. Typically
     // used on a renderable
     var withTimers = function()
     {
 
-        // execute immediately + setup interval
-        this.doInterval = function(fn, timeout, context)
-        {
-            fn.call(context || this);
-            return this.setInterval(fn, timeout, context);
-        };
-
-        // keep track
-        this.setInterval = function(fn, timeout, context)
+        this.createTimer = function(fn, timeout, context)
         {
             this._timers = this._timers || [];
-            context = context || this;
 
-            var tId = setInterval(fn.bind(context), timeout);
-            log ('starting timer ' + tId);
-            this._timers.push(tId);
+            var t = new Timer(fn, timeout, context || this);
+            this._timers.push(t);
 
-            return tId;
+            return t;
         };
 
         // shut down anything left running
         this.clearTimers = function()
         {
-            // optimize
-            if (!this._timers)
-                return;
-
-            this._timers.forEach(function(tId) {
-                log('stopping timer ' + tId);
-                clearInterval(tId);
+            this._timers.forEach(function(timer) {
+                timer.stop();
             });
         };
 

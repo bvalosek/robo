@@ -4,7 +4,7 @@ define(function(require, exports, module) {
     return function(s)
     {
         if(console.log)
-            console.log(s);
+            console.log.apply(console, arguments);
     };
 
 });
