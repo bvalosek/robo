@@ -32,10 +32,13 @@ define(function(require, exports, module) {
 
         close: function()
         {
-            if (this.value !== undefined)
+            if (this.value !== undefined) {
                 this._d.resolve(this.value);
-            else
+                this.addClass('popup-resolved');
+            } else {
                 this._d.reject();
+                this.addClass('popup-rejected');
+            }
 
             Popup.Super.prototype.close.call(this);
         },
