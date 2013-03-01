@@ -52,6 +52,11 @@ define(function(require, exports, module) {
         // undocumented backbone patterns
         delegate: function(selector, event, method)
         {
+            // cram it in
+            var key = event + (selector ? ' ' + selector  : '');
+            this.events = this.events || {};
+            this.events[key] = method;
+
             var eventName = event + '.delegateEvents' + this.cid;
             method = method.bind(this);
 
@@ -63,8 +68,11 @@ define(function(require, exports, module) {
             return this;
         },
 
-        delegateEvents: function()
+        // will clobber any existing events
+        delegateEvents: function(events)
         {
+            this.events = events || this.events;
+
             View.Super.prototype.delegateEvents.apply(this, arguments);
             return this;
         },

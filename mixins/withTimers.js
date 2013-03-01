@@ -22,6 +22,9 @@ define(function(require, exports, module) {
         // shut down anything left running
         this.clearTimers = function()
         {
+            if (!this._timers)
+                return;
+
             this._timers.forEach(function(timer) {
                 timer.stop();
             });
