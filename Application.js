@@ -7,6 +7,12 @@ define(function(require, exports, module) {
     var Backbone       = require('backbone');
     var log            = require('./log');
     var _              = require('underscore');
+    var $              = require('jquery');
+
+    // jCOOKS
+    require('jquery.cookie');
+
+    var FOREVER_COOKIE = 40000;
 
     // singleton context
     var _context;
@@ -80,6 +86,24 @@ define(function(require, exports, module) {
                 this.window.removeClass(cName);
                 this._popupClasses = _(this._popupClasses).without(cName);
             }.bind(this));
+        },
+
+        saveCookie: function(key, value)
+        {
+            $.cookie(key, value, {expires: FOREVER_COOKIE, path: '/'});
+        },
+
+        getCookie: function(key)
+        {
+            return $.cookie(key);
+        },
+
+        clearCookie: function(key)
+        {
+            var r = this.getCookie(key);
+            $.removeCookie(key);
+
+            return r;
         },
 
         // lifecycle defaults-- should override

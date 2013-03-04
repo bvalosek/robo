@@ -2,9 +2,13 @@ define(function(require, exports, module) {
 
     var asRenderable = require('./mixins/asRenderable');
     var compose      = require('./compose');
-    var Base         = require('robo/Base');
+    var Application  = require('./Application');
+    var Base         = require('./Base');
     var Backbone     = require('backbone');
-    var Application  = require('robo/Application');
+    var helpers      = require('./helpers');
+    var _            = require('underscore');
+    var $            = require('jquery');
+    var log          = require('./log');
 
     // create BackboneView object that has the compose.js goodies baked in
     var BackboneView = Backbone.View.extend();
@@ -18,8 +22,11 @@ define(function(require, exports, module) {
         {
             opts = opts || {};
 
-            if (!opts.silent)
+            log('closing ' + this.cid);
+
+            if (!opts.silent) {
                 this.trigger('close');
+            }
 
             this.remove();
             this.off();
@@ -60,7 +67,7 @@ define(function(require, exports, module) {
             var eventName = event + '.delegateEvents' + this.cid;
             method = method.bind(this);
 
-            if (selector === '')
+            if (!selector)
                 this.$el.bind(eventName, method);
             else
                 this.$el.delegate(selector, eventName, method);
@@ -108,6 +115,24 @@ define(function(require, exports, module) {
         render: function()
         {
             return this;
+        },
+
+        inject: function(View)
+        {
+            // apply all the arguments to the constructor
+            var v =  helpers.applyToConstructor.apply(this, arguments);
+            v.parent = this;
+
+            // make sure to close thew new v when this view closes
+            this.on('close', v.close.bind(v));
+
+            // a bit later bind the actual dom element to the HTML we insterted
+            _(function() {
+                v.setElement(this.$('[data-cid="' + v.cid + '"]')).render();
+            }.bind(this)).defer();
+
+            // return placeholder text to insert
+            return  $('<div>').attr('data-cid', v.cid).prop('outerHTML');
         }
 
     });
