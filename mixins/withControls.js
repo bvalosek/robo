@@ -2,6 +2,8 @@ define(function(require, exports, module) {
 
     var helpers = require('../helpers');
     var log     = require('../log');
+    var _       = require('underscore');
+    var $       = require('jquery');
 
     // give a view the ability to create controls that are then handled via
     // onContolChange calls

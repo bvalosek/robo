@@ -13,6 +13,9 @@ define(function(require, exports, module) {
         // generate the HTML from the template
         getHtml: function()
         {
+            if (!this._html)
+                return null;
+
             // cache template
             if(!this.template) {
                 this.template = _.template(this._html);

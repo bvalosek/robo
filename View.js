@@ -115,24 +115,6 @@ define(function(require, exports, module) {
         render: function()
         {
             return this;
-        },
-
-        inject: function(View)
-        {
-            // apply all the arguments to the constructor
-            var v =  helpers.applyToConstructor.apply(this, arguments);
-            v.parent = this;
-
-            // make sure to close thew new v when this view closes
-            this.on('close', v.close.bind(v));
-
-            // a bit later bind the actual dom element to the HTML we insterted
-            _(function() {
-                v.setElement(this.$('[data-cid="' + v.cid + '"]')).render();
-            }.bind(this)).defer();
-
-            // return placeholder text to insert
-            return  $('<div>').attr('data-cid', v.cid).prop('outerHTML');
         }
 
     });
