@@ -25,22 +25,14 @@ define(function(require, exports, module) {
                 promise: d
             });
 
-            this._runQueue();
+            if (!this._running);
+                this._runQueue();
 
             return d;
         },
 
         _runQueue: function()
         {
-            // when the queue is empty, allow it to be run again later
-            if (!this._queue.length) {
-                this._running = false;
-                return;
-            }
-
-            if (this._running)
-                return;
-
             this._running = true;
 
             var info = this._queue.splice(0, 1)[0];
@@ -52,8 +44,14 @@ define(function(require, exports, module) {
             // it's not a deferred object
             if (d && d.then) {
                 d.then(function(retValue) {
-                    this._runQueue();
                     info.promise.resolve(retValue);
+
+                    // keep going if we have stuff, otherwise we're done
+                    if (this._queue.length)
+                        this._runQueue();
+                    else
+                        this._running = false;
+
                 }.bind(this));
             } else {
                 info.promise.resolve();
