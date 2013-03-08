@@ -17,11 +17,12 @@ define(function(require, exports, module) {
 
         queue: function()
         {
-            var args = _(arguments).toArray();
+            // create a new promise that we resolve later whenever the queue
+            // gets to this task
             var d    = new $.Deferred();
 
             this._queue.push({
-                args: args,
+                args: _(arguments).toArray(),
                 promise: d
             });
 
@@ -40,22 +41,26 @@ define(function(require, exports, module) {
 
             var d = this._fn.apply(this, args);
 
-            // call when the running fn finishes or after the stack clears if
-            // it's not a deferred object
-            if (d && d.then) {
-                d.then(function(retValue) {
-                    info.promise.resolve(retValue);
+            // when done, resolve the promise we gave back to the original
+            // caller from the queue and see if we need to keep going
+            var whenDone = function(ret) {
 
-                    // keep going if we have stuff, otherwise we're done
-                    if (this._queue.length)
-                        this._runQueue();
-                    else
-                        this._running = false;
+                // return the value resolved via the promise or the direct
+                // response from the queued function
+                info.promise.resolve(ret || d);
 
-                }.bind(this));
-            } else {
-                info.promise.resolve();
-            }
+                // keep going if we have stuff, otherwise we're done
+                if (this._queue.length)
+                    this._runQueue();
+                else
+                    this._running = false;
+            }.bind(this);
+
+            // wait if it's deferred, otherwise just plow
+            if (d && d.then)
+                d.then(whenDone);
+            else
+                whenDone();
         }
 
     });

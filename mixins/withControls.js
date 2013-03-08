@@ -9,28 +9,35 @@ define(function(require, exports, module) {
     // onContolChange calls
     var withControls = function()
     {
-        this.controlFactory = function(View)
+        this.controlFactory = function(View, tag)
         {
-            // apply all the arguments to the constructor
-            var v =  helpers.applyToConstructor.apply(this, arguments);
-            v.parent = this;
+            // apply all the arguments to the constructor, give the control a
+            // reference to the parent, and stash a reference to the control
+            var args = _(arguments).toArray();
+            args.splice(1, 1);
+            var v =  helpers.applyToConstructor.apply(this, args);
+
+            if (tag) {
+                this.controls = this.controls || {};
+                this.controls[tag] = v;
+
+                var f = tag + 'OnStart';
+                if (this[f])
+                    this[f](v);
+            }
 
             // make sure to close thew new v when this view closes
             this.on('close', v.close.bind(v));
 
             // a bit later bind the actual dom element to the HTML we insterted
             _(function() {
+                var classes = v.$el.attr('class');
                 v.setElement(this.$('[data-cid="' + v.cid + '"]')).render();
+                v.setClass(classes);
             }.bind(this)).defer();
 
             // return placeholder text to insert
             return  $('<div>').attr('data-cid', v.cid).prop('outerHTML');
-        };
-
-        // should be overridden to do something interesting with the control
-        this.onControlChange = function(control)
-        {
-            log('control ' + control.cid + ' has changed but is not handled');
         };
     };
 
