@@ -22,9 +22,10 @@ define(function(require, exports, module) {
         },
 
         // boot the page that we found a match for
-        startPage: function()
+        routePage: function()
         {
             var url = window.location.pathname;
+            log('routing for ' + url);
 
             var m;
             var page = _(this.urls).find(function(p) {

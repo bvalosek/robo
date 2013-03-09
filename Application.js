@@ -2,17 +2,13 @@ define(function(require, exports, module) {
 
     var Base           = require('./Base');
     var View           = require('./View');
+    var log            = require('./log');
+    var PageManager    = require('./PageManager');
     var asCompositable = require('./mixins/asCompositable');
     var withEvents     = require('./mixins/withEvents');
     var Backbone       = require('backbone');
-    var log            = require('./log');
     var _              = require('underscore');
     var $              = require('jquery');
-
-    // jCOOKS
-    require('jquery.cookie');
-
-    var FOREVER_COOKIE = 40000;
 
     // singleton context
     var _context;
@@ -31,6 +27,8 @@ define(function(require, exports, module) {
             this.onCreate();
             log('app created');
 
+            this.pageManager = new PageManager(this);
+
             this.window = new View()
                 .setElement('body')
                 .mixin(asCompositable);
@@ -40,8 +38,12 @@ define(function(require, exports, module) {
 
             // how we resume
             var postStart = function() {
-                log('app done starting');
                 this.onResume();
+
+                // route to correct page
+                log('routing to page...');
+                this.pageManager.routePage();
+
             }.bind(this);
 
             // if application is still starting
@@ -49,13 +51,6 @@ define(function(require, exports, module) {
                 d.then(postStart);
             else
                 postStart();
-        },
-
-        // will start routing immediately based on current URL
-        startRouter: function(RouterClass)
-        {
-            this.router = new RouterClass(this);
-            Backbone.history.start({ pushState: true });
         },
 
         // add a view to the overall DOM and add a class so we can alter the other
@@ -88,30 +83,13 @@ define(function(require, exports, module) {
             }.bind(this));
         },
 
-        saveCookie: function(key, value)
-        {
-            $.cookie(key, value, {expires: FOREVER_COOKIE, path: '/'});
-        },
-
-        getCookie: function(key)
-        {
-            return $.cookie(key);
-        },
-
-        clearCookie: function(key)
-        {
-            var r = this.getCookie(key);
-            $.removeCookie(key);
-
-            return r;
-        },
-
         // lifecycle defaults-- should override
         onCreate : function() {},
         onStart  : function() {},
         onResume : function() {}
     });
 
+    // singleton style
     Application.instance = function()
     {
         return _context;

@@ -1,6 +1,5 @@
 define(function(require, exports, module) {
 
-    var asRenderable = require('./mixins/asRenderable');
     var compose      = require('./compose');
     var Application  = require('./Application');
     var Base         = require('./Base');
@@ -59,6 +58,11 @@ define(function(require, exports, module) {
         // undocumented backbone patterns
         delegate: function(selector, event, method)
         {
+            // 2 args
+            if (arguments.length == 2) {
+                method = event; event = selector; selector = '';
+            }
+
             // cram it in
             var key = event + (selector ? ' ' + selector  : '');
             this.events = this.events || {};

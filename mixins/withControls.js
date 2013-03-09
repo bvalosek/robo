@@ -14,8 +14,9 @@ define(function(require, exports, module) {
             // apply all the arguments to the constructor, give the control a
             // reference to the parent, and stash a reference to the control
             var args = _(arguments).toArray();
-            args.splice(1, 1);
             var v =  helpers.applyToConstructor.apply(this, args);
+
+            v.parent = this;
 
             if (tag) {
                 this.controls = this.controls || {};
@@ -29,11 +30,34 @@ define(function(require, exports, module) {
             // make sure to close thew new v when this view closes
             this.on('close', v.close.bind(v));
 
-            // a bit later bind the actual dom element to the HTML we insterted
+            // a bit later bind the actual dom element to the HTML we
+            // insterted. This is actually pretty expensive and also relies on
+            // the assumption that the DOM will be ready as soon as the calling
+            // stack frame has cleared.
             _(function() {
-                var classes = v.$el.attr('class');
-                v.setElement(this.$('[data-cid="' + v.cid + '"]')).render();
-                v.setClass(classes);
+                var tagName = v.$el.prop('tagName');
+
+                var $target = this.$('[data-cid="' + v.cid + '"]');
+                var $new = $('<' + tagName + '>');
+
+                // copy over all attributes
+                var theTarget = $target[0];
+                $.each(theTarget.attributes, function(x) {
+                    $new.attr(theTarget.attributes[x].name,
+                        theTarget.attributes[x].value);
+                });
+
+                // any additional?
+                if (v._attributes)
+                    _(v._attributes).each(function(val, key) {
+                        $new.attr(key, val);
+                    });
+
+                // swap n set
+                log('swapped in control ' + v.cid);
+                $target.after($new).remove();
+                v.setElement($new).render();
+
             }.bind(this)).defer();
 
             // return placeholder text to insert

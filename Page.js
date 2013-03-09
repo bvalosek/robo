@@ -1,11 +1,11 @@
 define(function(require, exports, module) {
 
     var View             = require('./View');
-    var helpers          = require('helpers');
     var AnimationContext = require('./AnimationContext');
+    var log              = require('./log');
+    var helpers          = require('./helpers');
     var $                = require('jquery');
     var _                = require('underscore');
-    var log              = require('./log');
 
     var Page = View.extend({
 
@@ -26,7 +26,7 @@ define(function(require, exports, module) {
                         this.data = window.page;
 
                     // base view
-                    this.setElement($('.content div').first());
+                    this.setElement($('body'));
 
                     // start the page with any dump n chump
                     this.onStart(this.data);
