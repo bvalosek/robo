@@ -7,21 +7,17 @@ define(function(require, exports, module) {
     var BackboneModel = Backbone.Model.extend();
     compose.mixin(BackboneModel.prototype, compose.withCompose);
 
-    var Model = BackboneModel.extend({
-
-        baseCheck: function()
-        {
-            console.log('check');
-        }
-
-    });
+    var Model = BackboneModel.extend();
 
     // have to create our own extender to ensure the Collection object also
     // gets extended
-    var makeExtender = function(parentExtender, parentCollection)
+    var makeExtender = function(Parent)
     {
+        var extender = Parent.extend;
+        var Collection = Parent.Collection;
+
         return function(obj) {
-            Child = parentExtender.apply(this, arguments);
+            Child = extender.apply(this, arguments);
 
             obj = obj || {};
 
@@ -30,7 +26,9 @@ define(function(require, exports, module) {
                 model: Child
             });
 
-            Child.Collection = parentCollection.extend(cHash);
+            Child.Collection = Collection.extend(cHash);
+
+            Child.extend = makeExtender(Child);
 
             return Child;
         };
@@ -39,7 +37,7 @@ define(function(require, exports, module) {
     // Static class let's us make collections via model classes
     Model.Collection = Collection;
 
-    Model.extend = makeExtender(Model.extend, Model.Collection);
+    Model.extend = makeExtender(Model);
 
     return Model;
 });

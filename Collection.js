@@ -6,9 +6,7 @@ define(function(require, exports, module) {
     var BackboneCollection = Backbone.Collection.extend();
     compose.mixin(BackboneCollection.prototype, compose.withCompose);
 
-    var Collection = BackboneCollection.extend({
-
-    });
+    var Collection = BackboneCollection.extend();
 
     return Collection;
 });
