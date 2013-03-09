@@ -115,11 +115,6 @@ define(function(require, exports, module) {
             return this.$el.attr('class');
         },
 
-        busTrigger: function()
-        {
-            Application.getContext().trigger.apply(this, arguments);
-        },
-
         render: function()
         {
             return this;

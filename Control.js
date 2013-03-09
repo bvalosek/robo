@@ -10,8 +10,6 @@ define(function(require, exports, module) {
 
             if (opts && opts.attributes)
                 this._attributes = opts.attributes;
-
-            this.addClass('control');
         }
 
     });

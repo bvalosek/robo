@@ -17,8 +17,17 @@ define(function(require, exports, module) {
             opts.parentView = this;
             var v = new View(opts);
 
+            // add to control list if parent wants it
+            this.controls = this.controls || [];
+            this.controls.push(v);
+
             // make sure to close thew new v when this view closes
             this.on('close', v.close.bind(v));
+
+            // and remove this shit from parent when it closes
+            this.listenTo(v, 'close', function() {
+                this.controls = _(this.controls).without(v);
+            });
 
             // a bit later bind the actual dom element to the HTML we
             // insterted. This is actually pretty expensive and also relies on
