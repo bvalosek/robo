@@ -41,10 +41,10 @@ define(function(require, exports, module) {
                 var $new = $('<' + tagName + '>');
 
                 // copy over all attributes
-                var theTarget = $target[0];
-                $.each(theTarget.attributes, function(x) {
-                    $new.attr(theTarget.attributes[x].name,
-                        theTarget.attributes[x].value);
+                var theOld = v.$el[0];
+                $.each(theOld.attributes, function(x) {
+                    $new.attr(theOld.attributes[x].name,
+                        theOld.attributes[x].value);
                 });
 
                 // any additional?
