@@ -4,11 +4,27 @@ define(function(require, exports, module) {
     var log     = require('../log');
     var _       = require('underscore');
     var $       = require('jquery');
+    var compose = require('../compose');
 
     // give a view the ability to create controls that are then handled via
     // onContolChange calls
     var withControls = function()
     {
+
+        // take over the render function make sure it is only called once, and
+        // then render the controls after every seperate call
+        this.render = compose.wrap(this.render, function(render)
+        {
+            if (!this._rendered) {
+                this._rendered = true;
+                return render();
+            }
+
+            this.controls.forEach(function(control) {
+                control.render();
+            });
+        });
+
         this.controlFactory = function(View, opts)
         {
             // apply all the arguments to the constructor, give the control a
