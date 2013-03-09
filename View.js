@@ -66,6 +66,10 @@ define(function(require, exports, module) {
             // cram it in
             var key = event + (selector ? ' ' + selector  : '');
             this.events = this.events || {};
+
+            if (this.events[key])
+                throw new Error('Cannot delegate to the same condition twice');
+
             this.events[key] = method;
 
             var eventName = event + '.delegateEvents' + this.cid;

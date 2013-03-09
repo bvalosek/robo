@@ -15,7 +15,7 @@ define(function(require, exports, module) {
             this.caption = opts.caption || 'Button ' + this.cid;
 
             if (opts.onClick)
-                this.onClick = opts.onClick.bind(opts.context || this.parent);
+                this.onClick = opts.onClick.bind(opts.context || opts.parentView);
 
             this.delegate('click', this.onClick);
         },

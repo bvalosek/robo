@@ -9,23 +9,13 @@ define(function(require, exports, module) {
     // onContolChange calls
     var withControls = function()
     {
-        this.controlFactory = function(View, tag)
+        this.controlFactory = function(View, opts)
         {
             // apply all the arguments to the constructor, give the control a
             // reference to the parent, and stash a reference to the control
-            var args = _(arguments).toArray();
-            var v =  helpers.applyToConstructor.apply(this, args);
-
-            v.parent = this;
-
-            if (tag) {
-                this.controls = this.controls || {};
-                this.controls[tag] = v;
-
-                var f = tag + 'OnStart';
-                if (this[f])
-                    this[f](v);
-            }
+            opts = opts || {};
+            opts.parentView = this;
+            var v = new View(opts);
 
             // make sure to close thew new v when this view closes
             this.on('close', v.close.bind(v));
