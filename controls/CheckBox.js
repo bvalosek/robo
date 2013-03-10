@@ -1,29 +1,19 @@
 define(function(require, exports, module) {
 
-    var Control = require('../Control');
-    var _       = require('underscore');
+    var ModelControl = require('./ModelControl');
 
-    var CheckBox = Control.extend({
+    var CheckBox = ModelControl.extend({
 
         constructor: function(opts)
         {
-            CheckBox.Super.call(this, {
+            _(opts).extend({
                 tagName: 'input',
                 attributes: {
                     type: 'checkbox'
                 }
             });
 
-            opts = opts || {};
-
-            _(this).extend({
-                model   : opts.model,
-                param   : opts.param
-            });
-
-            if (this.model && this.param) {
-                this.listenTo(this.model, 'change:' + this.param, this.render);
-            }
+            CheckBox.Super.call(this, opts);
 
             // toggle on click
             this.delegate('click', function() {
@@ -31,31 +21,10 @@ define(function(require, exports, module) {
             });
         },
 
-        // really just toggle the check
+        // really just toggle the check based on state
         render: function()
         {
             this.$el.prop('checked', this.getValue());
-        },
-
-        setValue: function(param, val)
-        {
-            if (!this.model)
-                return;
-
-            if (val === undefined) {
-                val = param;
-                param = this.param;
-            }
-
-            this.model.set(param, val);
-        },
-
-        getValue: function()
-        {
-            if (this.model && this.param)
-                return this.model.attributes[this.param];
-
-            return null;
         }
 
     });

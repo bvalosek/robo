@@ -1,28 +1,22 @@
 define(function(require, exports, module) {
 
-    var Control = require('../Control');
+    var ModelControl = require('./ModelControl');
+    var _            = require('underscore');
 
-    var TextInput = Control.extend({
+    var TextInput = ModelControl.extend({
 
         constructor: function(opts)
         {
-            TextInput.Super.call(this, {
+            _(opts).extend({
                 tagName: 'input',
                 attributes: {
                     type: 'text'
                 }
             });
 
-            this.model = opts.model;
-            this.param = opts.param;
+            TextInput.Super.call(this, opts);
 
-            // dynamic
-            if (this.model) {
-                var e = this.param ? 'change:' + this.param : 'change';
-                this.listenTo(this.model, e, this.render);
-
-                this.delegate('keyup', this.onType);
-            }
+            this.delegate('keyup', this.onType);
         },
 
         onType: function()
@@ -33,27 +27,6 @@ define(function(require, exports, module) {
         render: function()
         {
             this.$el.val(this.getValue());
-        },
-
-        setValue: function(param, val)
-        {
-            if (!this.model)
-                return;
-
-            if (val === undefined) {
-                val = param;
-                param = this.param;
-            }
-
-            this.model.set(param, val);
-        },
-
-        getValue: function()
-        {
-            if (this.model && this.param)
-                return this.model.attributes[this.param];
-
-            return null;
         }
 
     });

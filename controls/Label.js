@@ -1,26 +1,20 @@
 define(function(require, exports, module) {
 
-    var Control = require('../Control');
+    var ModelControl = require('./ModelControl');
 
-    var Label = Control.extend({
+    var Label = ModelControl.extend({
 
         constructor: function(opts)
         {
-            Label.Super.call(this, { tagName: 'span' });
+            _(opts).extend({ tagName: 'span' });
+
+            Label.Super.call(this, opts);
 
             this.caption = opts.caption || 'Label ' + this.cid;
-            this.model   = opts.model;
-            this.param   = opts.param;
 
             // bind function to parent
             if (_(this.caption).isFunction())
                 this.caption = this.caption.bind(opts.parentView);
-
-            // dynamic
-            if (this.model) {
-                var e = this.param ? 'change:' + this.param : 'change';
-                this.listenTo(this.model, e, this.render);
-            }
         },
 
         getCaption: function()

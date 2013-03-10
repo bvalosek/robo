@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-    var TemplateView = require('../TemplateView');
+    var TemplateView = require('../../TemplateView');
 
     var TableRow = TemplateView.extend({
 
