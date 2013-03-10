@@ -15,14 +15,25 @@ define(function(require, exports, module) {
         // then render the controls after every seperate call
         this.render = compose.wrap(this.render, function(render)
         {
+            if (this._closed)
+                throw new Error('Attempting to render a View withControls after it has been closed');
+
             if (!this._rendered) {
                 this._rendered = true;
                 return render();
             }
 
+            log('View withControls already rendered, rendering all controls');
             this.controls.forEach(function(control) {
                 control.render();
             });
+        });
+
+        // make sure to remove rendered flag on close
+        this.close = compose.wrap(this.close, function(close)
+        {
+            this._close = true;
+            return close();
         });
 
         this.controlFactory = function(View, opts)
