@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 
     var ModelControl = require('./ModelControl');
+    var _            = require('underscore');
 
     var CheckBox = ModelControl.extend({
 
