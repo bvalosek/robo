@@ -7,7 +7,6 @@ define(function(require, exports, module) {
     var helpers      = require('./helpers');
     var _            = require('underscore');
     var $            = require('jquery');
-    var log          = require('./log');
 
     // create BackboneView object that has the compose.js goodies baked in
     var BackboneView = Backbone.View.extend();
@@ -20,9 +19,6 @@ define(function(require, exports, module) {
         close: function(opts)
         {
             opts = opts || {};
-
-
-            log('closing ' + this.cid);
 
             if (!opts.silent) {
                 this.trigger('close');

@@ -1,7 +1,6 @@
 define(function(require, exports, module) {
 
     var helpers = require('../helpers');
-    var log     = require('../log');
     var _       = require('underscore');
     var $       = require('jquery');
     var compose = require('../compose');
@@ -23,7 +22,6 @@ define(function(require, exports, module) {
                 return render();
             }
 
-            log('View withControls already rendered, rendering all controls');
             this.controls.forEach(function(control) {
                 control.render();
             });
@@ -84,7 +82,6 @@ define(function(require, exports, module) {
                     });
 
                 // swap n set
-                log('swapped in control ' + v.cid);
                 $target.after($new).remove();
                 v.setElement($new).render();
 

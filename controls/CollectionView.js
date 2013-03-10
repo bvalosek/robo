@@ -39,7 +39,6 @@ define(function(require, exports, module) {
             // view creation
             var v;
             if ( (v = this._viewCache[model.cid])) {
-                console.log('cache hit on model ' + model.cid);
                 return null;
             }
 
@@ -66,17 +65,11 @@ define(function(require, exports, module) {
                 if (v)
                     this.addView(v);
             }.bind(this));
-
-            if (this._views)
-                console.log(this.cid + ' render, has '  + this._views.length);
         },
 
         reset: function()
         {
             this.closeViews();
-
-            if (this._views)
-                console.log(this.cid + ' reset, has '  + this._views.length);
         }
 
     });

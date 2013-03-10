@@ -29,7 +29,6 @@ define(function(require, exports, module) {
 
         this.removeView = function(view)
         {
-            console.log(this.cid + ' removing ' + view.cid);
             this._views = _(this._views).without(view);
         };
 
