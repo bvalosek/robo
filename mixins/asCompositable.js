@@ -5,10 +5,10 @@ define(function(require, exports, module) {
 
     var asCompositable = function()
     {
-        this._views = [];
-
         this.addView = function(view)
         {
+            this._views = this._views || [];
+
             view.render();
             if (this._animationContext) {
                 this._animationContext.queue(function() {
@@ -22,37 +22,28 @@ define(function(require, exports, module) {
             // removed from here
             this.listenTo(view, 'close', function() { this.removeView(view); });
 
-            return this.attachView(view);
+            this._views.push(view);
+
+            return this;
         };
 
         this.removeView = function(view)
         {
+            console.log(this.cid + ' removing ' + view.cid);
             this._views = _(this._views).without(view);
-        };
-
-        this.forEach = function(fn)
-        {
-            _(this._views).each(fn);
-            return this;
-        };
-
-        this.attachView = function(view)
-        {
-            this._views.push(view);
-            return this;
-        };
-
-        this.factory = function(View)
-        {
-            var v = new View();
-            v.animationContext = this._animationContext;
-
-            return v;
         };
 
         this.closeViews = function()
         {
+            this._views = this._views || [];
+
             this._views.forEach(function(v) { v.close(); });
+
+            // all views should be gone out of the list, having been bound when
+            // added. If there's not, there's a problem.
+            if (this._views.length)
+                throw new Error('Views remaining in composite after closing all. Probably a problem');
+
             return this;
         };
 
@@ -65,6 +56,8 @@ define(function(require, exports, module) {
         // render all child views as well
         this.render = compose.wrap(this.render, function(render) {
             render();
+
+            this._views = this._views || [];
 
             this._views.forEach(function(v) { v.render(); });
             return this;

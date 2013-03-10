@@ -21,11 +21,17 @@ define(function(require, exports, module) {
         {
             opts = opts || {};
 
+
             log('closing ' + this.cid);
 
             if (!opts.silent) {
                 this.trigger('close');
+
+                if (this._closed)
+                    throw new Error('View must be silently closed if closed more than once');
             }
+
+            this._closed = true;
 
             this.remove();
             this.off();

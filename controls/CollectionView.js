@@ -19,7 +19,8 @@ define(function(require, exports, module) {
 
             // blindly re-render the whole list on these events, not best if
             // they are being called frequently
-            this.listenTo(this.collection, 'add reset', this.render);
+            this.listenTo(this.collection, 'add', this.render);
+            this.listenTo(this.collection, 'reset', this.reset);
         },
 
         // given an index, fetch the view and bind the model
@@ -38,6 +39,7 @@ define(function(require, exports, module) {
             // view creation
             var v;
             if ( (v = this._viewCache[model.cid])) {
+                console.log('cache hit on model ' + model.cid);
                 return null;
             }
 
@@ -64,7 +66,17 @@ define(function(require, exports, module) {
                 if (v)
                     this.addView(v);
             }.bind(this));
-            console.log(this._views.length);
+
+            if (this._views)
+                console.log(this.cid + ' render, has '  + this._views.length);
+        },
+
+        reset: function()
+        {
+            this.closeViews();
+
+            if (this._views)
+                console.log(this.cid + ' reset, has '  + this._views.length);
         }
 
     });

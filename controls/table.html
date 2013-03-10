@@ -1,0 +1,10 @@
+<%
+    var CollectionView = require('robo/controls/CollectionView');
+    var TableRow       = require('robo/controls/TableRow');
+%>
+
+<%= controlFactory(CollectionView, {
+    collection: collection,
+    View: TableRow,
+    tagName: 'tbody'
+}) %>

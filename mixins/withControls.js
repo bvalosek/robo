@@ -44,6 +44,10 @@ define(function(require, exports, module) {
             opts.parentView = this;
             var v = new View(opts);
 
+            // if, when this view is done rending, if all the children should
+            // be moved out of the container
+            var flatten = opts.flatten;
+
             // add to control list if parent wants it
             this.controls = this.controls || [];
             this.controls.push(v);
@@ -83,6 +87,16 @@ define(function(require, exports, module) {
                 log('swapped in control ' + v.cid);
                 $target.after($new).remove();
                 v.setElement($new).render();
+
+                // move children out of container?
+                if (flatten) {
+                    var $newParent = v.$el.parent();
+                    var $oldParent = v.$el;
+
+                    v.$el.after(v.$el.children());
+                    v.setElement($newParent);
+                    $oldParent.remove();
+                }
 
             }.bind(this)).defer();
 
