@@ -92,8 +92,6 @@ define(function(require, exports, module) {
                     var ca = info.annotations[key] || {};
                     var pa = originalFunction.__annotations__ || {};
 
-                    // console.log('mixin', key, ca, '->', pa);
-
                     if (ca.NEW) {
                         // who cares if new
                     } else {
@@ -169,17 +167,12 @@ define(function(require, exports, module) {
             if (Child && !_(Child).isFunction()) {
                 info = processAnnotations(Child);
 
-                // swap in the de-annotated hash
-                Child = info.hash;
+                // prototype so far is the de-annotated version of the hash
+                proto = _(info.hash).omit('constructor');
 
-                proto = _(Child).omit('constructor');
+                // constructor function if we've got one
                 Child = Child.hasOwnProperty('constructor') ?
                     Child.constructor : null;
-
-                _(info.annotations).each(function(a, key) {
-                    if (a.STATIC)
-                        statics.push(key);
-                });
             }
 
             // by default child calls parent constructor
@@ -187,13 +180,17 @@ define(function(require, exports, module) {
                 return Parent.apply(this, arguments);
             };
 
-            // setup proto chain
+            // stash them annotations
+            Child.__annotations__ = info.annotations;
+
+            // setup proto chain via a surrogate object
             var ctor = function() {};
             ctor.prototype = Parent.prototype;
             Child.prototype = new ctor();
             Child.prototype.constructor = Child;
 
-            // copy all things from the generated proto
+            // copy all of the stuff from our current proto hash onto the
+            // actual Child prototype
             if (proto)
                 _(Child.prototype).extend(proto);
 
@@ -205,75 +202,71 @@ define(function(require, exports, module) {
             // nice.
             Child.Super = Parent;
 
-            // add statics directly to Child
-            if (statics.length) {
-                statics.forEach(function(key) {
-                    Child[key] = Child.prototype[key];
-                    delete Child.prototype[key];
-                });
-            }
-
             // check parent overrides parent/child modifiers
             _(Child.prototype).each(function(fn, key) {
-                var childFn  = fn;
-                var childAnnotations = info.annotations ? info.annotations[key] : {};
-                var parentFn = Parent.prototype[key];
+                if (key != 'constructor')
+                    handleAnnotations(
+                        // classes so far
+                        Parent, Child, key,
 
-                if (childAnnotations.READONLY)
-                {
-                    Object.defineProperty(Child.prototype, key, {
-                        writable: false
-                    });
-                }
+                        // the members
+                        Parent.prototype[key], fn,
 
-                if (_(childFn).isObject() && childFn.__PROPERTY__) {
-
-                    Object.defineProperty(Child.prototype, key, {
-                        get: childFn.get,
-                        set: childFn.set,
-                    });
-                }
-
-                // if it's a getter
-                if (_(childFn).isFunction() && childFn.__GET__) {
-
-                    Object.defineProperty(Child.prototype, key, {
-                        get: childFn
-                    });
-                }
-
-                if (_(childFn).isFunction() && childFn.__SET__) {
-
-                    Object.defineProperty(Child.prototype, key, {
-                        set: childFn
-                    });
-
-                }
-
-                // if we have something overriding
-                if (_(childFn).isFunction() && _(parentFn).isFunction() && key !== 'constructor') {
-
-                    ca = childFn.__annotations__ || {};
-                    pa = parentFn.__annotations__ || {};
-
-                    // console.log('extend', key, ca, '->', pa);
-
-                    if (ca.NEW)
-                    {
-                        // if new, dont care
-
-                    } else {
-                        if (!ca.OVERRIDE)
-                            throw new Error('Must use override annotation on method "' + key + '" when hiding a parent method');
-                        if (!pa.VIRTUAL && !pa.ABSTRACT)
-                            throw new Error('Base method "' + key + '" must be virtual or abstract');
-                    }
-                }
+                        // the annotation information
+                        Parent.prototype[key] ? Parent.prototype[key].__annotations__ : null,
+                        info.annotations[key]);
             });
 
+            // propigate extender
             Child.extend = makeExtender(Child);
             return Child;
         };
+    };
+
+    // given a Parent, Child, pm, cm .. and their annotations, do stuff
+    var handleAnnotations = function(Parent, Child, key, pm, cm, pa, ca)
+    {
+        // don't care if no annotations
+        if (_(pa).isEmpty() && _(ca).isEmpty())
+            return;
+
+        console.log('handling', key, ca, ' -> ', pa);
+
+        // basic function mutators
+        if (_(cm).isFunction()) {
+
+            if (ca.GET) {
+                Object.defineProperty(Child.prototype, key, {
+                    get: cm,
+                    enumerable: true
+                });
+
+            } else if (ca.SET) {
+                Object.defineProperty(Child.prototype, key, {
+                    set: cm
+                    enumerable: true
+                });
+            }
+
+        // hash mutations
+        } else if (_(cm).isObject()) {
+
+            if (ca.PROPERTY) {
+                Object.defineProperty(Child.prototype, key, {
+                    get: cm.get,
+                    set: cm.set
+                    enumerable: true
+                });
+            }
+        }
+
+        // general mutations
+        if (ca.READONLY) {
+            Object.defineProperty(Child.prototype, key, {
+                writable: false
+                enumerable: true
+            });
+        }
     };
 
     // mixin that targets a class, making sure to call an empty extend to get a
