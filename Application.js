@@ -15,13 +15,10 @@ define(function(require, exports, module) {
             if (Application.context)
                 throw new Error('Can only instantiate one Application object');
 
-            log('app booted');
-
             // stash context
             Application.context = this;
 
             this.onCreate();
-            log('app created');
 
             this.pageManager = new PageManager(this);
 
@@ -29,7 +26,6 @@ define(function(require, exports, module) {
                 .setElement('body')
                 .mixin(asCompositable);
 
-            log('app starting...');
             var d = this.onStart();
 
             // how we resume
@@ -37,7 +33,6 @@ define(function(require, exports, module) {
                 this.onResume();
 
                 // route to correct page
-                log('routing to page...');
                 this.pageManager.routePage();
 
             }.bind(this);
@@ -67,7 +62,6 @@ define(function(require, exports, module) {
             var cName = view.getClassName() + '-open';
 
             if (~this._popupClasses.indexOf(cName)) {
-                log('Only 1 type of this popup allowed at once');
                 return;
             }
 

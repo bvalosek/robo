@@ -25,7 +25,6 @@ define(function(require, exports, module) {
         routePage: function()
         {
             var url = window.location.pathname;
-            log('routing for ' + url);
 
             var m;
             var page = _(this.urls).find(function(p) {
@@ -54,7 +53,6 @@ define(function(require, exports, module) {
                 args = h;
             }
 
-            log('page found, instantiating');
             var p = new page.Page(args);
             p.application = this.application;
         }

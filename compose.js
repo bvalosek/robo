@@ -19,7 +19,6 @@ define(function(require, exports, module) {
 
             // cannot have same key
             if (key != 'constructor' && newHash[key] !== undefined) {
-                console.log(newHash);
                 throw new Error('Duplicate member found: ' + key);
             }
 
@@ -93,7 +92,7 @@ define(function(require, exports, module) {
                     var ca = info.annotations[key] || {};
                     var pa = originalFunction.__annotations__ || {};
 
-                    console.log('mixin', key, ca, '->', pa);
+                    // console.log('mixin', key, ca, '->', pa);
 
                     if (ca.NEW) {
                         // who cares if new
@@ -257,7 +256,7 @@ define(function(require, exports, module) {
                     ca = childFn.__annotations__ || {};
                     pa = parentFn.__annotations__ || {};
 
-                    console.log('extend', key, ca, '->', pa);
+                    // console.log('extend', key, ca, '->', pa);
 
                     if (ca.NEW)
                     {
