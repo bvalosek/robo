@@ -7,7 +7,12 @@ define(function(require, exports, module) {
     var BackboneModel = Backbone.Model.extend();
     compose.mixin(BackboneModel.prototype, compose.withCompose);
 
-    var Model = BackboneModel.extend();
+    var Model = BackboneModel.extend({
+
+        // Static class let's us make collections via model classes
+        __static__Collection: Collection
+
+    });
 
     // have to create our own extender to ensure the Collection object also
     // gets extended
@@ -34,9 +39,7 @@ define(function(require, exports, module) {
         };
     };
 
-    // Static class let's us make collections via model classes
-    Model.Collection = Collection;
-
+    // prime the first extender
     Model.extend = makeExtender(Model);
 
     return Model;

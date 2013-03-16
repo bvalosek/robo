@@ -3,9 +3,9 @@ define(function(require, exports, module) {
     var compose = require('../compose');
     var _       = require('underscore');
 
-    var asCompositable = function()
+    var asCompositable = compose.createMixin(
     {
-        this.addView = function(view)
+        addView: function(view)
         {
             this._views = this._views || [];
 
@@ -25,14 +25,14 @@ define(function(require, exports, module) {
             this._views.push(view);
 
             return this;
-        };
+        },
 
-        this.removeView = function(view)
+        removeView: function(view)
         {
             this._views = _(this._views).without(view);
-        };
+        },
 
-        this.closeViews = function()
+        closeViews: function()
         {
             this._views = this._views || [];
 
@@ -44,32 +44,31 @@ define(function(require, exports, module) {
                 throw new Error('Views remaining in composite after closing all. Probably a problem');
 
             return this;
-        };
+        },
 
-        this.setView = function(view)
+        setView: function(view)
         {
             this.closeViews();
             this.addView(view);
-        };
+        },
 
         // render all child views as well
-        this.render = compose.wrap(this.render, function(render) {
-            render();
-
+        __after__render: function()
+        {
             this._views = this._views || [];
 
             this._views.forEach(function(v) { v.render(); });
             return this;
-        }.bind(this));
+        },
 
         // close all child views
-        this.close = compose.wrap(this.close, function(close) {
-            close();
-
+        __after__close: function()
+        {
             this.closeViews();
             return this;
-        }.bind(this));
-    };
+        }
+
+    });
 
     return asCompositable;
 });

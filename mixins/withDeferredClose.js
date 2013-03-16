@@ -5,19 +5,19 @@ define(function(require, exports, module) {
 
     // modify the render and close behavior to delay the removal from the DOM
     // long enough to potentially animate it
-    var withDeferredClose =  function()
+    var withDeferredClose =  compose.createMixin(
     {
         // once we render, add the opened class
-        this.render = compose.wrap(this.render, function(render) {
+        __before__render: function()
+        {
             _(function() {
                 this.addClass('open').addClass('opened');
             }.bind(this)).defer();
-
-            return render();
-        });
+        },
 
         // close after a short period of time
-        this.close = compose.wrap(this.close, function(close) {
+        __wrapped__close: function(close)
+        {
             this.addClass('closed').removeClass('open');
             this.trigger('close');
 
@@ -26,8 +26,9 @@ define(function(require, exports, module) {
             }, 1000);
 
             return this;
-        });
-    };
+        }
+
+    });
 
     return withDeferredClose;
 

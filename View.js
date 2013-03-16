@@ -50,7 +50,7 @@ define(function(require, exports, module) {
             return this;
         },
 
-        setElement: function()
+        __new__setElement: function()
         {
             View.Super.prototype.setElement.apply(this, arguments);
             return this;
@@ -86,7 +86,7 @@ define(function(require, exports, module) {
         },
 
         // will clobber any existing events
-        delegateEvents: function(events)
+        __new__delegateEvents: function(events)
         {
             this.events = events || this.events;
 
@@ -117,7 +117,7 @@ define(function(require, exports, module) {
             return this.$el.attr('class');
         },
 
-        render: function()
+        __new__virtual__render: function()
         {
             return this;
         }

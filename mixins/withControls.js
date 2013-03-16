@@ -7,12 +7,12 @@ define(function(require, exports, module) {
 
     // give a view the ability to create controls that are then handled via
     // onContolChange calls
-    var withControls = function()
+    var withControls = compose.createMixin(
     {
 
         // take over the render function make sure it is only called once, and
         // then render the controls after every seperate call
-        this.render = compose.wrap(this.render, function(render)
+        __wrapped__render: function(render)
         {
             if (this._closed)
                 throw new Error('Attempting to render a View withControls after it has been closed');
@@ -25,16 +25,15 @@ define(function(require, exports, module) {
             this.controls.forEach(function(control) {
                 control.render();
             });
-        });
+        },
 
         // make sure to remove rendered flag on close
-        this.close = compose.wrap(this.close, function(close)
+        __before__close: function()
         {
             this._close = true;
-            return close();
-        });
+        },
 
-        this.controlFactory = function(View, opts)
+        controlFactory: function(View, opts)
         {
             // apply all the arguments to the constructor, give the control a
             // reference to the parent, and stash a reference to the control
@@ -99,8 +98,9 @@ define(function(require, exports, module) {
 
             // return placeholder text to insert
             return  $('<div>').attr('data-cid', v.cid).prop('outerHTML');
-        };
-    };
+        }
+
+    });
 
     return withControls;
 });

@@ -13,21 +13,13 @@ define(function(require, exports, module) {
             opts = opts || {};
 
             this.caption = opts.caption || 'Button ' + this.cid;
-
-            if (opts.onClick)
-                this.onClick = opts.onClick.bind(opts.context || opts.parentView);
-
-            this.delegate('click', this.onClick);
         },
 
         // just update the button caption on render
         render: function()
         {
             this.$el.html(this.caption);
-        },
-
-        // do something
-        onClick: function() {}
+        }
 
     });
 

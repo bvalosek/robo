@@ -89,10 +89,10 @@ define(function(require, exports, module) {
         },
 
         // called once page has loaded
-        onStart: function() {},
+        __virtual__onStart: function() {},
 
         // used to handle a hash fragment
-        handleViewState: function() {}
+        __virtual__handleViewState: function() {}
 
     });
 

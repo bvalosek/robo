@@ -1,5 +1,4 @@
 define(function(require, exports, module) {
-
     var Base           = require('./Base');
     var View           = require('./View');
     var log            = require('./log');
@@ -10,19 +9,16 @@ define(function(require, exports, module) {
     var _              = require('underscore');
     var $              = require('jquery');
 
-    // singleton context
-    var _context;
-
     var Application = Base.mixin(withEvents).extend({
 
         constructor: function() {
-            if (_context)
+            if (Application.context)
                 throw new Error('Can only instantiate one Application object');
 
             log('app booted');
 
             // stash context
-            _context = this;
+            Application.context = this;
 
             this.onCreate();
             log('app created');
@@ -51,6 +47,14 @@ define(function(require, exports, module) {
                 d.then(postStart);
             else
                 postStart();
+        },
+
+        // singleton style
+        __static__context: null,
+
+        __static__instance: function()
+        {
+            return Application.context;
         },
 
         // add a view to the overall DOM and add a class so we can alter the other
@@ -84,16 +88,10 @@ define(function(require, exports, module) {
         },
 
         // lifecycle defaults-- should override
-        onCreate : function() {},
-        onStart  : function() {},
-        onResume : function() {}
+        __virtual__onCreate : function() {},
+        __virtual__onStart  : function() {},
+        __virtual__onResume : function() {}
     });
-
-    // singleton style
-    Application.instance = function()
-    {
-        return _context;
-    };
 
     return Application;
 });

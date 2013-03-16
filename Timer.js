@@ -3,9 +3,6 @@ define(function(require, exports, module) {
     var Base = require('./Base');
     var log  = require('./log');
 
-    // window context
-    var root = this;
-
     var Timer = Base.extend({
 
         constructor: function(fn, timeout, context)
@@ -13,7 +10,7 @@ define(function(require, exports, module) {
             this.id = null;
             this.fn = fn;
             this.timeout = timeout || 0;
-            this.context = context || root;
+            this.context = context || this;
         },
 
         triggerAndStart: function()

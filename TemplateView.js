@@ -29,7 +29,7 @@ define(function(require, exports, module) {
         },
 
         // clobber render
-        render: function()
+        __override__render: function()
         {
             TemplateView.Super.prototype.render.call(this);
 
