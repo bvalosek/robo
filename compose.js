@@ -148,125 +148,111 @@ define(function(require, exports, module) {
     var wrap = function(fn, wrapper, context)
     {
         return function() {
-            return wrapper.call(this, fn.bind(context || this), _(arguments).toArray());
+            return wrapper.call(this,
+                fn.bind(context || this), _(arguments).toArray());
         };
     };
 
-    // Given some constructor function Parent, return a function that extends
-    // itself
     var makeExtender = function(Parent)
     {
-        return function(Child)
+        return function(obj)
         {
-            var proto;
-            var statics = [];
-            var info = {};
+            obj = obj || {};
 
-            // if passing in a hash instead of a function, assume it's the
-            // stuff we want hanging off the prototype + constructor
-            if (Child && !_(Child).isFunction()) {
-                info = processAnnotations(Child);
-
-                // prototype so far is the de-annotated version of the hash
-                proto = _(info.hash).omit('constructor');
-
-                // constructor function if we've got one
-                Child = Child.hasOwnProperty('constructor') ?
-                    Child.constructor : null;
+            // create constructor function
+            var Child;
+            if (obj !== undefined && _(obj).isObject()
+                && obj.hasOwnProperty('constructor'))  {
+                    Child = obj.constructor;
+            } else {
+                Child = function() {
+                    return Parent.apply(this, arguments);
+                };
             }
 
-            // by default child calls parent constructor
-            Child = Child || function() {
-                return Parent.apply(this, arguments);
-            };
-
-            // stash them annotations
-            Child.__annotations__ = info.annotations;
-
-            // setup proto chain via a surrogate object
+            // setup prototype chain via a surrogate constructor object, this
+            // way we don't actually have to instantiate a Parent, as that may
+            // cause side effects
             var ctor = function() {};
             ctor.prototype = Parent.prototype;
             Child.prototype = new ctor();
             Child.prototype.constructor = Child;
 
-            // copy all of the stuff from our current proto hash onto the
-            // actual Child prototype
-            if (proto)
-                _(Child.prototype).extend(proto);
+            // nice.
+            Child.Super = Parent;
 
-            // create a mixin function on the new class
+            // now deal with all the stuff we have in the descriptor hash
+            var info = processAnnotations(obj);
+            _(info.hash).each(function(val, key) {
+                var annotations = info.annotations[key];
+
+                var parentVal, parentAnnotations;
+
+                // inject the member into the prototype
+                processMember(
+                    Child.prototype, key, val,
+                    annotations, parentVal, parentAnnotations);
+            });
+
+            // create a mixin object on the Child constructor
             Child.mixin = function() {
                 return includeMixin(Child, _(arguments).toArray());
             };
 
-            // nice.
-            Child.Super = Parent;
-
-            // check parent overrides parent/child modifiers
-            _(Child.prototype).each(function(fn, key) {
-                if (key != 'constructor')
-                    handleAnnotations(
-                        // classes so far
-                        Parent, Child, key,
-
-                        // the members
-                        Parent.prototype[key], fn,
-
-                        // the annotation information
-                        Parent.prototype[key] ? Parent.prototype[key].__annotations__ : null,
-                        info.annotations[key]);
-            });
-
-            // propigate extender
+            // propigate the extender
             Child.extend = makeExtender(Child);
             return Child;
         };
     };
 
-    // given a Parent, Child, pm, cm .. and their annotations, do stuff
-    var handleAnnotations = function(Parent, Child, key, pm, cm, pa, ca)
+    // process a member taking into account the annotations
+    var processMember = function(
+        proto, key, val, annotations, parentVal, parentAnnotations)
     {
-        // don't care if no annotations
-        if (_(pa).isEmpty() && _(ca).isEmpty())
-            return;
+        if (key === 'constructor')
+            return undefined;
 
-        console.log('handling', key, ca, ' -> ', pa);
-
-        // basic function mutators
-        if (_(cm).isFunction()) {
-
-            if (ca.GET) {
-                Object.defineProperty(Child.prototype, key, {
-                    get: cm,
-                    enumerable: true
-                });
-
-            } else if (ca.SET) {
-                Object.defineProperty(Child.prototype, key, {
-                    set: cm
-                    enumerable: true
-                });
-            }
-
-        // hash mutations
-        } else if (_(cm).isObject()) {
-
-            if (ca.PROPERTY) {
-                Object.defineProperty(Child.prototype, key, {
-                    get: cm.get,
-                    set: cm.set
-                    enumerable: true
-                });
-            }
-        }
-
-        // general mutations
-        if (ca.READONLY) {
-            Object.defineProperty(Child.prototype, key, {
-                writable: false
-                enumerable: true
+        // getters and setters
+        if (annotations.GET)
+            Object.defineProperty(proto, key, {
+                get: val,
+                enumerable: true, configurable: true
             });
-        }
+        else if (annotations.SET)
+            Object.defineProperty(proto, key, {
+                set: val,
+                enumerable: true, configurable: true
+            });
+        else if (annotations.PROPERTY)
+            Object.defineProperty(proto, key, {
+                get: val.get,
+                set: val.set,
+                enumerable: true, configurable: true
+            });
+        else if (annotations.CONST)
+            Object.defineProperty(proto, key, {
+                get: function() { return val; },
+                set: function() { throw new Error('Cannot change const member'); },
+                enumerable: true, configurable: true
+            });
+        else
+            Object.defineProperty(proto, key, {
+                value: val,
+                writable: true,
+                enumerable: true, configurable: true
+            });
+
+        // hide
+        if (annotations.HIDDEN)
+            Object.defineProperty(proto, key, { enumerable: false });
+
+        // read only
+        if (annotations.READONLY)
+            Object.defineProperty(proto, key, { writable: false });
+
+        // inheritance.
+
+
     };
 
     // mixin that targets a class, making sure to call an empty extend to get a
@@ -303,11 +289,15 @@ define(function(require, exports, module) {
 
     };
 
+    var Base = function() {};
+    mixin(Base.prototype, withCompose);
+
     return {
         withCompose : withCompose,
         extend      : extend,
         mixin       : mixin,
         wrap        : wrap,
-        createMixin : createMixin
+        createMixin : createMixin,
+        Base        : Base
     };
 });
