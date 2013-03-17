@@ -14,7 +14,7 @@ define(function(require, exports, module) {
             // check for any view events to bizzzzind
             _(this.constructor.__annotations__).each(function(a, key) {
                 if(a.ATTRIBUTE) {
-                    this.addAttribute(key, this[key]);
+                    this.addAttribute(key, this[key], a);
                 }
             }.bind(this));
 
@@ -34,7 +34,7 @@ define(function(require, exports, module) {
         },
 
         // setup observationable attributes
-        addAttribute: function(key, initVal)
+        addAttribute: function(key, initVal, annotations)
         {
             // no objects, yet
             if (_(initVal).isObject())
@@ -48,9 +48,17 @@ define(function(require, exports, module) {
 
             this.attributes[key] = initVal;
 
+            var setter;
+            if (annotations && annotations.READONLY)
+                setter = undefined;
+            else if (annotations && annotations.CONST)
+                setter = function() { throw new Error('Cannot change const attribute in Model'); };
+            else
+                setter = function(val) { this.set(key, val); };
+
             Object.defineProperty(this, key, {
                 get: function() { return this.get(key); },
-                set: function(val) { this.set(key, val); },
+                set: setter,
                 enumerable: true
             });
         },

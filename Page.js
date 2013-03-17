@@ -52,9 +52,19 @@ define(function(require, exports, module) {
 
         handleHashChange: function()
         {
+            var hash = helpers.getWindowHash();
+
             if (!this._ignoreHashChange) {
                 log('# -> ' + helpers.getWindowHash());
                 this.handleViewState(helpers.getWindowHash());
+
+                // trigger if we have anything
+                if (hash === '') hash = 'index';
+
+                var annotations = this.constructor.__annotations__[hash];
+                if (annotations && annotations.PAGEROUTE)
+                    this[hash]();
+
             } else {
                 this._ignoreHashChange = false;
             }
