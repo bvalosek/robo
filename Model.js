@@ -7,6 +7,8 @@ define(function(require, exports, module) {
 
     var Model = BackboneModel.extend({
 
+        __virtual__urlRoot: null,
+
         constructor: function(obj)
         {
             Model.Super.apply(this, arguments);
