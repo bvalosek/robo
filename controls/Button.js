@@ -12,7 +12,13 @@ define(function(require, exports, module) {
 
             opts = opts || {};
 
-            this.caption = opts.caption || 'Button ' + this.cid;
+            this.caption  = opts.caption || 'Button ' + this.cid;
+            this._onClick = opts.onClick.bind(opts.context || opts.parentView);
+        },
+
+        __viewEvent__click: function()
+        {
+            this._onClick();
         },
 
         // just update the button caption on render

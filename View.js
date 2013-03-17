@@ -15,6 +15,18 @@ define(function(require, exports, module) {
     // new View object that is robo-like but extending from backbone.js
     var View = BackboneView.extend({
 
+        constructor: function()
+        {
+            View.Super.apply(this, arguments);
+
+            // check for any view events to bizzzzind
+            _(this.constructor.__annotations__).each(function(a, key) {
+                if(a.VIEWEVENT)
+                    this.delegate('click', this[key]);
+            }.bind(this));
+
+        },
+
         // opts.silent = no event fired
         close: function(opts)
         {
