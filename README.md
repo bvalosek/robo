@@ -1,6 +1,6 @@
 # Robo
 
-Robo is a comprehensive Javascript framework for large-scale client applications. Its primary motivation comes from:
+Robo is a comprehensive Javascript framework for large-scale client applications.
 
 * **Large-scale Javascript apps are hard.** Javascript's best and worst feature
   is its ability to pretty much get away with anything you want. Consistent and
