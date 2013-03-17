@@ -88,6 +88,61 @@ person.walk() // 'walking...'
 
 ### Member Annotations
 
+#### Inheritence
+```javascript
+var Lifeform = Base.Extend({
+
+    // CAN be overriden in derived class
+    __virtual__speak: function() 
+    {
+        console.log('the sound of nothing');
+    },
+
+    // MUST be overriden in derived class
+    __abstract__move: undefined
+
+    // accessible directly on class
+    __static__const__TAG: 'lifeform class'
+});
+
+var Human = Lifeform.extend({
+
+    __override__move: function()
+    {
+        console.log('walk on 2 legs');
+    },
+
+    __override__speak: function()
+    {
+        console.log('blah blah');
+    },
+
+});
+
+var Lizard = Lifeform.extend({
+
+    // ERROR: must use 'override' annotation
+    move: function()
+    {
+        // ...
+    }
+
+    // ERROR: must implement abstract member 'speak'
+
+});
+
+```
+
+#### Accessors
+
+#### Mixins
+
+#### Models
+
+#### Views
+
+#### Custom
+
 ### Model-View-Template
 
 ### Controls
