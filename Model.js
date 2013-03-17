@@ -1,11 +1,8 @@
 define(function(require, exports, module) {
 
-    var compose    = require('./compose');
-    var Collection = require('./Collection');
-
-    // create BackboneModel that has the compose.js goodies baked in
-    var BackboneModel = Backbone.Model.extend();
-    compose.mixin(BackboneModel.prototype, compose.withCompose);
+    var compose       = require('./compose');
+    var BackboneModel = require('./backbone/Model');
+    var Collection    = require('./Collection');
 
     var Model = BackboneModel.extend({
 
