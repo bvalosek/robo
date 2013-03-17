@@ -231,7 +231,7 @@ define(function(require, exports, module) {
                         return;
 
                     if (!ca.OVERRIDE && !ca.ABSTRACT && !ca.NEW)
-                        throw new Error('Non-abstract child class must implement abstract member "' + key + '"');
+                        throw new Error('Non-abstract child class must define abstract member "' + key + '"');
                 });
 
             // create a mixin object on the Child constructor
@@ -397,7 +397,6 @@ define(function(require, exports, module) {
         withCompose : withCompose,
         extend      : extend,
         mixin       : mixin,
-        wrap        : wrap,
         createMixin : createMixin,
         Base        : Base
     };
