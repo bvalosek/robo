@@ -16,7 +16,7 @@ Robo is a comprehensive Javascript framework for large-scale client applications
 
 ## Getting Started
 
-## The Good Stuff
+## Where the magic happens - compose.js
 
 ### Inheritance
 
@@ -40,19 +40,19 @@ before, after, wrapped
 
 hidden, readonly, const, sealed, static
 
-#### Models
+## The rest of the magic - the Robo framework
 
-attribute
+### Application
 
-#### Views
-
-viewEvent
-
-#### Custom
+### Page
 
 ### Model-View-Template
 
 ### Controls
+
+#### Standard Elements
+
+#### CollectionView
 
 ## Special Thanks
 
