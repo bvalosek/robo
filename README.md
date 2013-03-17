@@ -14,17 +14,53 @@ Robo is a comprehensive Javascript framework for large-scale client applications
 
 ## The Good Stuff
 
-### Model-View-Template
-
-Robo leverages the awesome work done with [http://backbonejs.org/](backbone.js).
-
-### Controls
-
 ### Inheritance
+
+Basic class definition
+
+```javascript
+var Lifeform = Base.extend({
+
+    constructor: function()
+    {
+        this.alive = true;
+    },
+
+    kill: function()
+    {
+        this.alive = false;
+    },
+
+});
+```
+
+Basic inheritence
+
+```javascript
+var Human = Lifeform.extend({
+
+    eat: function()
+    {
+        console.log('tasty');
+    }
+
+});
+```
+
+```javascript
+var person = new Human();   // this.alive == true
+person.eat();               // 'tasty'
+person.kill()               // this.alive == false
+```
 
 ### Functional Mixins
 
 ### Member Annotations
+
+### Model-View-Template
+
+### Controls
+
 
 ## License
 Copywrite 2013 Brandon Valosek, @bvalosek
