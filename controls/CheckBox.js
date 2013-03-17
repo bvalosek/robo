@@ -15,11 +15,11 @@ define(function(require, exports, module) {
             });
 
             CheckBox.Super.call(this, opts);
+        },
 
-            // toggle on click
-            this.delegate('click', function() {
-                this.setValue(!this.getValue());
-            });
+        __viewEvent__click: function()
+        {
+            this.setValue(!this.getValue());
         },
 
         // really just toggle the check based on state

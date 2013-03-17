@@ -22,9 +22,8 @@ define(function(require, exports, module) {
             // check for any view events to bizzzzind
             _(this.constructor.__annotations__).each(function(a, key) {
                 if(a.VIEWEVENT)
-                    this.delegate('click', this[key]);
+                    this.delegate(key, this[key]);
             }.bind(this));
-
         },
 
         // opts.silent = no event fired

@@ -16,10 +16,9 @@ define(function(require, exports, module) {
 
             TextInput.Super.call(this, opts);
 
-            this.delegate('keyup', this.onType);
         },
 
-        onType: function()
+        __viewEvent__keyup: function()
         {
             this.setValue(this.$el.val());
         },
