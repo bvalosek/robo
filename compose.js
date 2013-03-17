@@ -173,8 +173,8 @@ define(function(require, exports, module) {
             // determine what the actual constructor is going to be, if we have
             // it in the hash, etc
             var Child;
-            if (obj !== undefined && _(obj).isObject()
-                && obj.hasOwnProperty('constructor'))  {
+            if (obj !== undefined && _(obj).isObject() &&
+                obj.hasOwnProperty('constructor'))  {
                     Child = obj.constructor;
             } else {
                 if (!Parent.__ABSTRACT__)
@@ -263,8 +263,7 @@ define(function(require, exports, module) {
     };
 
     // process a member taking into account the annotations
-    var processMember = function(
-        Child, key, val, annotations, parentVal, parentAnnotations)
+    var processMember = function(Child, key, val, annotations)
     {
         if (key === 'constructor')
             return;

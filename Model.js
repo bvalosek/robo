@@ -70,7 +70,7 @@ define(function(require, exports, module) {
                 set: setter,
                 enumerable: true
             });
-        },
+        }
 
     });
 
