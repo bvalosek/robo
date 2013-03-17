@@ -159,15 +159,18 @@ define(function(require, exports, module) {
         {
             obj = obj || {};
 
-            // create constructor function
+            // CREATE constructor function
             var Child;
             if (obj !== undefined && _(obj).isObject()
                 && obj.hasOwnProperty('constructor'))  {
                     Child = obj.constructor;
             } else {
-                Child = function() {
-                    return Parent.apply(this, arguments);
-                };
+                if (!Parent.__ABSTRACT__)
+                    Child = function() {
+                        return Parent.apply(this, arguments);
+                    };
+                else
+                    Child = function() {};
             }
 
             // setup prototype chain via a surrogate constructor object, this
@@ -181,18 +184,55 @@ define(function(require, exports, module) {
             // nice.
             Child.Super = Parent;
 
-            // now deal with all the stuff we have in the descriptor hash
+            // now deal with all the stuff we have in the descriptor hash, and
+            // store it on the constructor for later fun
             var info = processAnnotations(obj);
+
+            // if there are any abstract members, this is an abstract class, so
+            // kill the constructor
+            var abstractMember = _(info.annotations).find(function(val, key) {
+                return val.ABSTRACT;
+            });
+
+            if (abstractMember) {
+                if (obj.hasOwnProperty('constructor'))
+                    throw new Error('Cannot have constructor in abstract class');
+
+                var p = Child.prototype; var S = Child.Super;
+                Child = function() {
+                    throw new Error('Cannot instantiate abstract class');
+                };
+
+                Child.__ABSTRACT__ = true;
+                Child.prototype    = p;
+                Child.Super        = S;
+            }
+
+            Object.defineProperty(Child, '__annotations__', {
+                enumerable: false, writable: false, value: info.annotations
+            });
+
             _(info.hash).each(function(val, key) {
                 var annotations = info.annotations[key];
 
-                var parentVal, parentAnnotations;
-
                 // inject the member into the prototype
-                processMember(
-                    Child.prototype, key, val,
-                    annotations, parentVal, parentAnnotations);
+                processMember(Child, key, val, annotations);
             });
+
+            // check for any non-implemented abstract members. This has to be a
+            // static/load-time check otherwise there will be overrhead with
+            // every function call
+            if (!Child.__ABSTRACT__)
+                _(Parent.prototype).each(function(val, key)  {
+                    var pa = findAnnotations(Parent, key);
+                    var ca = info.annotations[key] || {};
+
+                    if (!pa.ABSTRACT)
+                        return;
+
+                    if (!ca.OVERRIDE && !ca.ABSTRACT && !ca.NEW)
+                        throw new Error('Non-abstract child class must implement abstract member "' + key + '"');
+                });
 
             // create a mixin object on the Child constructor
             Child.mixin = function() {
@@ -207,10 +247,18 @@ define(function(require, exports, module) {
 
     // process a member taking into account the annotations
     var processMember = function(
-        proto, key, val, annotations, parentVal, parentAnnotations)
+        Child, key, val, annotations, parentVal, parentAnnotations)
     {
         if (key === 'constructor')
             return undefined;
+
+        // if this is a static member, we're operating on the actual
+        // constructor object/function and not the prototype hash
+        var proto;
+        if (annotations.STATIC)
+            proto = Child;
+        else
+            proto = Child.prototype;
 
         // getters and setters
         if (annotations.GET)
@@ -250,10 +298,63 @@ define(function(require, exports, module) {
         if (annotations.READONLY)
             Object.defineProperty(proto, key, { writable: false });
 
-        // inheritance.
+        // if it's static, we're done here (no inheritance)
+        if (annotations.STATIC)
+            return;
 
+        // inheritance. at this point, the member is on the Child prototype, we
+        // need to check on what the deal is with any member we may be hiding
+        // down the prototype chain
+        var parentAnnotations = findAnnotations(Child.Super, key);
+
+        // member not on parent
+        if (parentAnnotations === undefined)
+            return;
+
+        var pa = parentAnnotations; var ca = annotations;
+
+        // if its new, doesnt matter what's going on below, disregard all
+        if (ca.NEW)
+            return;
+
+        if (!pa.ABSTRACT && !pa.VIRTUAL)
+            throw new Error('Hidden base member must be virtual or abstract');
+
+        if (!ca.OVERRIDE)
+            throw new Error('Must use override annotation when hiding base virtual or abstract member');
+    };
+
+    // given a key and a starting object, get the annotations of it from the
+    // constructor
+    var findAnnotations = function(Class, key)
+    {
+        if (!Class)
+            return;
+
+        var proto = Class.prototype;
+
+        if (proto.hasOwnProperty(key))
+            return Class.__annotations__ ? Class.__annotations__[key] : {};
+
+        return findAnnotations(Class.Super, key);
 
     };
+
+    // get the property descriptor for a key, descending down the proto chain?
+    var getDescriptor = function(C, obj, key)
+    {
+        if (!obj)
+            return;
+
+        if (obj.hasOwnProperty(key))
+            return Object.getOwnPropertyDescriptor(obj, key);
+
+        if (!C.Super)
+            return;
+
+        return getDescriptor(C.Super, C.Super.prototype, key);
+    };
+
 
     // mixin that targets a class, making sure to call an empty extend to get a
     // new proto and not clobber the base
