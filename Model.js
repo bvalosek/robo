@@ -10,15 +10,16 @@ define(function(require, exports, module) {
         {
             Model.Super.apply(this, arguments);
 
-            if (obj)
-                this.setAttributes(obj);
-
             // check for any view events to bizzzzind
             _(this.constructor.__annotations__).each(function(a, key) {
                 if(a.ATTRIBUTE) {
                     this.addAttribute(key, this[key]);
                 }
             }.bind(this));
+
+            if (obj)
+                this.setAttributes(obj);
+
         },
 
         // Static class let's us make collections via model classes
@@ -34,11 +35,18 @@ define(function(require, exports, module) {
         // setup observationable attributes
         addAttribute: function(key, initVal)
         {
+            // if it is already setup, then just update
+            if (this[key] === this.attributes[key]) {
+                this[key] = initVal;
+                return;
+            }
+
             this.attributes[key] = initVal;
 
             Object.defineProperty(this, key, {
                 get: function() { return this.get(key); },
-                set: function(val) { this.set(key, val); }
+                set: function(val) { this.set(key, val); },
+                enumerable: true
             });
         },
 
