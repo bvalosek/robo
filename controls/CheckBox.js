@@ -23,7 +23,7 @@ define(function(require, exports, module) {
         },
 
         // really just toggle the check based on state
-        render: function()
+        __override__render: function()
         {
             this.$el.prop('checked', this.getValue());
         }

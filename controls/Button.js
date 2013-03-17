@@ -16,7 +16,7 @@ define(function(require, exports, module) {
         },
 
         // just update the button caption on render
-        render: function()
+        __override__render: function()
         {
             this.$el.html(this.caption);
         }

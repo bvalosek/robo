@@ -54,7 +54,7 @@ define(function(require, exports, module) {
             return view;
         },
 
-        render: function()
+        __override__render: function()
         {
             // remove all current views
             // this.closeViews();

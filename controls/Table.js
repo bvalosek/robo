@@ -17,7 +17,7 @@ define(function(require, exports, module) {
             this.collection = opts.collection;
         },
 
-        render: function()
+        __override__render: function()
         {
             Table.Super.prototype.render.apply(this, arguments);
         }

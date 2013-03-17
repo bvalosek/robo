@@ -23,7 +23,7 @@ define(function(require, exports, module) {
             return _(this).result('caption');
         },
 
-        render: function()
+        __override__render: function()
         {
             this.$el.html(this.getCaption());
         }

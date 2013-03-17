@@ -12,8 +12,8 @@ define(function(require, exports, module) {
         // should be overridden to point to endpoint
         __virtual__url: '',
 
-        // shouldnt ever be null, so we know what type of models to contain
-        __abstract__model: null
+        // should be overridden
+        __virtual__model: null
 
     });
 

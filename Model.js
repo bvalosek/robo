@@ -22,13 +22,13 @@ define(function(require, exports, module) {
         var Collection = Parent.Collection;
 
         return function(obj) {
-            Child = extender.apply(this, arguments);
+            var Child = extender.apply(this, arguments);
 
             obj = obj || {};
 
             var cHash = _(obj.Collection || {}).extend({
-                url: obj.urlRoot || '',
-                model: Child
+                __override__url: obj.urlRoot || '',
+                __override__model: Child
             });
 
             Child.Collection = Collection.extend(cHash);

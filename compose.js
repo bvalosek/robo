@@ -227,6 +227,9 @@ define(function(require, exports, module) {
                     var pa = findAnnotations(Parent, key);
                     var ca = info.annotations[key] || {};
 
+                    if (!pa)
+                        return;
+
                     if (!pa.ABSTRACT)
                         return;
 
@@ -317,11 +320,11 @@ define(function(require, exports, module) {
         if (ca.NEW)
             return;
 
-        if (!pa.ABSTRACT && !pa.VIRTUAL)
+        if (!pa.ABSTRACT && !pa.VIRTUAL && !pa.OVERRIDE)
             throw new Error('Hidden base member must be virtual or abstract');
 
         if (!ca.OVERRIDE)
-            throw new Error('Must use override annotation when hiding base virtual or abstract member');
+            throw new Error('Must use override annotation when hiding base virtual or abstract member "' + key + '"');
     };
 
     // given a key and a starting object, get the annotations of it from the

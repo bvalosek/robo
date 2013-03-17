@@ -24,7 +24,7 @@ define(function(require, exports, module) {
             this.setValue(this.$el.val());
         },
 
-        render: function()
+        __override__render: function()
         {
             this.$el.val(this.getValue());
         }
