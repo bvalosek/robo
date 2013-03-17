@@ -4,8 +4,7 @@ define(function(require, exports, module) {
     var helpers = require('./helpers');
 
     // return both the correct hash and an info object for dealing with
-    // annotations in a key/value hash, and also hang meta info off of objects
-    // in the actual hash
+    // annotations in a key/value hash
     var processAnnotations = function(hash)
     {
         var newHash = {};
@@ -28,15 +27,6 @@ define(function(require, exports, module) {
             // set the flags on the info
             allAnnotations[key] = helpers.makeHash(annotations, true);
 
-            // add in meta information if we can hang stuff off
-            if(annotations.length && _(val).isObject()) {
-                val.__annotations__ = helpers.makeHash(annotations, true);
-
-                annotations.forEach(function(a) {
-                    val['__' + a + '__'] = true;
-                });
-            }
-
         });
 
         return {
@@ -45,7 +35,22 @@ define(function(require, exports, module) {
         };
     };
 
-    // mixin the functionality of m into a
+
+    // attempt to find the annotation info for a hash. WIll only work if its an
+    // object created by a compose.js constructor (via extend, etc). Depds on
+    // the meta information hanging off the constructor
+    var annotationsFromThis = function(obj)
+    {
+        if (obj && obj.constructor && obj.constructor.__annotations__)
+            return obj.constructor.__annotations__;
+
+        return {};
+    };
+
+    // Functional mixin -- mixin the functionality of m into a
+    // inspired by:
+    // http://javascriptweblog.wordpress.com/2011/05/31/a-fresh-look-at-javascript-mixins/
+    // also keep track with a _mixin key to prevent multi-mix
     var mixinSingle = function(a, m)
     {
         if (a._mixins) {
@@ -53,7 +58,10 @@ define(function(require, exports, module) {
             // if we're mixing into something that only has _mixins in its
             // prototype chain, give it its own
             if (!a.hasOwnProperty('_mixins')) {
-                a._mixins = _(a._mixins).clone();
+                Object.defineProperty(a, '_mixins', {
+                    value: _(a._mixins).clone(),
+                    enumberable: false, writable: false
+                });
             }
 
             // only add this mixin if we don't have it already
@@ -63,15 +71,17 @@ define(function(require, exports, module) {
                 a._mixins.push(m);
 
         } else {
-            a._mixins = [m];
+            Object.defineProperty(a, '_mixins', {
+                value: [m],
+                enumberable: false, writable: false
+            });
         }
 
         // do it
         m.call(a);
     };
 
-    // create a functional mixin from a hash of stuff with a magically WRAP
-    // ability as an annotation
+    // create a "functional mixin" from a hash of stuff
     var createMixin = function(hash)
     {
         var info = processAnnotations(hash);
@@ -79,18 +89,17 @@ define(function(require, exports, module) {
         return function() {
             _(info.hash).each(function(fn, key) {
 
-                var originalFunction = this[key];
-
                 if (!_(fn).isFunction())
                     throw new Error ('Only functions are valid in mixins');
 
-                // check when hiding
+                // if we're hiding any functions in the target class
+                var originalFunction = this[key];
                 if (originalFunction) {
                     if (!_(originalFunction).isFunction())
                         throw new Error('Mixin function cannot conflict with non-function base member');
 
                     var ca = info.annotations[key] || {};
-                    var pa = originalFunction.__annotations__ || {};
+                    var pa = annotationsFromThis(this)[key];
 
                     if (ca.NEW) {
                         // who cares if new
@@ -134,6 +143,7 @@ define(function(require, exports, module) {
         if (_(mixins).isFunction())
             mixins = [mixins];
 
+        // get w/ compose for free!
         mixins.push(withCompose);
 
         _(mixins).each(function(mixin) {
@@ -153,13 +163,15 @@ define(function(require, exports, module) {
         };
     };
 
+    // give a Parent constructor an extend function that is used for inheritence
     var makeExtender = function(Parent)
     {
         return function(obj)
         {
             obj = obj || {};
 
-            // CREATE constructor function
+            // determine what the actual constructor is going to be, if we have
+            // it in the hash, etc
             var Child;
             if (obj !== undefined && _(obj).isObject()
                 && obj.hasOwnProperty('constructor'))  {
@@ -189,7 +201,7 @@ define(function(require, exports, module) {
             var info = processAnnotations(obj);
 
             // if there are any abstract members, this is an abstract class, so
-            // kill the constructor
+            // kill the constructor by preventing instantiating
             var abstractMember = _(info.annotations).find(function(val, key) {
                 return val.ABSTRACT;
             });
@@ -198,6 +210,7 @@ define(function(require, exports, module) {
                 if (obj.hasOwnProperty('constructor'))
                     throw new Error('Cannot have constructor in abstract class');
 
+                // make new fake constructor
                 var p = Child.prototype; var S = Child.Super;
                 Child = function() {
                     throw new Error('Cannot instantiate abstract class');
@@ -208,6 +221,7 @@ define(function(require, exports, module) {
                 Child.Super        = S;
             }
 
+            // attach meta information to the constructor for later
             Object.defineProperty(Child, '__annotations__', {
                 enumerable: false, writable: false, value: info.annotations
             });
@@ -234,7 +248,7 @@ define(function(require, exports, module) {
                         return;
 
                     if (!ca.OVERRIDE && !ca.ABSTRACT && !ca.NEW)
-                        throw new Error('Non-abstract child class must define abstract member "' + key + '"');
+                        throw new Error('Non-abstract child class must define abstract base member "' + key + '"');
                 });
 
             // create a mixin object on the Child constructor
@@ -253,7 +267,7 @@ define(function(require, exports, module) {
         Child, key, val, annotations, parentVal, parentAnnotations)
     {
         if (key === 'constructor')
-            return undefined;
+            return;
 
         // if this is a static member, we're operating on the actual
         // constructor object/function and not the prototype hash
@@ -263,7 +277,7 @@ define(function(require, exports, module) {
         else
             proto = Child.prototype;
 
-        // getters and setters
+        // getters and setters ... accessor stuff
         if (annotations.GET)
             Object.defineProperty(proto, key, {
                 get: val,
@@ -274,7 +288,10 @@ define(function(require, exports, module) {
                 set: val,
                 enumerable: true, configurable: true
             });
+
         else if (annotations.PROPERTY)
+
+            // result leverages udnerscores result method
             if (annotations.RESULT)  {
                 var _key = '_' + key;
                 proto[_key] = val;
@@ -283,6 +300,8 @@ define(function(require, exports, module) {
                     set: function(v) { this[_key] = _(v).isFunction() ? v.bind(this) : v; },
                     enumerable: true, configurable: true
                 });
+
+            // otherwise expect get and set properties
             } else {
                 Object.defineProperty(proto, key, {
                     get: val.get,
@@ -290,6 +309,8 @@ define(function(require, exports, module) {
                     enumerable: true, configurable: true
                 });
             }
+
+        // more overhead, but throw error when trying to set
         else if (annotations.CONST)
             Object.defineProperty(proto, key, {
                 get: function() { return val; },
@@ -303,7 +324,7 @@ define(function(require, exports, module) {
                 enumerable: true, configurable: true
             });
 
-        // hide
+        // hide from enumeration
         if (annotations.HIDDEN)
             Object.defineProperty(proto, key, { enumerable: false });
 
@@ -338,7 +359,9 @@ define(function(require, exports, module) {
     };
 
     // given a key and a starting object, get the annotations of it from the
-    // constructor
+    // constructor. This is needed in order to ensure we traverse all the way
+    // back to the correct constructor context in order to get the annotations
+    // off a member exposed via the prototype
     var findAnnotations = function(Class, key)
     {
         if (!Class)
@@ -350,24 +373,7 @@ define(function(require, exports, module) {
             return Class.__annotations__ ? Class.__annotations__[key] : {};
 
         return findAnnotations(Class.Super, key);
-
     };
-
-    // get the property descriptor for a key, descending down the proto chain?
-    var getDescriptor = function(C, obj, key)
-    {
-        if (!obj)
-            return;
-
-        if (obj.hasOwnProperty(key))
-            return Object.getOwnPropertyDescriptor(obj, key);
-
-        if (!C.Super)
-            return;
-
-        return getDescriptor(C.Super, C.Super.prototype, key);
-    };
-
 
     // mixin that targets a class, making sure to call an empty extend to get a
     // new proto and not clobber the base
@@ -411,7 +417,6 @@ define(function(require, exports, module) {
                 enumerable: false
             });
         }
-
     };
 
     var Base = function() {};
