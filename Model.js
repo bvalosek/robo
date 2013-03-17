@@ -48,7 +48,6 @@ define(function(require, exports, module) {
                 return;
             }
 
-            this.attributes[key] = initVal;
 
             var setter;
             if (annotations && annotations.READONLY)
@@ -58,8 +57,16 @@ define(function(require, exports, module) {
             else
                 setter = function(val) { this.set(key, val); };
 
+            // dont actually put it into attributes if its hidden
+            var actualKey = key;
+            if (annotations && annotations.HIDDEN) {
+                actualKey = '_' + key;
+            } else {
+                this.attributes[key] = initVal;
+            }
+
             Object.defineProperty(this, key, {
-                get: function() { return this.get(key); },
+                get: function() { return this.get(actualKey); },
                 set: setter,
                 enumerable: true
             });
