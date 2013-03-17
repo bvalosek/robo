@@ -275,11 +275,21 @@ define(function(require, exports, module) {
                 enumerable: true, configurable: true
             });
         else if (annotations.PROPERTY)
-            Object.defineProperty(proto, key, {
-                get: val.get,
-                set: val.set,
-                enumerable: true, configurable: true
-            });
+            if (annotations.RESULT)  {
+                var _key = '_' + key;
+                proto[_key] = val;
+                Object.defineProperty(proto, key, {
+                    get: function() { return _(this).result(_key); },
+                    set: function(v) { this[_key] = _(v).isFunction() ? v.bind(this) : v; },
+                    enumerable: true, configurable: true
+                });
+            } else {
+                Object.defineProperty(proto, key, {
+                    get: val.get,
+                    set: val.set,
+                    enumerable: true, configurable: true
+                });
+            }
         else if (annotations.CONST)
             Object.defineProperty(proto, key, {
                 get: function() { return val; },
