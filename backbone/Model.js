@@ -7,5 +7,6 @@ define(function(require, exports, module) {
     compose.mixin(Model.prototype, compose.withCompose);
     Model.__annotations__ = {};
 
+
     return Model;
 });

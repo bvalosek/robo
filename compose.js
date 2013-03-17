@@ -379,16 +379,27 @@ define(function(require, exports, module) {
     var withCompose = function()
     {
         // could be overwritten below if we're a constructor
-        this.mixin = function(m) { return mixin(this, _(arguments).toArray()); };
+        Object.defineProperty(this, 'mixin', {
+            value: function(m) { return mixin(this, _(arguments).toArray()); },
+            enumerable: false
+        });
 
         // if we've got a constructor, go ahead and do it a solid by chaining
         // the extend method
         if (this.constructor) {
-            this.constructor.extend = makeExtender(this.constructor);
+            Object.defineProperty(this.constructor, 'extend', {
+                value: makeExtender(this.constructor),
+                enumerable: false
+            });
 
-            this.constructor.mixin = function() {
+            var m = function() {
                 return includeMixin(this, _(arguments).toArray());
             }.bind(this.constructor);
+
+            Object.defineProperty(this.constructor, 'mixin', {
+                value: m,
+                enumerable: false
+            });
         }
 
     };
