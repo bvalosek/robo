@@ -55,6 +55,37 @@ person.kill()               // this.alive == false
 
 ### Functional Mixins
 
+Concept of a mixin
+
+```javascript
+function withWalk = function() 
+{
+    this.walk = function() { console.log('walking...'); }
+}
+```
+
+Robo mixin
+```javascript
+var withWalk = compose.createMixin({
+
+    walk: function()
+    {
+        console.log('walking...');
+    }
+
+});
+
+var Human = Lifeform.mixin(withWalking).extend({
+
+    // ...
+
+})
+```
+
+```javascript
+person.walk() // 'walking...'
+```
+
 ### Member Annotations
 
 ### Model-View-Template
