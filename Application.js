@@ -1,4 +1,5 @@
 define(function(require, exports, module) {
+
     var Base           = require('./Base');
     var View           = require('./View');
     var log            = require('./log');

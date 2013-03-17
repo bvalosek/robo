@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 
     // modify the render and close behavior to delay the removal from the DOM
     // long enough to potentially animate it
-    var withDeferredClose =  compose.createMixin(
+    var withDeferredClose =  compose.defineMixin(
     {
         // once we render, add the opened class
         __before__render: function()

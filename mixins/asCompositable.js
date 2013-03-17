@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     var compose = require('../compose');
     var _       = require('underscore');
 
-    var asCompositable = compose.createMixin(
+    var asCompositable = compose.defineMixin(
     {
         addView: function(view)
         {

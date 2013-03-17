@@ -408,6 +408,9 @@ define(function(require, exports, module) {
                 enumerable: false
             });
 
+            if (this.constructor.__annotations__ === undefined)
+                this.constructor.__annotations__ = {};
+
             var m = function() {
                 return includeMixin(this, _(arguments).toArray());
             }.bind(this.constructor);
@@ -419,14 +422,26 @@ define(function(require, exports, module) {
         }
     };
 
+    // Base object contains all the fun stuff from compose.js
     var Base = function() {};
     mixin(Base.prototype, withCompose);
 
+    var defineClass = function(obj)
+    {
+        return Base.extend(obj);
+    };
+
+    var defineMixin = createMixin;
+
     return {
+
+        // should be primary use of compose.js
+        defineMixin : defineMixin,
+        defineClass : defineClass,
+
+        // using conpose.js on existing objects
         withCompose : withCompose,
         extend      : extend,
-        mixin       : mixin,
-        createMixin : createMixin,
-        Base        : Base
+        mixin       : mixin
     };
 });

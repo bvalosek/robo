@@ -1,12 +1,12 @@
 define(function(require, exports, module) {
 
-    var Base = require('./Base');
-    var _    = require('underscore');
-    var $    = require('jquery');
+    var compose = require('./compose');
+    var _       = require('underscore');
+    var $       = require('jquery');
 
     // queue up functions taht return a deferred object, ensuring that they happen
     // sequentially
-    var DeferredQueue = Base.extend({
+    var DeferredQueue = compose.defineClass({
 
         // optionally provide a single function that is being queued
         constructor: function(fn, context)

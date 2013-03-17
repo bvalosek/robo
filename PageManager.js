@@ -1,10 +1,10 @@
 define(function(require, exports, module) {
 
-    var _    = require('underscore');
-    var Base = require('./Base');
-    var log  = require('./log');
+    var _       = require('underscore');
+    var log     = require('./log');
+    var compose = require('./compose');
 
-    var PageManager = Base.extend({
+    var PageManager = compose.defineClass({
 
         // stash the app context
         constructor: function(application) {

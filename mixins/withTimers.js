@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 
     // keep track of timers on an object, clear them out on close. Typically
     // used on a renderable
-    var withTimers = compose.createMixin(
+    var withTimers = compose.defineMixin(
     {
 
         createTimer: function(fn, timeout, context)

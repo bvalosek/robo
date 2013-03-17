@@ -1,9 +1,9 @@
 define(function(require, exports, module) {
 
-    var Base = require('./Base');
-    var log  = require('./log');
+    var compose = require('./compose');
+    var log     = require('./log');
 
-    var Timer = Base.extend({
+    var Timer = compose.defineClass({
 
         constructor: function(fn, timeout, context)
         {

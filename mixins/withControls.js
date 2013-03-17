@@ -7,7 +7,7 @@ define(function(require, exports, module) {
 
     // give a view the ability to create controls that are then handled via
     // onContolChange calls
-    var withControls = compose.createMixin(
+    var withControls = compose.defineMixin(
     {
 
         // take over the render function make sure it is only called once, and

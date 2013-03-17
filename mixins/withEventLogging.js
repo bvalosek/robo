@@ -5,7 +5,7 @@ define(function(require, exports, module) {
     var _       = require('underscore');
 
     // mixin to output any triggered events
-    var withEventLogging = compose.createMixin(
+    var withEventLogging = compose.defineMixin(
     {
         getTag: function()
         {

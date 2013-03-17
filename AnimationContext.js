@@ -1,10 +1,10 @@
 define(function(require, exports, module) {
 
-    var Base = require('./Base');
+    var compose = require('./compose');
 
     var MS_THRESHOLD = 17;
 
-    var AnimationContext = Base.extend({
+    var AnimationContext = compose.defineClass({
 
         constructor: function() {
             this._queue = [];

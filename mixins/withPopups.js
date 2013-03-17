@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 
     // the ability to open popups with a certain context to ensure that a close
     // event will remove the popup
-    var withPopups = compose.createMixin(
+    var withPopups = compose.defineMixin(
     {
         showPopup: function(view)
         {
