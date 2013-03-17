@@ -3,6 +3,7 @@ define(function(require, exports, module) {
     var compose       = require('./compose');
     var BackboneModel = require('./backbone/Model');
     var Collection    = require('./Collection');
+    var _             = require('underscore');
 
     var Model = BackboneModel.extend({
 
@@ -35,6 +36,10 @@ define(function(require, exports, module) {
         // setup observationable attributes
         addAttribute: function(key, initVal)
         {
+            // no objects, yet
+            if (_(initVal).isObject())
+                throw new Error('Model does not support object attributes, yet');
+
             // if it is already setup, then just update
             if (this[key] === this.attributes[key]) {
                 this[key] = initVal;

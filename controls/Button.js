@@ -18,7 +18,8 @@ define(function(require, exports, module) {
 
         __viewEvent__click: function()
         {
-            this._onClick();
+            if (this._onClick)
+                this._onClick();
         },
 
         // just update the button caption on render
