@@ -30,7 +30,7 @@ define(function(require, exports, module) {
             this.close();
         },
 
-        close: function()
+        __new__close: function()
         {
             if (this.value !== undefined) {
                 this._d.resolve(this.value);
