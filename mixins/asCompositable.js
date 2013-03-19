@@ -46,6 +46,11 @@ define(function(require, exports, module) {
             return this;
         },
 
+        forEach: function(fn)
+        {
+            return this._views.forEach(fn);
+        },
+
         setView: function(view)
         {
             this.closeViews();
