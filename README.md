@@ -41,12 +41,15 @@ Robo should work with the following browsers:
 * **Inheritance.** Classical inheritance goodness in Javascipt. Create a rich
   class hierarchy that feels sane, with all the power and common
   sense you've come to expect in an object-oriented language.
+
 * **Functional mixins.**  Inspired by [Angus Croll's
   article](http://javascriptweblog.wordpress.com/2011/05/31/a-fresh-look-at-javascript-mixins/)
   on using functions to mutate an object and add new functionality. The
   `before`, `after`, and `wrapped` annotations can be used to modifiy existing
   functions.
+
 * **Member annotations.**
+
 * **Define-time semantics checking.** Use the `virtual`, `abstract`, and
   `override` member annotations to ensure predictable inheritence behavior, and
   get feedback in the form of define-time errors when implementation contracts
