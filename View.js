@@ -1,12 +1,12 @@
 define(function(require, exports, module) {
 
-    var compose      = require('./compose');
-    var Application  = require('./Application');
-    var Base         = require('./Base');
-    var Backbone     = require('backbone');
-    var helpers      = require('./helpers');
-    var _            = require('underscore');
-    var $            = require('jquery');
+    var compose     = require('./compose');
+    var Application = require('./Application');
+    var Base        = require('./Base');
+    var Backbone    = require('backbone');
+    var helpers     = require('./helpers');
+    var _           = require('underscore');
+    var $           = require('jquery');
 
     // create BackboneView object that has the compose.js goodies baked in
     var BackboneView = Backbone.View.extend();
@@ -19,10 +19,8 @@ define(function(require, exports, module) {
         {
             View.Super.apply(this, arguments);
 
-            // check for any view events to bizzzzind
-            _(this.constructor.__annotations__).each(function(a, key) {
-                if(a.VIEWEVENT)
-                    this.delegate(key, this[key]);
+            _(this.constructor.findKeys('VIEWEVENT')).each(function(key) {
+                this.delegate(key, this[key]);
             }.bind(this));
         },
 

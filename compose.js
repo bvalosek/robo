@@ -87,24 +87,30 @@ define(function(require, exports, module) {
         var info = processAnnotations(hash);
 
         return function() {
+
+            // This may be undefined if we're not mixing into a constructor
+            var targetAnnotations = this.constructor ?
+                this.constructor.__annotations__ : undefined;
+
             _(info.hash).each(function(fn, key) {
 
-                if (!_(fn).isFunction())
+                var ma = info.annotations[key] || {};
+                var ta = annotationsFromThis(this)[key];
+
+                // Make sure it's either abstract or a function
+                if (!ma.ABSTRACT && !_(fn).isFunction())
                     throw new Error ('Only functions are valid in mixins');
 
                 // if we're hiding any functions in the target class
                 var originalFunction = this[key];
                 if (originalFunction) {
                     if (!_(originalFunction).isFunction())
-                        throw new Error('Mixin function cannot conflict with non-function base member');
+                        throw new Error('Mixin function cannot override non-function base member');
 
-                    var ca = info.annotations[key] || {};
-                    var pa = annotationsFromThis(this)[key];
-
-                    if (ca.NEW) {
+                    if (ma.NEW) {
                         // who cares if new
                     } else {
-                        if (!ca.AFTER && !ca.BEFORE && !ca.WRAPPED)
+                        if (!ma.AFTER && !ma.BEFORE && !ma.WRAPPED)
                             throw new Error ('Must use before, after, or wrapped annotations when overriding a base member with a mixin');
                     }
                 }
@@ -128,6 +134,20 @@ define(function(require, exports, module) {
                         f.apply(this, arguments);
                         afterFunc.apply(this, arguments);
                     });
+                }
+
+                // If we're mixing into a constructor, make sure to map all the
+                // annotations if we don't yet have the function, or check that
+                // all the correct annotations are there.
+                if (targetAnnotations !== undefined) {
+                    var dump = _(ma).omit(['WRAPPED', 'BEFORE', 'AFTER']);
+
+                    // trivial case of when the mixin function isn't in the target
+                    if (!_(dump).isEmpty() && targetAnnotations[key] === undefined) {
+                        console.log(targetAnnotations);
+                        targetAnnotations[key] = dump;
+                    } else if (!_(dump).isEmpty()) {
+                    }
                 }
 
                 // MIX IT IN!
@@ -256,6 +276,16 @@ define(function(require, exports, module) {
                 return includeMixin(Child, _(arguments).toArray());
             };
 
+            // annotation helpers
+            Object.defineProperty(Child, 'findAnnotations', {
+                value: function(k) { return findAnnotations(Child, k); },
+                enumberable: false
+            });
+            Object.defineProperty(Child, 'findKeys', {
+                value: function(a) { return findKeys(Child, a); },
+                enumberable: false
+            });
+
             // propigate the extender
             Child.extend = makeExtender(Child);
             return Child;
@@ -355,6 +385,18 @@ define(function(require, exports, module) {
 
         if (!ca.OVERRIDE)
             throw new Error('Must use override annotation when hiding base virtual or abstract member "' + key + '"');
+
+        // check the annotations to make sure all of them are carried forward.
+        // We already know the override/vritual/abstract is correct so omit
+        // those
+        var omits = ['OVERRIDE', 'VIRTUAL', 'ABSTRACT', 'NEW'];
+        var cao = _(ca).omit(omits);
+        var pao = _(pa).omit(omits);
+        var cd = _(cao).difference(pao);
+        var pd = _(pao).difference(cao);
+        if (cd.length != pd.length != 0)
+            throw new Error ('Override member must have same annotation signature as base class: "' +
+                _(pao).reduce(function(acc, v,k) { return acc + ' ' + k.toLowerCase() + ' '; }, '').trim() + '"');
     };
 
     // given a key and a starting object, get the annotations of it from the
@@ -372,6 +414,23 @@ define(function(require, exports, module) {
             return Class.__annotations__ ? Class.__annotations__[key] : {};
 
         return findAnnotations(Class.Super, key);
+    };
+
+    // give a constrcutor and an annotation, find al lthe keys that have it
+    var findKeys = function(Class, annotation, found)
+    {
+        found = found || [];
+
+        _(Class.__annotations__).each(function(annos, key) {
+            if (annos[annotation])
+                found.push(key);
+        });
+
+        if (Class.Super)
+            return findKeys(Class.Super, annotation, found);
+        else
+            return _(found).uniq();
+
     };
 
     // mixin that targets a class, making sure to call an empty extend to get a
@@ -402,20 +461,22 @@ define(function(require, exports, module) {
         // if we've got a constructor, go ahead and do it a solid by chaining
         // the extend method
         if (this.constructor) {
-            Object.defineProperty(this.constructor, 'extend', {
-                value: makeExtender(this.constructor),
+            var Ctor = this.constructor;
+
+            // extend
+            Object.defineProperty(Ctor, 'extend', {
+                value: makeExtender(Ctor),
                 enumerable: false
             });
 
-            if (this.constructor.__annotations__ === undefined)
-                this.constructor.__annotations__ = {};
 
-            var m = function() {
-                return includeMixin(this, _(arguments).toArray());
-            }.bind(this.constructor);
+            // empty annotations
+            if (Ctor.__annotations__ === undefined)
+                Ctor.__annotations__ = {};
 
+            // mixin
             Object.defineProperty(this.constructor, 'mixin', {
-                value: m,
+                value: function() { return includeMixin(Ctor, _(arguments).toArray()); },
                 enumerable: false
             });
         }

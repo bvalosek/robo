@@ -1,25 +1,17 @@
 define(function(require, exports, module) {
 
-    var Control = require('../Control');
+    var ClickControl = require('./ClickControl');
 
-    var Button = Control.extend({
+    var Button = ClickControl.extend({
+
+        __override__tagName: 'button',
 
         constructor: function(opts)
         {
-            Button.Super.call(this, {
-                tagName: 'button'
-            });
+            Button.Super.apply(this, arguments);
 
             opts = opts || {};
-
             this.caption  = opts.caption || 'Button ' + this.cid;
-            this._onClick = opts.onClick.bind(opts.context || opts.parentView);
-        },
-
-        __viewEvent__click: function()
-        {
-            if (this._onClick)
-                this._onClick();
         },
 
         // just update the button caption on render

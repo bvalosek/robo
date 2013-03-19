@@ -1,5 +1,7 @@
 define(function(require, exports, module) {
 
+    var _ = require('underscore');
+
     var helpers = {
 
         // apply but for constructors
