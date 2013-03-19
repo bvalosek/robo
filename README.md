@@ -18,6 +18,24 @@ Robo is a comprehensive Javascript framework for large-scale client applications
 
 ## Where the magic happens - compose.js
 
+## compose.Object
+
+```
+Class (constructor function)
+    __anotations__
+    __mixins__
+    Super
+    findAnnotations()
+    findKeys()
+    getTypes()
+    mixin
+    extend
+    prototype
+        constructor ( === Class)
+        __mixins__
+        mixin
+```
+
 ### Inheritance
 
 ### Functional Mixins
