@@ -21,20 +21,34 @@ Robo is a comprehensive Javascript framework for large-scale client applications
 ## compose.Object
 
 ```
-Class (constructor function)
-    __anotations__
-    __mixins__
+Class
+    extend()
+    mixin()
     Super
     findAnnotations()
     findKeys()
-    getTypes()
-    mixin
-    extend
+    __anotations__
+    __mixins__
     prototype
-        constructor ( === Class)
+        is()
+        mixin()
+        constructor
         __mixins__
-        mixin
 ```
+
+#### extend()
+
+#### mixin()
+
+##### On the constructor (class)
+
+##### On the prototype (instance)
+
+#### findAnnotations()
+
+#### findKeys()
+
+#### is()
 
 ### Inheritance
 
@@ -44,19 +58,47 @@ Class (constructor function)
 
 #### Inheritance
 
-override, virtual, abstract
+##### override
+
+##### virtual
+
+##### abstract
+
+##### new
 
 #### Accessors
 
-get, set, property, result
+##### get
+
+##### set
+
+##### property
+
+##### result
+
+##### memoize
+
+##### once
 
 #### Mixins
 
-before, after, wrapped
+##### before
+
+##### after
+
+##### wrapped
 
 #### Modifiers
 
-hidden, readonly, const, sealed, static
+##### hidden
+
+##### readonly
+
+##### const
+
+##### sealed
+
+##### static
 
 ## The rest of the magic - the Robo framework
 
