@@ -59,15 +59,17 @@ Run a http server from the root of the repo, and browse to e.g. `localhost:8080/
 
 ## compose.Object
 
+Base class constructor.
+
 ```
-Class
+compose.Object
     extend()
     using()
     findAnnotations()
     findMembers()
     Super
     __name__
-    __anotations__
+    __annotations__
     __mixins__
     prototype
         is()
@@ -82,7 +84,7 @@ Class
 
 #### findAnnotations()
 
-#### findKeys()
+#### findMembers()
 
 #### is()
 
