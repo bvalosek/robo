@@ -48,6 +48,7 @@ define(function(require, exports, module) {
 
         forEach: function(fn)
         {
+            this._views = this._views || [];
             return this._views.forEach(fn);
         },
 
