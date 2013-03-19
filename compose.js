@@ -92,11 +92,16 @@ define(function(require, exports, module) {
                     if (!_(originalFunction).isFunction())
                         throw new Error('Mixin function cannot override non-function base member');
 
+                    // who cares if new
                     if (ma.NEW) {
-                        // who cares if new
-                    } else {
-                        if (!ma.AFTER && !ma.BEFORE && !ma.WRAPPED)
-                            throw new Error ('Must use before, after, or wrapped annotations when overriding a base member with a mixin');
+
+                    // need to do something if theres an override
+                    } else if (!ma.ABSTRACT && !ma.AFTER && !ma.BEFORE && !ma.WRAPPED) {
+                        throw new Error ('Must use before, after, or wrapped annotations when overriding a base member with a mixin');
+
+                    // just check that annotation signature matches
+                    } else if (ma.ABSTRACT) {
+                        console.log(ma, ta);
                     }
                 }
 
@@ -128,17 +133,15 @@ define(function(require, exports, module) {
                     // pulled-up member
                     thisAnnotationMap[key] = thisAnnotationMap[key] || {};
                     _(thisAnnotationMap[key]).extend(ta);
-
-
                 }
-
-                var others = _(ma).omit(['WRAPPED', 'BEFORE', 'AFTER']);
 
                 // if we have any other annotations on this function, there
                 // better not be something we're mixing in on top of
+                var others = _(ma).omit(['WRAPPED', 'BEFORE', 'AFTER']);
                 if (!_(others).isEmpty() && originalFunction)
                     throw new Error('Cannot mixin "' + key + '" on top of existing base function');
 
+                // otherwise then update our annotation map with what this stuff is
                 if (!_(others).isEmpty()) {
                     thisAnnotationMap[key] = others;
                 }
@@ -431,9 +434,7 @@ define(function(require, exports, module) {
         var omits = ['OVERRIDE', 'VIRTUAL', 'ABSTRACT', 'NEW'];
         var cao = _(ca).omit(omits);
         var pao = _(pa).omit(omits);
-        var cd = _(cao).difference(pao);
-        var pd = _(pao).difference(cao);
-        if (cd.length != pd.length != 0)
+        if (!helpers.sameAnnotations(cao, pao))
             throw new Error ('Override member must have same annotation signature as base class: "' +
                 prettyPrint(Child.Super, key, pa) + '"');
     };

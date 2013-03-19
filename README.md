@@ -26,7 +26,7 @@ Robo makes use of ECMAScript5 features such as `Object#defineProperty()`,
 `Function#bind()`, and `Array#forEach()`, which limits its compatibility to
 modern, compliant browsers.
 
-Robo _should_ work with the following browsers:
+Robo should work with the following browsers:
 
 * Chrome 7+
 * Firefox 4+
@@ -34,23 +34,33 @@ Robo _should_ work with the following browsers:
 * Opera 4+
 * Internet Explorer 9+
 
+#### Tests
 
-## compose.js -- Where the magic happens
+## compose.js
 
-* **Inheritance.**
-* **Functional mixins.**
+* **Inheritance.** Classical inheritance goodness in Javascipt. Create a rich
+  class hierarchy that feels sane, with all the power and common
+  sense you've come to expect in an object-oriented language.
+* **Functional mixins.**  Inspired by [Angus Croll's
+  article](http://javascriptweblog.wordpress.com/2011/05/31/a-fresh-look-at-javascript-mixins/)
+  on using functions to mutate an object and add new functionality. The
+  `before`, `after`, and `wrapped` annotations can be used to modifiy existing
+  functions.
 * **Member annotations.**
-* **Define-time semantics checking.**
+* **Define-time semantics checking.** Use the `virtual`, `abstract`, and
+  `override` member annotations to ensure predictable inheritence behavior, and
+  get feedback in the form of define-time errors when implementation contracts
+  are broken.
 
 ## compose.Object
 
 ```
 Class
     extend()
-    mixin()
-    Super
+    using()
     findAnnotations()
     findMembers()
+    Super
     __name__
     __anotations__
     __mixins__
@@ -63,17 +73,15 @@ Class
 
 #### extend()
 
-#### mixin()
-
-##### On the constructor (class)
-
-##### On the prototype (instance)
+#### using()
 
 #### findAnnotations()
 
 #### findKeys()
 
 #### is()
+
+#### mixin()
 
 ### Inheritance
 
