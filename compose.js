@@ -123,13 +123,24 @@ define(function(require, exports, module) {
                 // annotations if we don't yet have the function, or check that
                 // all the correct annotations are there.
                 if (ta !== undefined) {
-                    var dump = _(ma).omit(['WRAPPED', 'BEFORE', 'AFTER']);
 
                     // ensure that the direct target has the annotations of the
                     // pulled-up member
                     thisAnnotationMap[key] = thisAnnotationMap[key] || {};
                     _(thisAnnotationMap[key]).extend(ta);
 
+
+                }
+
+                var others = _(ma).omit(['WRAPPED', 'BEFORE', 'AFTER']);
+
+                // if we have any other annotations on this function, there
+                // better not be something we're mixing in on top of
+                if (!_(others).isEmpty() && originalFunction)
+                    throw new Error('Cannot mixin "' + key + '" on top of existing base function');
+
+                if (!_(others).isEmpty()) {
+                    thisAnnotationMap[key] = others;
                 }
 
                 // MIX IT IN!
