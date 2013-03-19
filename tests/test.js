@@ -35,7 +35,7 @@ define(function(require, exports, module) {
         __override__baseAbstract: -3,
     });
 
-    test("Basic Inheritance", function ()
+    test('Basic Inheritance', function ()
     {
         var child = new ChildClass();
         equal(child.render(), "child render");
@@ -46,4 +46,18 @@ define(function(require, exports, module) {
         equal(child.baseAbstract, -3);
 
     });
+    
+    test('Bad Inheritance', function ()
+    {
+        throws(function ()
+        {
+            BaseClass.extend({
+                render: function ()
+                {
+                    return 'new render';
+                }
+            });
+        }, 'Missing override');
+    });
+
 });
