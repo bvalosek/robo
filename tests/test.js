@@ -17,7 +17,7 @@ define(function(require, exports, module) {
 
         basePlain: 1,
         __virtual__baseVirtual: 2,
-        __abstract__baseAbstract: undefined,
+        __abstract__baseAbstract: undefined
 
     });
 
@@ -32,7 +32,7 @@ define(function(require, exports, module) {
         },
 
         __override__baseVirtual: -2,
-        __override__baseAbstract: -3,
+        __override__baseAbstract: -3
     });
 
     test('Basic Inheritance', function ()
@@ -64,7 +64,7 @@ define(function(require, exports, module) {
                 render: function(){
                     return 'new render';
                 },
-                __override__baseAbstract: -3,
+                __override__baseAbstract: -3
             });
         },
         'Missing override');
@@ -77,7 +77,7 @@ define(function(require, exports, module) {
             __new__hidden__render: function ()
             {
                 return 'new render';
-            },
+            }
         });
 
         equal(newChild.render(), 'new render');
@@ -111,7 +111,7 @@ define(function(require, exports, module) {
         throws(function ()
         {
             ModifierTest.extend({
-                __readonly__const__roc: 3,
+                __readonly__const__roc: 3
             });
         },
        'Const and readonly are not both allowed');
