@@ -35,18 +35,6 @@ define(function(require, exports, module) {
         };
     };
 
-
-    // attempt to find the annotation info for a hash. WIll only work if its an
-    // object created by a compose.js constructor (via extend, etc). Depds on
-    // the meta information hanging off the constructor
-    var annotationsFromThis = function(obj)
-    {
-        if (obj && obj.constructor && obj.constructor.__annotations__)
-            return obj.constructor.__annotations__;
-
-        return {};
-    };
-
     // Functional mixin -- mixin the functionality of m into a
     // inspired by:
     // http://javascriptweblog.wordpress.com/2011/05/31/a-fresh-look-at-javascript-mixins/
@@ -88,14 +76,11 @@ define(function(require, exports, module) {
 
         return function() {
 
-            // This may be undefined if we're not mixing into a constructor
-            var targetAnnotations = this.constructor ?
-                this.constructor.__annotations__ : undefined;
-
             _(info.hash).each(function(fn, key) {
 
-                var ma = info.annotations[key] || {};
-                var ta = annotationsFromThis(this)[key];
+                var ta                = findAnnotations(this.constructor ? this.constructor : this, key);
+                var ma                = info.annotations[key] || {};
+                var thisAnnotationMap = (this.constructor ? this.constructor : this).__annotations__ || {};
 
                 // Make sure it's either abstract or a function
                 if (!ma.ABSTRACT && !_(fn).isFunction())
@@ -115,20 +100,18 @@ define(function(require, exports, module) {
                     }
                 }
 
-                var annotations = info.annotations[key];
-
                 // DAT WRAPPING
-                if (annotations.WRAPPED) {
+                if (ma.WRAPPED) {
                     fn = wrap(this[key], fn);
 
-                } else if (annotations.BEFORE) {
+                } else if (ma.BEFORE) {
                     var beforeFunc = fn;
                     fn = wrap(this[key], function(f) {
                         beforeFunc.apply(this, arguments);
                         f.apply(this, arguments);
                     });
 
-                } else if (annotations.AFTER) {
+                } else if (ma.AFTER) {
                     var afterFunc = fn;
                     fn = wrap(this[key], function(f) {
                         f.apply(this, arguments);
@@ -139,16 +122,14 @@ define(function(require, exports, module) {
                 // If we're mixing into a constructor, make sure to map all the
                 // annotations if we don't yet have the function, or check that
                 // all the correct annotations are there.
-                if (targetAnnotations !== undefined) {
+                if (ta !== undefined) {
                     var dump = _(ma).omit(['WRAPPED', 'BEFORE', 'AFTER']);
 
-                    // trivial case of when the mixin function isn't in the target
-                    if (!_(dump).isEmpty() && targetAnnotations[key] === undefined) {
-                        console.log(targetAnnotations);
-                        targetAnnotations[key] = dump;
-                    } else if (!_(dump).isEmpty()) {
-                        throw new Error('not implemented');
-                    }
+                    // ensure that the direct target has the annotations of the
+                    // pulled-up member
+                    thisAnnotationMap[key] = thisAnnotationMap[key] || {};
+                    _(thisAnnotationMap[key]).extend(ta);
+
                 }
 
                 // MIX IT IN!
@@ -229,6 +210,7 @@ define(function(require, exports, module) {
                 C.prototype.constructor = C;
                 C.__name__ = cName;
                 Child = C;
+                delete Child.prototype[cName];
             }
 
             // if there are any abstract members, this is an abstract class, so
@@ -427,6 +409,10 @@ define(function(require, exports, module) {
 
         if (!ca.OVERRIDE)
             throw new Error('Must use override annotation when hiding base virtual or abstract member "' + key + '"');
+
+        if (ca.OVERRIDE & !(pa.ABSTRACT || pa.VIRTUAL || pa.OVERRIDE))
+            throw new Error ('Hidden base member "' + prettyPrint(Child.Super, key, pa) + '" must be abstract, virtual, or override');
+
 
         // check the annotations to make sure all of them are carried forward.
         // We already know the override/vritual/abstract is correct so omit
