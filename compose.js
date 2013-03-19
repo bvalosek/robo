@@ -300,10 +300,36 @@ define(function(require, exports, module) {
                 enumberable: false
             });
 
+            // get all mixins + bases
+            Object.defineProperty(Child, 'getTypes', {
+                value: getAllTypes.bind(this, Child),
+                enumerable: false
+            });
+
+            // is a
+            Object.defineProperty(Child.prototype, 'isA', {
+                value: function(C) { return _(this.constructor.getTypes()).contains(C); },
+                enumerable: false
+            });
+
             // propigate the extender
             Child.extend = makeExtender(Child);
             return Child;
         };
+    };
+
+    var getAllTypes = function(Ctor)
+    {
+        var types = Ctor.prototype._mixins ? _(Ctor.prototype._mixins).clone() : [];
+
+        var C = Ctor;
+
+        while(C) {
+            types.push(C);
+            C = C.Super;
+        }
+
+        return types;
     };
 
     // process a member taking into account the annotations
