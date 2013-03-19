@@ -50,7 +50,6 @@ define(function(require, exports, module) {
                         Child, key, val, info.annotations[key]);
                 });
 
-
                 // propigate the extender
                 helpers.defHidden(Child, {
                     extend: extendMethods.makeExtend(Child)

@@ -7,7 +7,8 @@ define(function(require, exports, module) {
         // true if there are any un-implemented abstract methods
         isAbstract: function(Ctor)
         {
-
+            var sig = helpers.getClassSignature(Ctor);
+            return !!_(sig).find(function(v,k) { return v.ABSTRACT; });
         },
 
         // descend to the bottom of the heirachy, building back up, to get a
