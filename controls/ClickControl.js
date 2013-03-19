@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 
     var ClickControl = Control.mixin(Clickable).extend({
 
-        constructor: function(opts)
+        __constructor__ClickControl: function(opts)
         {
             ClickControl.Super.apply(this, arguments);
 

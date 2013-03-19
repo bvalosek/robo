@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 
     var CheckBox = ModelControl.extend({
 
-        constructor: function(opts)
+        __constructor__CheckBox: function(opts)
         {
             _(opts).extend({
                 tagName: 'input',

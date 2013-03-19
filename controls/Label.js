@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 
     var Label = ModelControl.extend({
 
-        constructor: function(opts)
+        __constructor__Label: function(opts)
         {
             _(opts).extend({ tagName: 'span' });
 

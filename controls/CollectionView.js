@@ -8,7 +8,7 @@ define(function(require, exports, module) {
 
     var CollectionView = Control.mixin(asCompositable).extend({
 
-        constructor: function(opts)
+        __constructor__CollectionView: function(opts)
         {
             CollectionView.Super.apply(this, arguments);
 

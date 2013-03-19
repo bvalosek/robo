@@ -12,7 +12,7 @@ define(function(require, exports, module) {
 
     var Application = Base.mixin(withEvents).extend({
 
-        constructor: function() {
+        __constructor__Application: function() {
             if (Application.context)
                 throw new Error('Can only instantiate one Application object');
 

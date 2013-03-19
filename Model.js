@@ -9,7 +9,7 @@ define(function(require, exports, module) {
 
         __virtual__urlRoot: null,
 
-        constructor: function(obj)
+        __constructor__Model: function(obj)
         {
             Model.Super.apply(this, arguments);
 

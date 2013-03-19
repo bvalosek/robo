@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 
     var Timer = compose.defineClass({
 
-        constructor: function(fn, timeout, context)
+        __constructor__Timer: function(fn, timeout, context)
         {
             this.id = null;
             this.fn = fn;

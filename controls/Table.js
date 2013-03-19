@@ -8,7 +8,7 @@ define(function(require, exports, module) {
 
     var Table = Control.mixin(withControls).extend({
 
-        constructor: function(opts)
+        __constructor__Table: function(opts)
         {
             Table.Super.call(this, _(opts).extend({ tagName: 'table' }));
 

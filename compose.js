@@ -147,6 +147,7 @@ define(function(require, exports, module) {
                         console.log(targetAnnotations);
                         targetAnnotations[key] = dump;
                     } else if (!_(dump).isEmpty()) {
+                        throw new Error('not implemented');
                     }
                 }
 
@@ -280,7 +281,8 @@ define(function(require, exports, module) {
                         return;
 
                     if (!ca.OVERRIDE && !ca.ABSTRACT && !ca.NEW)
-                        throw new Error('Non-abstract child class must define abstract base member "' + key + '"');
+                        throw new Error('Non-abstract child class must define abstract base member "' +
+                            prettyPrint(Parent, key, pa) + '"');
                 });
 
             // create a mixin object on the Child constructor
@@ -355,7 +357,8 @@ define(function(require, exports, module) {
         else if (annotations.CONST)
             Object.defineProperty(proto, key, {
                 get: function() { return val; },
-                set: function() { throw new Error('Cannot change const member'); },
+                set: function() { throw new Error('Cannot change const member "' +
+                    prettyPrint(Child, key, annotations) + '"'); },
                 enumerable: true, configurable: true
             });
         else
@@ -393,7 +396,8 @@ define(function(require, exports, module) {
             return;
 
         if (!pa.ABSTRACT && !pa.VIRTUAL && !pa.OVERRIDE)
-            throw new Error('Hidden base member must be virtual or abstract');
+            throw new Error('Hidden base member "' + prettyPrint(Child.Super, key, pa) + '", masked by "' +
+                    prettyPrint(Child, key, ca) + '" must be virtual or abstract');
 
         if (!ca.OVERRIDE)
             throw new Error('Must use override annotation when hiding base virtual or abstract member "' + key + '"');
@@ -408,16 +412,20 @@ define(function(require, exports, module) {
         var pd = _(pao).difference(cao);
         if (cd.length != pd.length != 0)
             throw new Error ('Override member must have same annotation signature as base class: "' +
-                _(pao).reduce(function(acc, v,k) { return acc + ' ' + k.toLowerCase() + ' '; }, '').trim() + '"');
+                prettyPrint(Child.Super, key, pa) + '"');
     };
 
-    var info = function(key, annotations)
+    var prettyPrint = function(Ctor, key, annotations)
     {
-        var s = key;
+        var s = '';
 
-        key += _(annotations).reduce(function(acc,v,k) {
-            return acc + ' ' + k.toLowerCase();
-        });
+        s += _(annotations).reduce(function(acc,v,k) {
+            return acc + k.toLowerCase() + ' ';
+        }, '');
+
+        if (Ctor.__name__)
+            s += Ctor.__name__ + '::'; // '
+        s += key;
 
         return s;
     };

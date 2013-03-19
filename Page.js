@@ -9,7 +9,7 @@ define(function(require, exports, module) {
 
     var Page = View.extend({
 
-        constructor: function()
+        __constructor__Page: function()
         {
             Page.Super.call(this);
 

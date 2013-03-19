@@ -7,7 +7,7 @@ define(function(require, exports, module) {
 
     var Popup = TemplateView.mixin(withDeferredClose).extend({
 
-        constructor: function()
+        __constructor__Popup: function()
         {
             Popup.Super.call(this);
 

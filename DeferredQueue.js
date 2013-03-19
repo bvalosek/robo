@@ -9,7 +9,7 @@ define(function(require, exports, module) {
     var DeferredQueue = compose.defineClass({
 
         // optionally provide a single function that is being queued
-        constructor: function(fn, context)
+        __constructor__DeferredQueue: function(fn, context)
         {
             this._queue = [];
             this._fn = context ? fn.bind(context) : fn;

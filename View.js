@@ -15,7 +15,7 @@ define(function(require, exports, module) {
     // new View object that is robo-like but extending from backbone.js
     var View = BackboneView.extend({
 
-        constructor: function()
+        __constructor__View: function()
         {
             View.Super.apply(this, arguments);
 

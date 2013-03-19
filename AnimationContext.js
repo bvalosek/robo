@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 
     var AnimationContext = compose.defineClass({
 
-        constructor: function() {
+        __constructor__AnimationContext: function() {
             this._queue = [];
         },
 

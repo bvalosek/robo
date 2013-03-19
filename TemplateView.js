@@ -5,6 +5,11 @@ define(function(require, exports, module) {
 
     var TemplateView = View.extend({
 
+        __constructor__TemplateView: function()
+        {
+            TemplateView.Super.apply(this, arguments);
+        },
+
         // generate the HTML from the template
         getHtml: function()
         {

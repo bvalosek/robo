@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 
     var TextInput = ModelControl.extend({
 
-        constructor: function(opts)
+        __constructor__TextInput: function(opts)
         {
             _(opts).extend({
                 tagName: 'input',

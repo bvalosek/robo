@@ -6,7 +6,7 @@ define(function(require, exports, module) {
     // attribute. Think text input, check boxes, etc
     var ModelControl = Control.extend({
 
-        constructor: function(opts)
+        __constructor__ModelControl: function(opts)
         {
             ModelControl.Super.apply(this, arguments);
 

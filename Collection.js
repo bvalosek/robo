@@ -6,6 +6,11 @@ define(function(require, exports, module) {
 
     var Collection = BackboneCollection.extend({
 
+        __constructor__Collection: function()
+        {
+            Collection.Super.apply(this, arguments);
+        },
+
         // should be overridden to point to endpoint
         __virtual__url: '',
 

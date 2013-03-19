@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 
         __override__tagName: 'button',
 
-        constructor: function(opts)
+        __constructor__Button: function(opts)
         {
             Button.Super.apply(this, arguments);
 

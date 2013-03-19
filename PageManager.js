@@ -7,7 +7,7 @@ define(function(require, exports, module) {
     var PageManager = compose.defineClass({
 
         // stash the app context
-        constructor: function(application) {
+        __constructor__PageManager: function(application) {
             this.application = application;
             this.urls = [];
         },

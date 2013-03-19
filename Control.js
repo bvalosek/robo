@@ -4,7 +4,7 @@ define(function(require, exports, module) {
 
     var Control = TemplateView.extend({
 
-        constructor: function(opts)
+        __constructor__Control: function(opts)
         {
             Control.Super.apply(this, arguments);
 
