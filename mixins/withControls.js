@@ -22,6 +22,8 @@ define(function(require, exports, module) {
                 return render();
             }
 
+            this.controls = this.control || [];
+
             this.controls.forEach(function(control) {
                 control.render();
             });
