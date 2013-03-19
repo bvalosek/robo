@@ -213,12 +213,22 @@ define(function(require, exports, module) {
             Child.prototype = new ctor();
             Child.prototype.constructor = Child;
 
-            // nice.
-            Child.Super = Parent;
-
             // now deal with all the stuff we have in the descriptor hash, and
             // store it on the constructor for later fun
             var info = processAnnotations(obj);
+
+            // if we have a constructor annnotation, setup a tag constant
+            var cName;
+            var hasCtor = _(info.annotations).find(function(v,k) { cName = k; return v.CONSTRUCTOR; });
+
+            if (hasCtor) {
+                // needs to be generalized
+                var C = info.hash[cName];
+                C.prototype = Child.prototype;
+                C.prototype.constructor = C;
+                C.__name__ = cName;
+                Child = C;
+            }
 
             // if there are any abstract members, this is an abstract class, so
             // kill the constructor by preventing instantiating
@@ -231,15 +241,17 @@ define(function(require, exports, module) {
                     throw new Error('Cannot have constructor in abstract class');
 
                 // make new fake constructor
-                var p = Child.prototype; var S = Child.Super;
+                var p = Child.prototype;
                 Child = function() {
                     throw new Error('Cannot instantiate abstract class');
                 };
 
                 Child.__ABSTRACT__ = true;
                 Child.prototype    = p;
-                Child.Super        = S;
             }
+
+            // nice.
+            Child.Super = Parent;
 
             // attach meta information to the constructor for later
             Object.defineProperty(Child, '__annotations__', {
@@ -399,6 +411,17 @@ define(function(require, exports, module) {
                 _(pao).reduce(function(acc, v,k) { return acc + ' ' + k.toLowerCase() + ' '; }, '').trim() + '"');
     };
 
+    var info = function(key, annotations)
+    {
+        var s = key;
+
+        key += _(annotations).reduce(function(acc,v,k) {
+            return acc + ' ' + k.toLowerCase();
+        });
+
+        return s;
+    };
+
     // given a key and a starting object, get the annotations of it from the
     // constructor. This is needed in order to ensure we traverse all the way
     // back to the correct constructor context in order to get the annotations
@@ -501,7 +524,6 @@ define(function(require, exports, module) {
 
         // using conpose.js on existing objects
         withCompose : withCompose,
-        extend      : extend,
         mixin       : mixin
     };
 });
