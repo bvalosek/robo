@@ -16,7 +16,12 @@ Robo is a comprehensive Javascript framework for large-scale client applications
 
 ## Getting Started
 
-## Where the magic happens - compose.js
+## compose.js -- Where the magic happens
+
+* **Inheritance.**
+* **Functional mixins.**
+* **Member annotations.**
+* **Define-time semantic checking.**
 
 ## compose.Object
 
@@ -26,7 +31,8 @@ Class
     mixin()
     Super
     findAnnotations()
-    findKeys()
+    findMembers()
+    __name__
     __anotations__
     __mixins__
     prototype
@@ -100,13 +106,17 @@ Class
 
 ##### static
 
-## The rest of the magic - the Robo framework
+## The Robo Framework
 
 ### Application
 
 ### Page
 
-### Model-View-Template
+### Model
+
+### View
+
+### Template
 
 ### Controls
 
@@ -115,6 +125,10 @@ Class
 #### CollectionView
 
 ## Special Thanks
+
+### Contributers
+
+### Open Source libraries
 
 ## License
 Copyright 2013 Brandon Valosek [@bvalosek](http://twitter.com/bvalosek)
