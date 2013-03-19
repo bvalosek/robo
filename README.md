@@ -26,13 +26,14 @@ Robo makes use of ECMAScript5 features such as `Object#defineProperty()`,
 `Function#bind()`, and `Array#forEach()`, which limits its compatibility to
 modern, compliant browsers.
 
-Robo __should__ work with the following browsers:
+Robo _should_ work with the following browsers:
 
-* Chrome
+* Chrome 7+
 * Firefox 4+
 * Safari 5.1+
 * Opera 4+
 * Internet Explorer 9+
+
 
 ## compose.js -- Where the magic happens
 
