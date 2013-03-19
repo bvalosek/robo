@@ -16,12 +16,30 @@ Robo is a comprehensive Javascript framework for large-scale client applications
 
 ## Getting Started
 
+```
+git clone git@github.com:bvalosek/robo.git
+```
+
+### Compatibility
+
+Robo makes use of ECMAScript5 features such as `Object#defineProperty()`,
+`Function#bind()`, and `Array#forEach()`, which limits its compatibility to
+modern, compliant browsers.
+
+Robo __should__ work with the following browsers:
+
+* Chrome
+* Firefox 4+
+* Safari 5.1+
+* Opera 4+
+* Internet Explorer 9+
+
 ## compose.js -- Where the magic happens
 
 * **Inheritance.**
 * **Functional mixins.**
 * **Member annotations.**
-* **Define-time semantic checking.**
+* **Define-time semantics checking.**
 
 ## compose.Object
 
