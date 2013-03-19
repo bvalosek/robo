@@ -7,7 +7,7 @@ require.config({
     paths: {
         'robo'            : '../src',
         'underscore'      : './vendor/underscore'
-    },
+    }
 
 });
 
