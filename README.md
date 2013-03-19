@@ -36,6 +36,8 @@ Robo should work with the following browsers:
 
 #### Tests
 
+Run a http server from the root of the repo, and browse to e.g. `localhost:8080/tests/index.html`.
+
 ## compose.js
 
 * **Inheritance.** Classical inheritance goodness in Javascipt. Create a rich
