@@ -6,6 +6,11 @@ define(function(require, exports, module) {
         {
             m.call(target);
             return target;
+        },
+
+        // like mixin but ensures that we get a usuable Class out of the deal
+        using: function(Target, m)
+        {
         }
 
     };

@@ -94,10 +94,15 @@ define(function(require, exports, module) {
         },
 
         // check the annotation signatures to see if they're the same
-        sameAnnotations: function(a1, a2)
+        sameAnnotations: function(a1, a2, omits)
         {
-            var ka1 = _(a1.keys);
-            var ka2 = _(a2.keys);
+            if (omits) {
+                a1 = _(a1).omit(omits);
+                a2 = _(a2).omit(omits);
+            }
+
+            var ka1 = _(a1).keys();
+            var ka2 = _(a2).keys();
 
             var d1 = _(ka1).difference(ka2);
             var d2 = _(ka2).difference(ka1);

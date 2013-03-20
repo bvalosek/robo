@@ -125,6 +125,11 @@ define(function(require, exports, module) {
             if (!ca.OVERRIDE)
                 throw new Error('Child member "' + prettyC +
                     '" needs override annotation when hiding "' + prettyP + '"');
+
+            // Ensure that all non-inheritance annotations are transfered
+            if (!helpers.sameAnnotations(ca, pa, ['VIRTUAL', 'ABSTRACT', 'OVERRIDE']))
+                throw new Error('Base member "' + prettyP + '" and child member "' +
+                    prettyC + '" do not have matching annotation signatures');
         },
 
         // handle all accessor-type info
