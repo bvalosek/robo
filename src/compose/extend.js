@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 
-    var helpers = require('./helpers');
+    var helpers      = require('./helpers');
+    var mixinMethods = require('./mixin');
 
     var extendMethods = {
 
@@ -66,6 +67,11 @@ define(function(require, exports, module) {
                 // propigate the extender
                 helpers.defHidden(Child, {
                     extend: extendMethods.makeExtend(Child)
+                });
+
+                // propigate using
+                helpers.defHidden(Child, {
+                    using: mixinMethods.makeUsing(Child)
                 });
 
                 return Child;

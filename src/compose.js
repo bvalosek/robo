@@ -1,8 +1,8 @@
 define(function(require, exports, module) {
 
+    var helpers       = require('./compose/helpers');
     var extendMethods = require('./compose/extend');
     var mixinMethods  = require('./compose/mixin');
-    var helpers       = require('./compose/helpers');
 
     // seed mixin -- mix this into any object to get some STRAIGHT UP MAGIG.
     // Assumes no other thing will be setting up objects other than this mixin
@@ -11,6 +11,7 @@ define(function(require, exports, module) {
         // setup instance members
         helpers.setupPrototype(this);
 
+        this.mixin = mixinMethods.mixin;
         this.__mixins__ = [];
 
         // done if not a constructed object
