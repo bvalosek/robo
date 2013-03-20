@@ -33,6 +33,8 @@ define(function(require, exports, module) {
                 var info = helpers.processAnnotations(obj);
                 var name = null;
 
+                // figure out what the actuall function will be for the
+                // constructor, which will be the basis of the Class
                 var Child = extendMethods
                     .determineConstructor(Parent, obj, info);
 
@@ -44,7 +46,8 @@ define(function(require, exports, module) {
                 Child.prototype = new ctor();
                 Child.prototype.constructor = Child;
 
-                // meta info on constructor
+                // cool methods on prototype and actual class
+                helpers.setupPrototype(Child.prototype);
                 helpers.setupConstructor(Child, Parent, name);
 
                 // process each member of the hash to either add it to the
@@ -54,31 +57,10 @@ define(function(require, exports, module) {
                         Child, key, val, info.annotations[key]);
                 });
 
+                // if this is an abstract class, then make sure swap
+                // constructor etc
                 if (helpers.isAbstract(Child)) {
-
-                    // ensure that all inherited abstract members are
-                    // re-declared, this is to ensure we didn't accidently
-                    // create an abstract class by leaving off their defs.
-                    // Kinda feels non-optimal
-                    _(Child.getSignature()).each(function(a, key) {
-
-                        if (a.ABSTRACT && !info.hash.hasOwnProperty(key))
-                            throw new Error('Base abstract member "' + key +
-                                '" is not present in child class. ' +
-                                'Implement or declare as abstract');
-
-                    });
-
-                    // if there was a constructor provided in the original
-                    // hash, that's really bad.
-                    if (info.hash.hasOwnProperty('constructor'))
-                        throw new Error('Abstract class cannot have constructor');
-
-                    // swap out the constructor for a dummy one to prevent
-                    // instantiation
-                    var AbstractClass = function() { throw new Error(
-                        'Cannot instantiate abstract class'); };
-                    Child = helpers.swapConstructor(Child, AbstractClass);
+                    Child = extendMethods.transformAbstract(Child, info);
                 }
 
                 // propigate the extender
@@ -88,6 +70,36 @@ define(function(require, exports, module) {
 
                 return Child;
             };
+        },
+
+        // do what we gotta do when we encounter an abstract class during
+        // extend creation
+        transformAbstract: function(Child, info)
+        {
+            // ensure that all inherited abstract members are
+            // re-declared, this is to ensure we didn't accidently
+            // create an abstract class by leaving off their defs.
+            // Kinda feels non-optimal
+            _(Child.getSignature()).each(function(a, key) {
+
+                if (a.ABSTRACT && !info.hash.hasOwnProperty(key))
+                    throw new Error('Base abstract member "' + key +
+                        '" is not present in child class. ' +
+                        'Implement or declare as abstract');
+
+            });
+
+            // if there was a constructor provided in the original
+            // hash, that's really bad.
+            if (info.hash.hasOwnProperty('constructor'))
+                throw new Error('Abstract class cannot have constructor');
+
+            // swap out the constructor for a dummy one to prevent
+            // instantiation
+            var AbstractClass = function() { throw new Error(
+                'Cannot instantiate abstract class'); };
+
+            return helpers.swapConstructor(Child, AbstractClass);
         },
 
         processMember: function(Child, key, val, annotations)

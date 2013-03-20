@@ -13,11 +13,7 @@ define(function(require, exports, module) {
     var withCompose = function()
     {
         // setup instance members
-        helpers.defHidden(this, {
-            is         : helpers.is.bind(this, this),
-            mixin      : mixin.bind(this, this),
-            __mixins__ : []
-        });
+        helpers.setupPrototype(this);
 
         // done if not a constructed object
         if (!this.constructor)

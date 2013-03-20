@@ -39,6 +39,20 @@ define(function(require, exports, module) {
             return sig;
         },
 
+        // give us all the cool stuff on the prototype
+        setupPrototype: function(proto)
+        {
+            // setup instance members
+            helpers.defHidden(proto, {
+                is         : helpers.is.bind(this, proto)
+
+                /*
+                mixin      : mixin.bind(this, this),
+                __mixins__ : []
+                */
+            });
+        },
+
         // stick on all the appropriate per-type stuff to a constructor
         setupConstructor: function(Ctor, Super, name)
         {
