@@ -45,11 +45,6 @@ define(function(require, exports, module) {
             // setup instance members
             helpers.defHidden(proto, {
                 is         : helpers.is.bind(this, proto)
-
-                /*
-                mixin      : mixin.bind(this, this),
-                __mixins__ : []
-                */
             });
         },
 

@@ -4,16 +4,14 @@ define(function(require, exports, module) {
     var mixinMethods  = require('./compose/mixin');
     var helpers       = require('./compose/helpers');
 
-    var mixin       = mixinMethods.mixin;
-    var makeExtend  = extendMethods.makeExtend;
-    var defineMixin = function() {};
-
     // seed mixin -- mix this into any object to get some STRAIGHT UP MAGIG.
     // Assumes no other thing will be setting up objects other than this mixin
     var withCompose = function()
     {
         // setup instance members
         helpers.setupPrototype(this);
+
+        this.__mixins__ = [];
 
         // done if not a constructed object
         if (!this.constructor)
@@ -25,13 +23,13 @@ define(function(require, exports, module) {
         helpers.setupConstructor(Ctor, null);
 
         // add in the extender and usinger
-        Ctor.extend = makeExtend(Ctor);
+        Ctor.extend = extendMethods.makeExtend(Ctor);
         Ctor.using = function() {};
     };
 
     // root object
     var Base = function() {};
-    mixin(Base.prototype, withCompose);
+    mixinMethods.mixin(Base.prototype, withCompose);
 
     // the annotations constants because I hate stringly type shit
     var annotations = helpers.makeHash([
@@ -44,13 +42,13 @@ define(function(require, exports, module) {
 
         // should be primary use of compose.js for creating new Classes and
         // mixins
-        defineMixin : defineMixin,
+        defineMixin : mixinMethods.defineMixin,
         defineClass : Base.extend,
         annotations : annotations,
 
         // root object if needed
         Object      : Base,
-        mixin       : mixin,
+        mixin       : mixinMethods.mixin,
         withCompose : withCompose
     };
 
