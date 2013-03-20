@@ -56,6 +56,19 @@ define(function(require, exports, module) {
 
                 if (helpers.isAbstract(Child)) {
 
+                    // ensure that all inherited abstract members are
+                    // re-declared, this is to ensure we didn't accidently
+                    // create an abstract class by leaving off their defs.
+                    // Kinda feels non-optimal
+                    _(Child.getSignature()).each(function(a, key) {
+
+                        if (a.ABSTRACT && !info.hash.hasOwnProperty(key))
+                            throw new Error('Base abstract member "' + key +
+                                '" is not present in child class. ' +
+                                'Implement or declare as abstract');
+
+                    });
+
                     // if there was a constructor provided in the original
                     // hash, that's really bad.
                     if (info.hash.hasOwnProperty('constructor'))
@@ -139,8 +152,9 @@ define(function(require, exports, module) {
                 throw new Error('Base member "' + prettyP +
                     '" cannot be hidden by non-abstract member "' + prettyC + '"');
 
-            // ... if the child doesn't indicate an override
-            if (!ca.OVERRIDE)
+            // ... if the child doesn't indicate an override or an ABSTRACT
+            // continuation
+            if (!ca.OVERRIDE && !(ca.ABSTRACT && pa.ABSTRACT))
                 throw new Error('Child member "' + prettyC +
                     '" needs override annotation when hiding "' + prettyP + '"');
 
