@@ -169,7 +169,23 @@ define(function(require, exports, module) {
                 hash: newHash,
                 annotations: allAnnotations
             };
-        }
+        },
+
+        // nicely outputted member tag, e.g. 'readonly virtual View::render'
+        prettyPrint: function(Ctor, key, annotations)
+        {
+            var s = '';
+
+            s += _(annotations).reduce(function(acc,v,k) {
+                return acc + k.toLowerCase() + ' ';
+            }, '');
+
+            if (Ctor.__name__)
+                s += Ctor.__name__ + '::'; // '
+            s += key;
+
+            return s;
+        },
 
     };
 

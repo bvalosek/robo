@@ -37,8 +37,8 @@ define(function(require, exports, module) {
                 // that may cause side effects
                 var ctor = function() {};
                 ctor.prototype = Parent.prototype;
-                helpers.defHidden(Child, { prototype: new ctor() });
-                helpers.defHidden(Child.prototype, { constructor: Child });
+                Child.prototype = new ctor();
+                Child.prototype.constructor = Child;
 
                 // meta info on constructor
                 helpers.setupConstructor(Child, Parent, name);
@@ -72,18 +72,77 @@ define(function(require, exports, module) {
             else
                 proto = Child.prototype;
 
-            // normal
-            Object.defineProperty(proto, key, {
-                value: val,
-                writable: true,
-                enumerable: true, configurable: true
-            });
+            // check out the annotations etc
+            extendMethods.processAccessors(proto, key, val, annotations);
 
+            // ensure we keep track of the annotations
             Child.__annotations__[key] = annotations;
 
             // don't do any inheritence checks for static
             if (annotations.STATIC)
                 return;
+        },
+
+        // handle all accessor-type info
+        processAccessors: function(proto, key, val, annotations)
+        {
+            var prettyKey = helpers.prettyPrint(proto.constructor, key, annotations);
+
+            // getters and setters ... accessor stuff
+            if (annotations.GET) {
+                Object.defineProperty(proto, key, {
+                    get: val, set: undefined,
+                    enumerable: true, configurable: true
+                });
+            } else if (annotations.SET) {
+                Object.defineProperty(proto, key, {
+                    set: val, get: undefined,
+                    enumerable: true, configurable: true
+                });
+
+            // result annotation leverages underscore 'result' function
+            } else if (annotations.PROPERTY && annotations.RESULT) {
+                var _key = '_' + key;
+                proto[_key] = val;
+                Object.defineProperty(proto, key, {
+                    get: function() { return _(this).result(_key); },
+                    set: function(v) { this[_key] = _(v).isFunction() ? v.bind(this) : v; },
+                    enumerable: true, configurable: true
+                });
+
+            // just property means expect get / set
+            } else if (annotations.PROPERTY) {
+                Object.defineProperty(proto, key, {
+                    get: val.get, set: val.set,
+                    enumerable: true, configurable: true
+                });
+
+            // throws an error when attempting to write, but at the expense of
+            // creating a getter/setting
+            } else if (annotations.CONST) {
+                Object.defineProperty(proto, key, {
+                    get: function() { return val; },
+                    set: function() { throw new Error('Cannot change const member "' +
+                        prettyKey + '"'); },
+                    enumerable: true, configurable: true
+                });
+
+            // normal
+            } else {
+                Object.defineProperty(proto, key, {
+                    value: val,
+                    writable: true,
+                    enumerable: true, configurable: true
+                });
+            }
+
+            // hide from enumeration
+            if (annotations.HIDDEN)
+                Object.defineProperty(proto, key, { enumerable: false });
+
+            // read only
+            if (annotations.READONLY)
+                Object.defineProperty(proto, key, { writable: false });
         }
 
     };
