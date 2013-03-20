@@ -39,6 +39,44 @@ define(function(require, exports, module) {
             return sig;
         },
 
+        // pretty print a sig
+        prettySig: function(Class)
+        {
+            var sig = Class.getSignature();
+
+            var s = 'class ' + (Class.__name__ || '?');
+
+            if (Class.Super)
+                s+= ' : ' + (Class.Super.__name__ || '?');
+
+            s += ' {\n';
+
+            _(sig).each(function(annotations, key) {
+
+                var a = _(annotations).reduce(function(a,x,k) {
+                    return a + k + ' ';
+                }, '').toLowerCase().trim();
+
+                s += '    ' + (a ? a + ' ' : '') + key + ': ';
+
+                var val = Class.prototype[key];
+
+                if (_(val).isFunction()) s += 'function ()';
+                else if (_(val).isArray()) s += 'Array []';
+                else if (_(val).isObject()) s += 'Object {}';
+                else if (val === undefined) s += 'undefined';
+                else if (val === null) s += 'null';
+                else s += val;
+
+                s += '\n';
+
+            });
+
+            s += '}';
+
+            return s;
+        },
+
         // give us all the cool stuff on the prototype
         setupPrototype: function(proto)
         {

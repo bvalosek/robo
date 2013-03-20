@@ -59,8 +59,11 @@ define(function(require, exports, module) {
                 });
 
                 // if this is an abstract class, then make sure swap
-                // constructor etc
-                if (helpers.isAbstract(Child)) {
+                // constructor etc.
+                //
+                // EXCEPTION : when obj is empty, meaning we are just copying
+                // the class
+                if (!_(obj).isEmpty() && helpers.isAbstract(Child)) {
                     Child = extendMethods.transformAbstract(Child, info);
                 }
 
@@ -73,6 +76,8 @@ define(function(require, exports, module) {
                 helpers.defHidden(Child, {
                     using: mixinMethods.makeUsing(Child)
                 });
+
+                console.log(helpers.prettySig(Child));
 
                 return Child;
             };

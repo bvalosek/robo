@@ -12,6 +12,7 @@ define(function(require, exports, module) {
                 target = this;
             }
 
+            // allow for mixins to be an array or just a single function
             if (_(mixins).isFunction())
                 mixins = [mixins];
             else if (mixins === undefined)
@@ -49,11 +50,56 @@ define(function(require, exports, module) {
         },
 
         // create a functional mixin from an imformative hash, doing semantic
-        // checks while forming
+        // checks while forming and ensuring the mixin will update the annotations et al
         defineMixin: function(obj)
         {
+            var info = helpers.processAnnotations(obj);
+
             return function()
             {
+                _(info.hash).each(function(fn, key) {
+
+                    // target annotations and mixin annotations
+                    var ta = helpers.findAnnotations(this.constructor, key);
+                    var ma = info.annotations[key];
+
+                    var prettyT = helpers.prettyPrint(this, key, ta);
+
+                    // Make sure it's either abstract or a function
+                    if (!ma.ABSTRACT && !_(fn).isFunction())
+                        throw new Error ('Only functions are valid in mixins');
+
+                    var targetFn = this[key];
+
+                    // if we're augmenting the target, do some sanity checks
+                    if (targetFn) {
+                        if (!_(targetFn).isFunction())
+                            throw new Error(
+                            'Cannot mixin on top of non-function base member "' +
+                                prettyT + '"');
+
+                        if (ma.NEW) {
+
+                            // nop
+
+                        // must be awknolwedged that we're clobbering
+                        } else if (!ma.ABSTRACT && !ma.BEFORE && !ma.AFTER && !ma.WRAPPED) {
+                            throw new Error ('Must use before, after, or wrapped ' +
+                                'annotations when overriding a base member with a mixin');
+
+                        // abstract in mixin is emulating the interface
+                        // pattern, so if we already have it, make sure it
+                        // matches the targets signature
+                        } else if (ma.ABSTRACT) {
+                            if (!helpers.sameAnnotations(ta, ma, ['ABSTRACT']))
+                                throw new Error ('Member annotation signatures ' +
+                                    'must match when mixing in an abstract member');
+                        }
+
+                    }
+
+
+                }.bind(this));
             };
         }
 

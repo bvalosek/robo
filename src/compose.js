@@ -24,8 +24,10 @@ define(function(require, exports, module) {
         helpers.setupConstructor(Ctor, null);
 
         // add in the extender and usinger
-        Ctor.extend = extendMethods.makeExtend(Ctor);
-        Ctor.using = function() {};
+        helpers.defHidden(Ctor, {
+            extend: extendMethods.makeExtend(Ctor),
+            using: mixinMethods.makeUsing(Ctor)
+        });
     };
 
     // root object
