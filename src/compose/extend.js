@@ -12,7 +12,11 @@ define(function(require, exports, module) {
 
             if (obj !== undefined && obj.hasOwnProperty('constructor')) {
                 Child = obj.constructor;
+            } else if (helpers.isAbstract(Parent)) {
+                Child = function() {};
             } else {
+                // need to make sure and instantiate a new constructor as to
+                // not leak the prototype etc
                 Child = function() { return Parent.apply(this, arguments); };
             }
 
@@ -49,6 +53,20 @@ define(function(require, exports, module) {
                     extendMethods.processMember(
                         Child, key, val, info.annotations[key]);
                 });
+
+                if (helpers.isAbstract(Child)) {
+
+                    // if there was a constructor provided in the original
+                    // hash, that's really bad.
+                    if (info.hash.hasOwnProperty('constructor'))
+                        throw new Error('Abstract class cannot have constructor');
+
+                    // swap out the constructor for a dummy one to prevent
+                    // instantiation
+                    var AbstractClass = function() { throw new Error(
+                        'Cannot instantiate abstract class'); };
+                    Child = helpers.swapConstructor(Child, AbstractClass);
+                }
 
                 // propigate the extender
                 helpers.defHidden(Child, {

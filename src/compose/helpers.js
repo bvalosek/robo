@@ -11,6 +11,21 @@ define(function(require, exports, module) {
             return !!_(sig).find(function(v,k) { return v.ABSTRACT; });
         },
 
+        // swap a constructor function into an existing class. basically rocket
+        // surgery. Better hope that Class has not sealed configuration or has
+        // any existing members
+        swapConstructor: function(Class, ctor)
+        {
+            var props = Object.getOwnPropertyNames(Class);
+
+            props.forEach(function(key) {
+                var desc = Object.getOwnPropertyDescriptor(Class, key);
+                Object.defineProperty(ctor, key, desc);
+            });
+
+            return ctor;
+        },
+
         // descend to the bottom of the heirachy, building back up, to get a
         // full map of annotations
         getClassSignature: function(Ctor, sig)
