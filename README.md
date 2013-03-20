@@ -16,6 +16,8 @@ Robo is a comprehensive Javascript framework for large-scale client applications
 
 ## Getting Started
 
+### Get the source
+
 ```
 git clone git@github.com:bvalosek/robo.git
 ```
@@ -36,7 +38,7 @@ Robo should work with the following browsers:
 
 #### Tests
 
-Run a http server from the root of the repo, and browse to e.g. `localhost:8080/tests/index.html`.
+Run a http server from the root of the repo, and browse to e.g. `localhost:8080/test/index.html`.
 
 ## compose.js
 
