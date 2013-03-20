@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 
     var compose = require('robo/compose');
 
-    
+
 
     var BaseClass = compose.defineClass({
 
@@ -46,13 +46,13 @@ define(function(require, exports, module) {
         equal(child.baseAbstract, -3);
 
     });
-    
+
     test('Bad Inheritance', function ()
     {
         throws(function ()
         {
             BaseClass.extend({
-            
+
             });
         },
         'Missing abstract');
@@ -80,7 +80,9 @@ define(function(require, exports, module) {
             }
         });
 
-        equal(newChild.render(), 'new render');
+        var o = new newChild();
+
+        equal(o.render(), 'new render');
     });
 
     var ModifierTest = compose.defineClass({
@@ -115,7 +117,7 @@ define(function(require, exports, module) {
             });
         },
        'Const and readonly are not both allowed');
-      
+
     });
 
 
@@ -144,7 +146,7 @@ define(function(require, exports, module) {
 
         });
 
-        
+
         var mixChild = new MixChild();
         equal(mixChild.render(), 'mix base render');
         equal(mixChild.newMix(), 'new mix');
@@ -184,7 +186,7 @@ define(function(require, exports, module) {
             },
             __override__lineage: function ()
             {
-                return FatherClass.Super.lineage() + 1;
+                return FatherClass.Super.prototype.lineage() + 1;
             }
         });
 
@@ -195,7 +197,7 @@ define(function(require, exports, module) {
             },
             __override__lineage: function ()
             {
-                return ChildClass.Super.lineage() + 1;
+                return ChildClass.Super.prototype.lineage() + 1;
             }
         });
 

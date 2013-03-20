@@ -81,6 +81,50 @@ define(function(require, exports, module) {
             // don't do any inheritence checks for static
             if (annotations.STATIC)
                 return;
+
+            // handle the inheritance annotations
+            extendMethods.processInheritance(Child, key, val, annotations);
+        },
+
+        processInheritance: function(Child, key, val, annotations)
+        {
+            var ca      = annotations;
+            var pa      = helpers.findAnnotations(Child.Super, key);
+            var prettyC = helpers.prettyPrint(Child, key, annotations);
+            var prettyP = helpers.prettyPrint(Child.Super, key, pa);
+
+            // override without a parent
+            if (ca.OVERRIDE && pa === undefined)
+                throw new Error('Member "' + prettyC +
+                    '" does not override a base member');
+
+            // no parent method -> done
+            if (pa === undefined)
+                return;
+
+            // ... if sealed, nothing can let us override!
+            if (pa.SEALED)
+                throw new Error('Member "' + prettyC +
+                    '" cannot override "' + prettyP + '"');
+
+            // ... if new, we can do whatever we want
+            if (ca.NEW)
+                return;
+
+            // ... if the parent isnt inheritable, then die
+            if (!pa.VIRTUAL && !pa.ABSTRACT && !pa.OVERRIDE)
+                throw new Error('Hidden base member "' + prettyP +
+                    '" cannot be overriden. Use virtual or abstract.');
+
+            // abstract means we
+            if (ca.ABSTRACT && !pa.ABSTRACT)
+                throw new Error('Base member "' + prettyP +
+                    '" cannot be hidden by non-abstract member "' + prettyC + '"');
+
+            // ... if the child doesn't indicate an override
+            if (!ca.OVERRIDE)
+                throw new Error('Child member "' + prettyC +
+                    '" needs override annotation when hiding "' + prettyP + '"');
         },
 
         // handle all accessor-type info
@@ -88,20 +132,28 @@ define(function(require, exports, module) {
         {
             var prettyKey = helpers.prettyPrint(proto.constructor, key, annotations);
 
+            var accessorMods = 0;
+
             // getters and setters ... accessor stuff
             if (annotations.GET) {
+                accessorMods++;
                 Object.defineProperty(proto, key, {
                     get: val, set: undefined,
                     enumerable: true, configurable: true
                 });
-            } else if (annotations.SET) {
+            }
+
+            if (annotations.SET) {
+                accessorMods++;
                 Object.defineProperty(proto, key, {
                     set: val, get: undefined,
                     enumerable: true, configurable: true
                 });
+            }
 
             // result annotation leverages underscore 'result' function
-            } else if (annotations.PROPERTY && annotations.RESULT) {
+            if (annotations.PROPERTY && annotations.RESULT) {
+                accessorMods++;
                 var _key = '_' + key;
                 proto[_key] = val;
                 Object.defineProperty(proto, key, {
@@ -112,35 +164,47 @@ define(function(require, exports, module) {
 
             // just property means expect get / set
             } else if (annotations.PROPERTY) {
+                accessorMods++;
                 Object.defineProperty(proto, key, {
                     get: val.get, set: val.set,
                     enumerable: true, configurable: true
                 });
+            }
 
             // throws an error when attempting to write, but at the expense of
             // creating a getter/setting
-            } else if (annotations.CONST) {
+            if (annotations.CONST) {
+                accessorMods++;
                 Object.defineProperty(proto, key, {
                     get: function() { return val; },
                     set: function() { throw new Error('Cannot change const member "' +
                         prettyKey + '"'); },
                     enumerable: true, configurable: true
                 });
+            }
 
-            // normal
-            } else {
+            // if we haven't done any access style yet, then just do it noraml.
+            // otherwise flip our shit
+            if (accessorMods === 0) {
                 Object.defineProperty(proto, key, {
                     value: val,
                     writable: true,
                     enumerable: true, configurable: true
                 });
+            } else if (accessorMods != 1) {
+                throw new Error('Member "' + prettyKey +
+                    '" has invalid accessor combination');
             }
 
             // hide from enumeration
             if (annotations.HIDDEN)
                 Object.defineProperty(proto, key, { enumerable: false });
 
-            // read only
+            // read only works if its a normal member with no access stuff
+            if (annotations.READONLY && accessorMods !== 0)
+                throw new Error('Member "' + prettyKey + '" cannot be readonly');
+
+            // read only proper
             if (annotations.READONLY)
                 Object.defineProperty(proto, key, { writable: false });
         }
