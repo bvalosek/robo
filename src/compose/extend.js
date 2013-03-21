@@ -11,7 +11,19 @@ define(function(require, exports, module) {
         {
             var Child;
 
-            if (obj !== undefined && obj.hasOwnProperty('constructor')) {
+            // attempt to find something with an explicit constructor
+            var key;
+            _(info.annotations).each(function(a,k) {
+                if (a.CONSTRUCTOR)
+                    key = k;
+            });
+
+            // swap the constructor in
+            if (key) {
+                Child = info.hash[key];
+                delete info.annotations[key];
+                delete info.hash[key];
+            } else if (obj !== undefined && obj.hasOwnProperty('constructor')) {
                 Child = obj.constructor;
             } else if (helpers.isAbstract(Parent)) {
                 Child = function() {};
