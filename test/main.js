@@ -11,6 +11,9 @@ require.config({
 
 });
 
-require(['./unit/inheritance']);
-require(['./unit/modifiers']);
-require(['./unit/mixins']);
+require([
+    './unit/inheritance',
+    './unit/modifiers',
+    './unit/mixins',
+    './unit/bmixins'
+]);

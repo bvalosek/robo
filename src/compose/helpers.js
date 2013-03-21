@@ -87,7 +87,7 @@ define(function(require, exports, module) {
                 else if (val === null) s += ' = null';
                 else if (_(val).isString()) s += ' = \'' + val + '\'';
                 else if (_(val).isNumber()) s += ' = ' + val;
-                else if (_(val).isBoolean()) s += ' ' + (val ? 'true' : 'false');
+                else if (_(val).isBoolean()) s += ' = ' + (val ? 'true' : 'false');
 
                 s += ';\n';
 
