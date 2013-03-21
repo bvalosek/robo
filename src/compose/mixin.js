@@ -43,7 +43,7 @@ define(function(require, exports, module) {
         {
             return function() {
                 var MixinClass = Child.extend();
-                mixinMethods.mixin.apply(
+                mixinMethods.mixin.call(
                     MixinClass.prototype, _(arguments).toArray());
                 return MixinClass;
             };
@@ -69,17 +69,61 @@ define(function(require, exports, module) {
                     // ensure everything checks out
                     mixinMethods.validateFunction(this, key, fn, ta, ma);
 
-                    if (!targetFn || (targetFn && ma.ABSTRACT)) {
+                    var thisAnnotations = this.constructor.__annotations__;
+
+                    // trivial case of nothing in the target to worry about
+                    if (!targetFn) {
                         this[key] = fn;
+                        thisAnnotations[key] =
+                            _(ma).omit(['BEFORE', 'AFTER', 'WRAPPED']);
+                        thisAnnotations[key].MIXIN = true;
+
+                    } else if (!ma.ABSTRACT && (ma.BEFORE || ma.AFTER || ma.WRAPPED)) {
+                        this[key] = null; // mixinMethods.getWrap(this, key, fn, ma);
+                        thisAnnotations[key] =
+                            _(ta).omit(['BEFORE', 'AFTER', 'WRAPPED']);
+                        thisAnnotations[key].AUGMENTED = true;
                     }
-
-
 
                 }.bind(this));
             };
         },
 
-        // given a hash, make sure it checks out
+        // properly do mixin wrapping on a function
+        getWrap: function(proto, key, fn, ma)
+        {
+            var wrapped = 0;
+
+            if (ma.WRAPPED) {
+                wrapped++;
+                fn = helpers.wrap(proto[key], fn);
+
+            } else if (ma.BEFORE) {
+                wrapped++;
+                var beforeFunc = fn;
+                fn = helpers.wrap(proto[key], function(f) {
+                    beforeFunc.apply(proto, arguments);
+                    f.apply(proto, arguments);
+                });
+
+            } else if (ma.AFTER) {
+                wrapped++;
+                var afterFunc = fn;
+                fn = helpers.wrap(proto[key], function(f) {
+                    f.apply(proto, arguments);
+                    afterFunc.apply(proto, arguments);
+                });
+            } else {
+                return;
+            }
+
+            if (wrapped > 1)
+                throw new Error('Too many augmentation annotations');
+
+            return fn;
+        },
+
+        // given a function to mixin, make sure it checks out
         validateFunction: function(target, key, fn, ta, ma)
         {
             var prettyT  = helpers.prettyPrint(target, key, ta);
@@ -88,6 +132,11 @@ define(function(require, exports, module) {
             // Make sure it's either abstract or a function
             if (!ma.ABSTRACT && !_(fn).isFunction())
                 throw new Error ('Only functions are valid in mixins');
+
+            // cannot augment on top of base abstract
+            if (ta && ta.ABSTRACT && (ma.BEFORE || ma.AFTER || ma.WRAPPED))
+                throw new Error('Cannot use augmenting annotation on ' +
+                    'top of base abstract member "' + prettyT + '"');
 
             // if we're augmenting the target, do some sanity checks
             if (targetFn) {
@@ -111,6 +160,10 @@ define(function(require, exports, module) {
                     if (!helpers.sameAnnotations(ta, ma, ['ABSTRACT']))
                         throw new Error ('Member annotation signatures ' +
                             'must match when mixing in an abstract member');
+            } else {
+                if (ma.BEFORE || ma.AFTER || ma.WRAPPED)
+                    throw new Error ('Augmentation annotation used when ' +
+                        'no base function present');
             }
         }
     };

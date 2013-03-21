@@ -11,6 +11,16 @@ define(function(require, exports, module) {
             return !!_(sig).find(function(v,k) { return v.ABSTRACT; });
         },
 
+        // create a function that when called, has 2 arguments: the original fn
+        // function, as well as all the arguments passed to it
+        wrap: function(fn, wrapper, context)
+        {
+            return function() {
+                return wrapper.call(this,
+                    fn.bind(context || this), _(arguments).toArray());
+            };
+        },
+
         // swap a constructor function into an existing class. basically rocket
         // surgery. Better hope that Class has not sealed configuration or has
         // any existing members

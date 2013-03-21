@@ -77,8 +77,6 @@ define(function(require, exports, module) {
                     using: mixinMethods.makeUsing(Child)
                 });
 
-                console.log(helpers.prettySig(Child));
-
                 return Child;
             };
         },
@@ -182,7 +180,8 @@ define(function(require, exports, module) {
                     '" needs override annotation when hiding "' + prettyP + '"');
 
             // Ensure that all non-inheritance annotations are transfered
-            if (!helpers.sameAnnotations(ca, pa, ['VIRTUAL', 'ABSTRACT', 'OVERRIDE']))
+            if (!helpers.sameAnnotations(ca, pa,
+                ['MIXIN', 'AUGMENTED', 'VIRTUAL', 'ABSTRACT', 'OVERRIDE']))
                 throw new Error('Base member "' + prettyP + '" and child member "' +
                     prettyC + '" do not have matching annotation signatures');
         },
