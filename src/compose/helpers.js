@@ -59,7 +59,7 @@ define(function(require, exports, module) {
             if (Class.Super)
                 s+= ' : ' + (Class.Super.__name__ || '?');
 
-            s += ' {\n';
+            s += ' \n{\n';
 
             _(sig).each(function(annotations, key) {
 
@@ -67,18 +67,17 @@ define(function(require, exports, module) {
                     return a + k + ' ';
                 }, '').toLowerCase().trim();
 
-                s += '    ' + (a ? a + ' ' : '') + key + ': ';
+                s += '    ' + (a ? a + ' ' : '') + key;
 
                 var val = Class.prototype[key];
 
-                if (_(val).isFunction()) s += 'function ()';
-                else if (_(val).isArray()) s += 'Array []';
-                else if (_(val).isObject()) s += 'Object {}';
-                else if (val === undefined) s += 'undefined';
-                else if (val === null) s += 'null';
-                else s += val;
+                if (_(val).isFunction()) s += '()';
+                else if (_(val).isArray()) s += '[]';
+                else if (_(val).isObject()) s += '{}';
+                else if (val === undefined && !annotations.ABSTRACT) s += ' = undefined';
+                else if (val === null) s += ' = null';
 
-                s += '\n';
+                s += ';\n';
 
             });
 
