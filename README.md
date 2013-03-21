@@ -105,6 +105,9 @@ compose.Object
 
 #### Inheritance
 
+The inheritance annotations are used to govern and check the inheritance
+semantics of your classes.
+
 ##### override
 
 ##### virtual
@@ -114,6 +117,8 @@ compose.Object
 ##### new
 
 #### Accessors
+
+Accessor annotations can create getters and setters out of class members.
 
 ##### get
 
@@ -125,17 +130,18 @@ compose.Object
 
 #### Mixins
 
+Mixin annotations are used to augment the targeted function they are mixing in
+on top of.
+
 ##### before
 
 ##### after
 
 ##### wrapped
 
-##### mixin
-
-##### augmented
-
 #### Modifiers
+
+Modifier annotations change the accessibility of class members.
 
 ##### hidden
 
@@ -146,6 +152,15 @@ compose.Object
 ##### sealed
 
 ##### static
+
+#### Implicit Annotations
+
+These annotations are automatically added via the class system, and cannot be
+used directly.
+
+##### mixin
+
+##### augmented
 
 ## The Robo Framework
 

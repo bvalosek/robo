@@ -1,0 +1,4 @@
+Authors ordered by first contribution
+
+Brandon Valosek <bvalosek@gmail.com>
+Dillon Shook <dshook@alumni.nmt.edu>
