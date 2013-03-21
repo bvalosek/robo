@@ -1,6 +1,6 @@
-﻿define(function (require)
+﻿define(function (require, exports, module)
 {
-    module('Modifiers');
+
     var compose = require('robo/compose');
 
     var BaseClass = compose.defineClass({
@@ -59,13 +59,6 @@
         },
        'Const and readonly are not both allowed');
 
-        throws(function()
-        {
-            ModifierTest.extend({
-                __new__st: 6
-            });
-        },
-        'Sealed throws error on New redefinition');
     });
 
 
