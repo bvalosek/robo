@@ -1,6 +1,6 @@
-﻿define(function (require, exports, module)
+﻿define(function (require)
 {
-
+    module('Mixins');
     var compose = require('robo/compose');
 
     test('Mixins', function ()
