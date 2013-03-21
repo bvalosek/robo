@@ -108,11 +108,21 @@ compose.Object
 The inheritance annotations are used to govern and check the inheritance
 semantics of your classes.
 
-##### override
+All inheritance annotations only add additional checking override during
+define time; no run-time overhead is incurred.
 
 ##### virtual
 
+The `virtual` annotation is used to indicate that a class member or property
+may be overriden (via the `override` annotation) in a later derived class.
+
+All class members are non-virtual be default, meaning that you must explicitly
+declare a member as `virtual` or a declare-time exception will be thrown if a
+derived class hides a virtual member.
+
 ##### abstract
+
+##### override
 
 ##### new
 
