@@ -138,7 +138,7 @@ define(function (require)
             return function ()
             {
                 return babyNum;
-            }
+            };
         }
 
         var iterations = 100;
