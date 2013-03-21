@@ -125,7 +125,7 @@ define(function(require, exports, module) {
                 proto = Child.prototype;
 
             // check out the annotations etc
-            extendMethods.processAccessors(proto, key, val, annotations);
+            helpers.processAccessors(proto, key, val, annotations);
 
             // ensure we keep track of the annotations
             Child.__annotations__[key] = annotations;
@@ -184,88 +184,6 @@ define(function(require, exports, module) {
                 ['MIXIN', 'AUGMENTED', 'VIRTUAL', 'ABSTRACT', 'OVERRIDE']))
                 throw new Error('Base member "' + prettyP + '" and child member "' +
                     prettyC + '" do not have matching annotation signatures');
-        },
-
-        // handle all accessor-type info
-        processAccessors: function(proto, key, val, annotations)
-        {
-            var prettyKey = helpers.prettyPrint(proto.constructor, key, annotations);
-
-            var accessorMods = 0;
-
-            // getters and setters ... accessor stuff
-            if (annotations.GET) {
-                accessorMods++;
-                Object.defineProperty(proto, key, {
-                    get: val, set: undefined,
-                    enumerable: true, configurable: true
-                });
-            }
-
-            if (annotations.SET) {
-                accessorMods++;
-                Object.defineProperty(proto, key, {
-                    set: val, get: undefined,
-                    enumerable: true, configurable: true
-                });
-            }
-
-            // result annotation leverages underscore 'result' function
-            if (annotations.PROPERTY && annotations.RESULT) {
-                accessorMods++;
-                var _key = '_' + key;
-                proto[_key] = val;
-                Object.defineProperty(proto, key, {
-                    get: function() { return _(this).result(_key); },
-                    set: function(v) { this[_key] = _(v).isFunction() ? v.bind(this) : v; },
-                    enumerable: true, configurable: true
-                });
-
-            // just property means expect get / set
-            } else if (annotations.PROPERTY) {
-                accessorMods++;
-                Object.defineProperty(proto, key, {
-                    get: val.get, set: val.set,
-                    enumerable: true, configurable: true
-                });
-            }
-
-            // throws an error when attempting to write, but at the expense of
-            // creating a getter/setting
-            if (annotations.CONST) {
-                accessorMods++;
-                Object.defineProperty(proto, key, {
-                    get: function() { return val; },
-                    set: function() { throw new Error('Cannot change const member "' +
-                        prettyKey + '"'); },
-                    enumerable: true, configurable: true
-                });
-            }
-
-            // if we haven't done any access style yet, then just do it noraml.
-            // otherwise flip our shit
-            if (accessorMods === 0) {
-                Object.defineProperty(proto, key, {
-                    value: val,
-                    writable: true,
-                    enumerable: true, configurable: true
-                });
-            } else if (accessorMods != 1) {
-                throw new Error('Member "' + prettyKey +
-                    '" has invalid accessor combination');
-            }
-
-            // hide from enumeration
-            if (annotations.HIDDEN)
-                Object.defineProperty(proto, key, { enumerable: false });
-
-            // read only works if its a normal member with no access stuff
-            if (annotations.READONLY && accessorMods !== 0)
-                throw new Error('Member "' + prettyKey + '" cannot be readonly');
-
-            // read only proper
-            if (annotations.READONLY)
-                Object.defineProperty(proto, key, { writable: false });
         }
 
     };

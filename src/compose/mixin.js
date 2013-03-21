@@ -69,21 +69,27 @@ define(function(require, exports, module) {
                     // ensure everything checks out
                     mixinMethods.validateFunction(this, key, fn, ta, ma);
 
+                    // figure out what the set and how
+                    var val;
+                    var descriptor;
                     var thisAnnotations = this.constructor.__annotations__;
 
                     // trivial case of nothing in the target to worry about
                     if (!targetFn) {
-                        this[key] = fn;
                         thisAnnotations[key] =
                             _(ma).omit(['BEFORE', 'AFTER', 'WRAPPED']);
                         thisAnnotations[key].MIXIN = true;
+                        val = fn;
 
                     } else if (!ma.ABSTRACT && (ma.BEFORE || ma.AFTER || ma.WRAPPED)) {
-                        this[key] = null; // mixinMethods.getWrap(this, key, fn, ma);
+                        val = mixinMethods.getWrap(this, key, fn, ma);
                         thisAnnotations[key] =
                             _(ta).omit(['BEFORE', 'AFTER', 'WRAPPED']);
                         thisAnnotations[key].AUGMENTED = true;
                     }
+
+                    // assign it
+                    helpers.processAccessors(this, key, val, ma);
 
                 }.bind(this));
             };
@@ -128,6 +134,10 @@ define(function(require, exports, module) {
         {
             var prettyT  = helpers.prettyPrint(target, key, ta);
             var targetFn = target[key];
+
+            // invalid inheritence stuff
+            if (ma.VIRTUAL || ma.OVERRIDE || ma.PROPERTY || ma.RESULT || ma.STATIC)
+                throw new Error ('Invalid annotation in mixin');
 
             // Make sure it's either abstract or a function
             if (!ma.ABSTRACT && !_(fn).isFunction())
