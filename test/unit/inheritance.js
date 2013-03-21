@@ -118,7 +118,7 @@ define(function (require, exports, module)
         equal(child.lineage(), 3);
     });
 
-
+    //Wikipedia translations
     test('Strategy Pattern', function ()
     {
         var Strategy = compose.defineClass({
