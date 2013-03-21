@@ -101,7 +101,7 @@ compose.Object
 
 ### Functional Mixins
 
-### Member Annotations
+### Class Member Annotations
 
 #### Inheritance
 
@@ -128,7 +128,7 @@ Accessor annotations can create getters and setters out of class members.
 
 ##### result
 
-#### Mixins
+### Mixin Member Annotations
 
 Mixin annotations are used to augment the targeted function they are mixing in
 on top of.
@@ -139,9 +139,9 @@ on top of.
 
 ##### wrapped
 
-#### Modifiers
+### Modifier Annotations
 
-Modifier annotations change the accessibility of class members.
+Modifier annotations change the accessibility of members.
 
 ##### hidden
 
@@ -153,7 +153,7 @@ Modifier annotations change the accessibility of class members.
 
 ##### static
 
-#### Implicit Annotations
+### Implicit Annotations
 
 These annotations are automatically added via the class system, and cannot be
 used directly.
