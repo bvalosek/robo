@@ -35,7 +35,9 @@ define(function(require, exports, module) {
         // any existing members
         swapConstructor: function(Class, ctor)
         {
-            var props = Object.getOwnPropertyNames(Class);
+            // without arguments for firefox bug
+            var props = _(Object.getOwnPropertyNames(Class))
+                .without('arguments','caller');
 
             props.forEach(function(key) {
                 var desc = Object.getOwnPropertyDescriptor(Class, key);

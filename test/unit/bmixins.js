@@ -26,12 +26,6 @@ define(function(require) {
         var ThingAgain = Thing.extend({ __name__  : 'ThingAagain' });
 
         // --------------------------------------------------------------------
-        // sigs
-
-        console.log(helpers.prettySig(Thing));
-        console.log(helpers.prettySig(ThingAgain));
-
-        // --------------------------------------------------------------------
         // tests
 
         raises(function() {
@@ -79,14 +73,7 @@ define(function(require) {
         var Child2B = Child2.using(MixB);
 
         // --------------------------------------------------------------------
-        // sigs
-
-        console.log('\n\n');
-        console.log(helpers.prettySig(Child1));
-        console.log(helpers.prettySig(Child2));
-        console.log(helpers.prettySig(Child3));
-        console.log(helpers.prettySig(Child2A));
-        console.log(helpers.prettySig(Child2B));
+        // tests
 
         ok(new Child1().is(compose.Object), 'Child1 instance is a Object');
         ok(new Child2().is(Child1), 'Child2 instance is a Child1');
