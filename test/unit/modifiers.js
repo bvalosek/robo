@@ -8,7 +8,7 @@
         __virtual__render: function ()
         {
             return 'base render';
-        },
+        }
 
     });
 

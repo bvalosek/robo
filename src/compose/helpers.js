@@ -242,6 +242,10 @@ define(function(require, exports, module) {
 
             });
 
+            // clear out the meta ones w/ no keys
+            delete newHash[''];
+            delete allAnnotations[''];
+
             return {
                 hash: newHash,
                 annotations: allAnnotations
