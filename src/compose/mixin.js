@@ -1,5 +1,7 @@
 define(function(require, exports, module) {
 
+    var helpers = require('./helpers');
+
     var mixinMethods = {
 
         // mixin the functionality of an array / single functional mixins

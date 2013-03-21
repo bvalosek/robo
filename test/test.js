@@ -52,7 +52,7 @@ define(function(require, exports, module) {
         throws(function ()
         {
             BaseClass.extend({
-
+                someMethod: function() {}
             });
         },
         'Missing abstract');
@@ -142,7 +142,7 @@ define(function(require, exports, module) {
             }
         });
 
-        var MixChild = BaseMix.mixin(RenderMix).extend({
+        var MixChild = BaseMix.using(RenderMix).extend({
 
         });
 
@@ -151,7 +151,7 @@ define(function(require, exports, module) {
         equal(mixChild.render(), 'mix base render');
         equal(mixChild.newMix(), 'new mix');
 
-        var OverrideMixChild = BaseMix.mixin(RenderMix).extend({
+        var OverrideMixChild = BaseMix.using(RenderMix).extend({
             __override__render: function ()
             {
                 return 'overridden render';
