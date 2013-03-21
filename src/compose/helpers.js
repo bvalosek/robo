@@ -81,10 +81,13 @@ define(function(require, exports, module) {
                 var val = Class.prototype[key];
 
                 if (_(val).isFunction()) s += '()';
-                else if (_(val).isArray()) s += '[]';
-                else if (_(val).isObject()) s += '{}';
+                else if (_(val).isArray()) s += ' = []';
+                else if (_(val).isObject()) s += ' = {}';
                 else if (val === undefined && !annotations.ABSTRACT) s += ' = undefined';
                 else if (val === null) s += ' = null';
+                else if (_(val).isString()) s += ' = \'' + val + '\'';
+                else if (_(val).isNumber()) s += ' = ' + val;
+                else if (_(val).isBoolean()) s += ' ' + (val ? 'true' : 'false');
 
                 s += ';\n';
 
