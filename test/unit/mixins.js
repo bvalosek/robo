@@ -79,4 +79,47 @@
         equal(ChildMixDirect.Super.Super.__name__, 'Child1', 'Direct Extended mixin grandparent name');
 
     });
+
+    test('Mixin Ordering', function ()
+    {
+        var fakeGlobal = '';
+
+        var Base = compose.defineClass({
+            __virtual__print: function ()
+            {
+                fakeGlobal += '2';
+            }
+        });
+
+        var MixBefore = compose.defineMixin({
+            __before__print: function ()
+            {
+                fakeGlobal += '1';
+            }
+        });
+
+        var MixAfter = compose.defineMixin({
+            __after__print: function ()
+            {
+                fakeGlobal += '3';
+            }
+        });
+
+        var MixWrap = compose.defineMixin({
+            __wrapped__print: function (print)
+            {
+                fakeGlobal += '0';
+                print();
+                fakeGlobal += '4';
+            }
+        });
+
+        var BaseBefore = Base.using(MixBefore);
+        var BaseAfter = BaseBefore.using(MixAfter);
+        var BaseWrap = BaseAfter.using(MixWrap);
+
+        var baseWrap = new BaseWrap();
+        baseWrap.print();
+        equal(fakeGlobal, '01234');
+    });
 });

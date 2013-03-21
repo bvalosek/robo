@@ -37,11 +37,11 @@
     test('Modifiers', function ()
     {
         var mt = new ModifierTest();
-        equal(mt.h, 1);
-        equal(mt.ro, 2);
-        equal(mt.c, 3);
-        equal(mt.s, 4);
-        equal(ModifierTest.st, 5);
+        equal(mt.h, 1, 'Hidden');
+        equal(mt.ro, 2, 'Read only');
+        equal(mt.c, 3, 'Const');
+        equal(mt.s, 4, 'Sealed');
+        equal(ModifierTest.st, 5, 'Static');
 
         throws(function ()
         {
@@ -66,6 +66,20 @@
             });
         },
         'Sealed throws error on New redefinition');
+
+        var ModifierChild = ModifierTest.extend({
+
+        });
+        var modifierChild = new ModifierChild();
+        equal(ModifierChild.Super.st, 5, 'Static inheritance');
+
+        throws(function ()
+        {
+            ModifierChild.extend({
+                __new__s: 7
+            });
+        },
+        'Inherited sealed throws on new redefinition');
     });
 
 
