@@ -58,7 +58,7 @@ define(function(require, exports, module) {
                 var ctor = function() {};
                 ctor.prototype = Parent.prototype;
                 Child.prototype = new ctor();
-                Child.prototype.constructor = Child;
+                helpers.defHidden(Child.prototype, { constructor: Child });
 
                 // cool methods on prototype and actual class
                 helpers.setupPrototype(Child.prototype);

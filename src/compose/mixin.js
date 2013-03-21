@@ -24,7 +24,8 @@ define(function(require, exports, module) {
             if (!target.hasOwnProperty('__mixins__'))
                 Object.defineProperty(target, '__mixins__', {
                     value: target.__mixins__ ? _(target.__mixins__).clone() : [],
-                    enumberable: false, writable: false
+                    enumberable: false, writable: false,
+                    configurable: true
                 });
 
             // add any mixin we don't already have
