@@ -93,9 +93,9 @@ define(function(require) {
         ok(new Child3().is(Child1), 'Child3 instance is a Child1');
         ok(!new Child1().is(Child3), 'Child1 instance is not a Child3');
 
-        ok(Child1.Super === compose.Object, 'Child1 Super is Parent');
-        ok(Child2.Super === Child1, 'Child1 Super is Parent');
-        ok(Child3.Super === Child2, 'Child1 Super is Parent');
+        ok(Child1.Super === compose.Object, 'Child1 Super is Object');
+        ok(Child2.Super === Child1, 'Child2 Super is Child1');
+        ok(Child3.Super === Child2, 'Child3 Super is Child2');
 
         ok(Child2A.Super === Child2.Super, 'Bare mixin class should leave Super intact');
         ok(Child2A.Super === Child2B.Super, 'Bare mixin classes from same base class should have same Super');
