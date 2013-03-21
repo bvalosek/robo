@@ -76,6 +76,7 @@ compose.Object
     findMembers()
     Super
     parent
+    __SuperDuper__
     __name__
     __annotations__
     __mixins__

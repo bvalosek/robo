@@ -44,9 +44,25 @@ define(function(require, exports, module) {
         makeUsing: function(Child)
         {
             return function() {
-                var MixinClass = Child.extend();
-                mixinMethods.mixin.call(
-                    MixinClass.prototype, _(arguments).toArray());
+                var mixins = _(arguments).toArray();
+
+                // create string of mixins
+                var smix = _(mixins).reduce(function(acc,m) {
+                    return acc + ' + ' + (m.__name__ || '?');
+                }, '');
+
+                // create the mixin class
+                var MixinClass = Child.extend({
+                    __name__: '(' + (Child.__name__ || '?') + smix + ')'
+                });
+
+                Object.defineProperty(MixinClass, 'Super', {
+                    writable: false, enumberable: false,
+                    value: Child.Super
+                });
+
+                // dat mix
+                mixinMethods.mixin.call(MixinClass.prototype, mixins);
                 return MixinClass;
             };
         },
@@ -55,11 +71,11 @@ define(function(require, exports, module) {
         // checks while forming and ensuring the mixin will update the annotations et al
         defineMixin: function(obj)
         {
-            var name = obj.__name__;
+            var name = obj.__name__ || null;
             var info = helpers.processAnnotations(obj);
 
             // always assume we're operating on a prototype
-            return function()
+            var f = function()
             {
                 _(info.hash).each(function(fn, key) {
 
@@ -96,6 +112,9 @@ define(function(require, exports, module) {
 
                 }.bind(this));
             };
+
+            f.__name__ = name;
+            return f;
         },
 
         // properly do mixin wrapping on a function

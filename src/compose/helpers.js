@@ -51,8 +51,8 @@ define(function(require, exports, module) {
         {
             sig = sig || {};
 
-            if (Ctor.Super)
-                helpers.getClassSignature(Ctor.Super, sig);
+            if (Ctor.__SuperDuper__)
+                helpers.getClassSignature(Ctor.__SuperDuper__, sig);
 
             _(sig).extend(Ctor.__annotations__);
             return sig;
@@ -116,6 +116,10 @@ define(function(require, exports, module) {
                 // meta properties
                 Super           : Super || null,
                 parent          : Super ? (Super.prototype) : {},
+
+                // used for literal inheritance traversal
+                __SuperDuper__  : Super || null,
+
                 __name__        : Ctor.__name__ || name || null,
                 __annotations__ : {},
                 __mixins__      : []
@@ -161,7 +165,8 @@ define(function(require, exports, module) {
             _(hash).each(function(val, key) {
                 Object.defineProperty(obj, key, {
                     value: val,
-                    enumberable: false, writable: false
+                    enumberable: false, writable: false,
+                    configurable: true
                 });
             });
         },
@@ -206,7 +211,7 @@ define(function(require, exports, module) {
             if (proto.hasOwnProperty(key))
                 return Class.__annotations__ ? Class.__annotations__[key] : {};
 
-            return helpers.findAnnotations(Class.Super, key);
+            return helpers.findAnnotations(Class.__SuperDuper__, key);
         },
 
         // given a class and an annotation string
