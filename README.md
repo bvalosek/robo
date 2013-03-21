@@ -36,6 +36,8 @@ Robo should work with the following browsers:
 * Opera 4+
 * Internet Explorer 9+
 
+#### Building
+
 #### Tests
 
 Run a http server from the root of the repo, and browse to e.g. `localhost:8080/test/index.html`.
@@ -52,7 +54,10 @@ Run a http server from the root of the repo, and browse to e.g. `localhost:8080/
   `before`, `after`, and `wrapped` annotations can be used to modifiy existing
   functions.
 
-* **Member annotations.**
+* **Member annotations.** Use modifiers on class members or mixin members to
+  change their behavior or enforce inheritance and access semantics, or use
+  custom annotations and reflection to amp up your own classes and reduce
+  boilerplate.
 
 * **Define-time semantics checking.** Use the `virtual`, `abstract`, and
   `override` member annotations to ensure predictable inheritance behavior, and
@@ -80,17 +85,17 @@ compose.Object
         __mixins__
 ```
 
-#### extend()
+#### compose.Object#extend()
 
-#### using()
+#### compose.Object#using()
 
-#### findAnnotations()
+#### compose.Object#findAnnotations()
 
-#### findMembers()
+#### compose.Object#findMembers()
 
-#### is()
+#### compose.Object.prototype#is()
 
-#### mixin()
+#### compose.Object.prototype#mixin()
 
 ### Inheritance
 
@@ -118,10 +123,6 @@ compose.Object
 
 ##### result
 
-##### memoize
-
-##### once
-
 #### Mixins
 
 ##### before
@@ -129,6 +130,10 @@ compose.Object
 ##### after
 
 ##### wrapped
+
+##### mixin
+
+##### augmented
 
 #### Modifiers
 
@@ -169,8 +174,14 @@ compose.Object
 
 ### Open Source libraries
 
+* Backbone
+* Underscore
+* JQuery
+* QUnit
+* requireJS
+
 ## License
-Copyright 2013 Brandon Valosek [@bvalosek](http://twitter.com/bvalosek)
+Copyright 2013 Brandon Valosek
 
 Robo is released under the new BSD and MIT licenses.
 
