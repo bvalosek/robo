@@ -1,12 +1,10 @@
-define(function(require, exports, module) {
-
+define(function (require, exports, module)
+{
     var compose = require('robo/compose');
-
-
 
     var BaseClass = compose.defineClass({
 
-        __virtual__render: function()
+        __virtual__render: function ()
         {
             return 'base render';
         },
@@ -52,7 +50,7 @@ define(function(require, exports, module) {
         throws(function ()
         {
             BaseClass.extend({
-                someMethod: function() {}
+                someMethod: function () { }
             });
         },
         'Missing abstract');
@@ -61,106 +59,14 @@ define(function(require, exports, module) {
         {
             BaseClass.extend({
 
-                render: function(){
+                render: function ()
+                {
                     return 'new render';
                 },
                 __override__baseAbstract: -3
             });
         },
         'Missing override');
-    });
-
-    test('New function', function ()
-    {
-        var newChild = BaseClass.extend({
-            __override__baseAbstract: -3,
-            __new__hidden__render: function ()
-            {
-                return 'new render';
-            }
-        });
-
-        var o = new newChild();
-
-        equal(o.render(), 'new render');
-    });
-
-    var ModifierTest = compose.defineClass({
-        __hidden__h: 1,
-        __readonly__ro: 2,
-        __const__c: 3,
-        __sealed__s: 4,
-        __static__st: 5
-    });
-
-    test('Modifiers', function ()
-    {
-        var mt = new ModifierTest();
-        equal(mt.h, 1);
-        equal(mt.ro, 2);
-        equal(mt.c, 3);
-        equal(mt.s, 4);
-        equal(ModifierTest.st, 5);
-
-        throws(function ()
-        {
-            mt.c = -4;
-        }, 'Assign to const');
-
-        mt.ro = -2;
-        equal(mt.ro, 2, 'Assigning to read only does not change value');
-
-        throws(function ()
-        {
-            ModifierTest.extend({
-                __readonly__const__roc: 3
-            });
-        },
-       'Const and readonly are not both allowed');
-
-    });
-
-
-    test('Mixins', function ()
-    {
-        var BaseMix = compose.defineClass({
-            __virtual__render: function ()
-            {
-                return 'base render';
-            }
-        });
-
-        var RenderMix = compose.defineMixin({
-            __wrapped__render: function (render)
-            {
-                return 'mix ' + render();
-            },
-
-            newMix: function ()
-            {
-                return 'new mix';
-            }
-        });
-
-        var MixChild = BaseMix.using(RenderMix).extend({
-
-        });
-
-
-        var mixChild = new MixChild();
-        equal(mixChild.render(), 'mix base render');
-        equal(mixChild.newMix(), 'new mix');
-
-        var OverrideMixChild = BaseMix.using(RenderMix).extend({
-            __override__render: function ()
-            {
-                return 'overridden render';
-            }
-        });
-
-        var overrideMixChild = new OverrideMixChild();
-        equal(overrideMixChild.render(), 'overridden render');
-
     });
 
     test('Multiple level inheritance', function ()
@@ -210,6 +116,46 @@ define(function(require, exports, module) {
         equal(child.name(), 'child');
 
         equal(child.lineage(), 3);
+    });
+
+
+    test('Strategy Pattern', function ()
+    {
+        var Strategy = compose.defineClass({
+            __abstract__execute: function (a, b) { return undefined; }
+        });
+
+        var Add = Strategy.extend({
+            __override__execute: function (a, b)
+            {
+                return a + b;
+            }
+        });
+
+        var Multiply = Strategy.extend({
+            __override__execute: function (a, b)
+            {
+                return a * b;
+            }
+        });
+
+        var Context = compose.defineClass({
+            constructor: function (strategy)
+            {
+                this.strategy = strategy;
+            },
+
+            executeStrategy: function (a, b)
+            {
+                return this.strategy.execute(a, b);
+            }
+        });
+
+        var multiplyContext = new Context(new Multiply());
+        var addContext = new Context(new Add());
+
+        equal(multiplyContext.executeStrategy(2, 4), 8);
+        equal(addContext.executeStrategy(2, 4), 6);
     });
 
 });

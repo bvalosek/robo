@@ -11,4 +11,6 @@ require.config({
 
 });
 
-require(['test']);
+require(['./unit/inheritance']);
+require(['./unit/modifiers']);
+require(['./unit/mixins']);
