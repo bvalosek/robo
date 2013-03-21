@@ -15,5 +15,6 @@ require([
     './unit/inheritance',
     './unit/modifiers',
     './unit/mixins',
-    './unit/bmixins'
+    './unit/bmixins',
+    './unit/api'
 ]);
