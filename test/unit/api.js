@@ -11,7 +11,7 @@ define(function(require) {
         // check root, somethikng extended from root, and something extended from an extended
         var check = [compose.Object, compose.Object.extend(), compose.Object.extend().extend()];
 
-        for (n in check) {
+        for (var n in check) {
             var O = check[n];
             ok(_(O.extend).isFunction(), 'Object#extend is function: level ' + n);
             ok(_(O.using).isFunction(), 'Object#using is function: level ' + n);
