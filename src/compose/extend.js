@@ -21,6 +21,7 @@ define(function(require, exports, module) {
             // swap the constructor in
             if (key) {
                 Child = info.hash[key];
+                Child.__name__ = key;
                 delete info.annotations[key];
                 delete info.hash[key];
             } else if (obj !== undefined && obj.hasOwnProperty('constructor')) {
@@ -44,7 +45,7 @@ define(function(require, exports, module) {
             {
                 obj      = obj || {};
                 var info = helpers.processAnnotations(obj);
-                var name = null;
+                var name = obj.__name__ || null;
 
                 // figure out what the actuall function will be for the
                 // constructor, which will be the basis of the Class

@@ -107,7 +107,7 @@ define(function(require, exports, module) {
                 // meta properties
                 Super           : Super || null,
                 parent          : Super ? (Super.prototype) : {},
-                __name__        : name || null,
+                __name__        : Ctor.__name__ || name || null,
                 __annotations__ : {},
                 __mixins__      : []
 
