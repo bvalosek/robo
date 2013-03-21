@@ -18,8 +18,6 @@ define(function(require, exports, module) {
         {
             var mixins = _({}).extend(
                 Ctor.findMembers('MIXIN'), Ctor.findMembers('AUGMENTED'));
-
-            console.log('mixins found', mixins);
         },
 
         // create a function that when called, has 2 arguments: the original fn
@@ -69,9 +67,6 @@ define(function(require, exports, module) {
 
             if (Class.Super)
                 s+= ' : ' + (Class.Super.__name__ || '?');
-
-            if (Class.Super)
-                console.log(helpers.isMixin(Class.Super));
 
             s += ' \n{\n';
 

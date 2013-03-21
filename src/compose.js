@@ -21,7 +21,7 @@ define(function(require, exports, module) {
         var Ctor = this.constructor;
 
         // Add all the necesary goodies on the actual type (the constructor)
-        helpers.setupConstructor(Ctor, null);
+        helpers.setupConstructor(Ctor, null, 'Object');
 
         // add in the extender and usinger
         helpers.defHidden(Ctor, {
