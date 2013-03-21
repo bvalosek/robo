@@ -55,7 +55,7 @@ Run a http server from the root of the repo, and browse to e.g. `localhost:8080/
 * **Member annotations.**
 
 * **Define-time semantics checking.** Use the `virtual`, `abstract`, and
-  `override` member annotations to ensure predictable inheritence behavior, and
+  `override` member annotations to ensure predictable inheritance behavior, and
   get feedback in the form of define-time errors when implementation contracts
   are broken.
 
@@ -163,6 +163,9 @@ compose.Object
 ## Special Thanks
 
 ### Contributers
+
+* Brandon Valosek [@bvalosek](http://twitter.com/bvalosek)
+* Dillon Shook [dshook.is](http://dshook.is)
 
 ### Open Source libraries
 
