@@ -75,6 +75,7 @@ compose.Object
     findAnnotations()
     findMembers()
     Super
+    parent
     __name__
     __annotations__
     __mixins__
@@ -92,6 +93,10 @@ compose.Object
 #### compose.Object#findAnnotations()
 
 #### compose.Object#findMembers()
+
+#### compose.Object#Super
+
+#### compose.Object#parent
 
 #### compose.Object.prototype#is()
 

@@ -186,7 +186,7 @@ define(function(require, exports, module) {
             },
             __override__lineage: function ()
             {
-                return FatherClass.Parent.lineage() + 1;
+                return FatherClass.parent.lineage() + 1;
             }
         });
 
@@ -197,7 +197,7 @@ define(function(require, exports, module) {
             },
             __override__lineage: function ()
             {
-                return ChildClass.Parent.lineage() + 1;
+                return ChildClass.parent.lineage() + 1;
             }
         });
 
