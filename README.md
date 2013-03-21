@@ -179,7 +179,7 @@ used directly.
 
 ## The Robo Framework
 
-### Application
+### Framework
 
 ### Page
 
