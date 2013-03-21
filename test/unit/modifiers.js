@@ -62,7 +62,7 @@
         throws(function()
         {
             ModifierTest.extend({
-                __new__st: 6
+                __new__s: 6
             });
         },
         'Sealed throws error on New redefinition');
