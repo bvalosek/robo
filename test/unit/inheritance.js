@@ -112,11 +112,45 @@ define(function (require)
         var father = new FatherClass();
         var child = new ChildClass();
 
+        equal(grandfather.Super, null, 'No Super class for a base object');
         equal(grandfather.name(), 'grandfather');
         equal(father.name(), 'father');
         equal(child.name(), 'child');
 
         equal(child.lineage(), 3);
+    });
+
+    test('Deep inheritance', function ()
+    {
+        var base = compose.defineClass(
+        {
+            __virtual__level: function ()
+            {
+                return 0;
+            }
+        });
+
+        var lineage = [];
+        lineage.push(base);
+
+        function babyMaker(babyNum)
+        {
+            return function ()
+            {
+                return babyNum;
+            }
+        }
+
+        var iterations = 100;
+        for (var i = 0; i < iterations; i++) {
+            var childLineage = lineage[i].extend({
+                __override__level: babyMaker(i + 1)
+            });
+            lineage.push(childLineage);
+        }
+
+        var finalChild = new lineage[iterations - 1]();
+        equal(finalChild.level(), iterations - 1);
     });
 
     //Wikipedia translations
