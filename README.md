@@ -135,13 +135,13 @@ derived class hides a virtual member.
 
 Accessor annotations can create getters and setters out of class members.
 
-##### get
-
-##### set
-
 ##### property
 
 ##### result
+
+##### get
+
+##### set
 
 ### Mixin Member Annotations
 
@@ -167,6 +167,12 @@ Modifier annotations change the accessibility of members.
 ##### sealed
 
 ##### static
+
+### Constructor Annotation
+
+Using the `constructor` annotation is an alternative way of indicating the
+actual constructor function of a class. This has the benefit of implicitly
+naming the class via the `Object#__name__` property.
 
 ### Implicit Annotations
 
