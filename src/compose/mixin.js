@@ -55,54 +55,64 @@ define(function(require, exports, module) {
         {
             var info = helpers.processAnnotations(obj);
 
+            // always assume we're operating on a prototype
             return function()
             {
                 _(info.hash).each(function(fn, key) {
 
                     // target annotations and mixin annotations
-                    var ta = helpers.findAnnotations(this.constructor, key);
-                    var ma = info.annotations[key];
-
-                    var prettyT = helpers.prettyPrint(this, key, ta);
-
-                    // Make sure it's either abstract or a function
-                    if (!ma.ABSTRACT && !_(fn).isFunction())
-                        throw new Error ('Only functions are valid in mixins');
-
+                    var ta       = helpers.findAnnotations(this.constructor, key);
+                    var ma       = info.annotations[key];
+                    var prettyT  = helpers.prettyPrint(this, key, ta);
                     var targetFn = this[key];
 
-                    // if we're augmenting the target, do some sanity checks
-                    if (targetFn) {
-                        if (!_(targetFn).isFunction())
-                            throw new Error(
-                            'Cannot mixin on top of non-function base member "' +
-                                prettyT + '"');
+                    // ensure everything checks out
+                    mixinMethods.validateFunction(this, key, fn, ta, ma);
 
-                        if (ma.NEW) {
-
-                            // nop
-
-                        // must be awknolwedged that we're clobbering
-                        } else if (!ma.ABSTRACT && !ma.BEFORE && !ma.AFTER && !ma.WRAPPED) {
-                            throw new Error ('Must use before, after, or wrapped ' +
-                                'annotations when overriding a base member with a mixin');
-
-                        // abstract in mixin is emulating the interface
-                        // pattern, so if we already have it, make sure it
-                        // matches the targets signature
-                        } else if (ma.ABSTRACT) {
-                            if (!helpers.sameAnnotations(ta, ma, ['ABSTRACT']))
-                                throw new Error ('Member annotation signatures ' +
-                                    'must match when mixing in an abstract member');
-                        }
-
+                    if (!targetFn || (targetFn && ma.ABSTRACT)) {
+                        this[key] = fn;
                     }
+
 
 
                 }.bind(this));
             };
-        }
+        },
 
+        // given a hash, make sure it checks out
+        validateFunction: function(target, key, fn, ta, ma)
+        {
+            var prettyT  = helpers.prettyPrint(target, key, ta);
+            var targetFn = target[key];
+
+            // Make sure it's either abstract or a function
+            if (!ma.ABSTRACT && !_(fn).isFunction())
+                throw new Error ('Only functions are valid in mixins');
+
+            // if we're augmenting the target, do some sanity checks
+            if (targetFn) {
+                if (!_(targetFn).isFunction())
+                    throw new Error(
+                    'Cannot mixin on top of non-function base member "' +
+                        prettyT + '"');
+
+                if (ma.NEW)
+                    return;
+
+                // must be awknolwedged that we're clobbering
+                if (!ma.ABSTRACT && !ma.BEFORE && !ma.AFTER && !ma.WRAPPED)
+                    throw new Error ('Must use before, after, or wrapped ' +
+                        'annotations when overriding a base member with a mixin');
+
+                // abstract in mixin is emulating the interface pattern, so if
+                // we already have it, make sure it matches the targets
+                // signature
+                if (ma.ABSTRACT)
+                    if (!helpers.sameAnnotations(ta, ma, ['ABSTRACT']))
+                        throw new Error ('Member annotation signatures ' +
+                            'must match when mixing in an abstract member');
+            }
+        }
     };
 
     return mixinMethods;
