@@ -76,7 +76,7 @@ define(function(require, exports, module) {
                 //
                 // EXCEPTION : when obj is empty, meaning we are just copying
                 // the class
-                if (!_(obj).isEmpty() && helpers.isAbstract(Child)) {
+                if (!_(info.hash).isEmpty() && helpers.isAbstract(Child)) {
                     Child = extendMethods.transformAbstract(Child, info);
                 }
 

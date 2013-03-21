@@ -55,6 +55,7 @@ define(function(require, exports, module) {
         // checks while forming and ensuring the mixin will update the annotations et al
         defineMixin: function(obj)
         {
+            var name = obj.__name__;
             var info = helpers.processAnnotations(obj);
 
             // always assume we're operating on a prototype

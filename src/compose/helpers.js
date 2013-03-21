@@ -11,6 +11,17 @@ define(function(require, exports, module) {
             return !!_(sig).find(function(v,k) { return v.ABSTRACT; });
         },
 
+        // true if a class constructor is the result of a mixin. This is
+        // determinable be checking if any of the properties with the mixin
+        // annotation are our own props
+        isMixin: function(Ctor)
+        {
+            var mixins = _({}).extend(
+                Ctor.findMembers('MIXIN'), Ctor.findMembers('AUGMENTED'));
+
+            console.log('mixins found', mixins);
+        },
+
         // create a function that when called, has 2 arguments: the original fn
         // function, as well as all the arguments passed to it
         wrap: function(fn, wrapper, context)
@@ -58,6 +69,9 @@ define(function(require, exports, module) {
 
             if (Class.Super)
                 s+= ' : ' + (Class.Super.__name__ || '?');
+
+            if (Class.Super)
+                console.log(helpers.isMixin(Class.Super));
 
             s += ' \n{\n';
 
@@ -203,19 +217,15 @@ define(function(require, exports, module) {
         // given a class and an annotation string
         findMembers: function(Class, annotation, found)
         {
-            found = found || [];
+            var sig = helpers.getClassSignature(Class);
 
-            _(Class.__annotations__).each(function(annos, key) {
-                if (annos[annotation])
-                    found.push(key);
+            var members = [];
+            _(sig).each(function(annotations, key) {
+                if (annotations[annotation])
+                    members.push(key);
             });
 
-            // continually build up our list of members we've found with
-            // matching annotations
-            if (Class.Super)
-                return findKeys(Class.Super, annotation, found);
-            else
-                return _(found).uniq();
+            return members;
         },
 
         // return both the correct hash and an info object for dealing with
