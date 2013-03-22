@@ -9,7 +9,7 @@ define(function(require, exports, module) {
         {
             // if being called from within another context, assume target is
             // this pointer
-            if (this !== mixinMethods) {
+            if (mixins === undefined) {
                 mixins = target;
                 target = this;
             }

@@ -193,4 +193,14 @@ define(function (require)
         equal(addContext.executeStrategy(2, 4), 6);
     });
 
+    test('override semantics', function() {
+
+        var Child1 = compose.defineClass({ f: function() {} });
+        var Child2 = Child1.extend({ __new__virtual__f: function() {} });
+        var Child3 = Child2.extend({ __override__f: function() {} });
+
+        deepEqual(Child3.findAnnotations('f'), {OVERRIDE: true}, 'new virtual base member can be overridden');
+
+    });
+
 });

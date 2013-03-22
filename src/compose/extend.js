@@ -194,7 +194,7 @@ define(function(require, exports, module) {
 
             // Ensure that all non-inheritance annotations are transfered
             if (!helpers.sameAnnotations(ca, pa,
-                ['MIXIN', 'AUGMENTED', 'VIRTUAL', 'ABSTRACT', 'OVERRIDE']))
+                ['NEW','MIXIN', 'AUGMENTED', 'VIRTUAL', 'ABSTRACT', 'OVERRIDE']))
                 throw new Error('Base member "' + prettyP + '" and child member "' +
                     prettyC + '" do not have matching annotation signatures');
         }

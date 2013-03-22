@@ -10,7 +10,7 @@ define(function(require, exports, module) {
     var _              = require('underscore');
     var $              = require('jquery');
 
-    var Application = Base.mixin(withEvents).extend({
+    var Application = Base.using(withEvents).extend({
 
         __constructor__Application: function() {
             if (Application.context)
