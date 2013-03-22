@@ -5,7 +5,7 @@ define(function(require, exports, module) {
     var events            = require('events');
     var $                 = require('jquery');
 
-    var Popup = TemplateView.mixin(withDeferredClose).extend({
+    var Popup = TemplateView.using(withDeferredClose).extend({
 
         __constructor__Popup: function()
         {

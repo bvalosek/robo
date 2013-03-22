@@ -19,7 +19,7 @@ define(function(require, exports, module) {
         {
             View.Super.apply(this, arguments);
 
-            _(this.constructor.findKeys('VIEWEVENT')).each(function(key) {
+            _(this.constructor.findMembers('VIEWEVENT')).each(function(key) {
                 this.delegate(key, this[key]);
             }.bind(this));
         },

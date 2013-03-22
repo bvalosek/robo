@@ -6,7 +6,7 @@ define(function(require, exports, module) {
     var TableRow       = require('robo/controls/table/TableRow');
     var _              = require('underscore');
 
-    var Table = Control.mixin(withControls).extend({
+    var Table = Control.using(withControls).extend({
 
         __constructor__Table: function(opts)
         {

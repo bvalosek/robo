@@ -93,14 +93,20 @@ define(function(require, exports, module) {
 
             Child.Collection = Collection.extend(cHash);
 
-            Child.extend = makeExtender(Child);
+            Object.defineProperty(Child, 'extend', {
+                value: makeExtender(Child),
+                writable: false, configurable: true
+            });
 
             return Child;
         };
     };
 
     // prime the first extender
-    Model.extend = makeExtender(Model);
+    Object.defineProperty(Model, 'extend', {
+        value: makeExtender(Model),
+        writable: false, configurable: true
+    });
 
     return Model;
 });

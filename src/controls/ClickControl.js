@@ -3,7 +3,9 @@ define(function(require, exports, module) {
     var Control   = require('../Control');
     var Clickable = require('../mixins/Clickable');
 
-    var ClickControl = Control.mixin(Clickable).extend({
+    var ClickControl = Control.using(Clickable).extend({
+
+        __virtual__tagName: 'div',
 
         __constructor__ClickControl: function(opts)
         {

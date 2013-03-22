@@ -6,7 +6,7 @@ define(function(require, exports, module) {
     var _              = require('underscore');
     var TemplateView   = require('../TemplateView');
 
-    var CollectionView = Control.mixin(asCompositable).extend({
+    var CollectionView = Control.using(asCompositable).extend({
 
         __constructor__CollectionView: function(opts)
         {
