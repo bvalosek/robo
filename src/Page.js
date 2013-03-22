@@ -55,7 +55,6 @@ define(function(require, exports, module) {
             var hash = helpers.getWindowHash();
 
             if (!this._ignoreHashChange) {
-                log('# -> ' + helpers.getWindowHash());
                 this.handleViewState(helpers.getWindowHash());
 
                 // trigger if we have anything
