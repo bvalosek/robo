@@ -4,9 +4,9 @@ define(function(require) {
     var helpers = require('robo/compose/helpers');
     var _       = require('underscore');
 
-    module('compose.Object API & consistency');
+    module('compose.js API');
 
-    test('Verify type and presence on root Object', function() {
+    test('Verify types and presence on root Object', function() {
 
         // check root, somethikng extended from root, and something extended from an extended
         var check = [compose.Object, compose.Object.extend(), compose.Object.extend().extend()];

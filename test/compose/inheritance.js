@@ -1,6 +1,6 @@
 define(function (require)
 {
-    module('Inheritance');
+    module('compose.js Inheritance');
     var compose = require('robo/compose');
 
     var BaseClass = compose.defineClass({

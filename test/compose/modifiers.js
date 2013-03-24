@@ -1,6 +1,6 @@
 ﻿define(function (require)
 {
-    module('Modifiers');
+    module('compose.js Modifiers');
     var compose = require('robo/compose');
 
     var BaseClass = compose.defineClass({

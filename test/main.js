@@ -12,9 +12,8 @@ require.config({
 });
 
 require([
-    './unit/inheritance',
-    './unit/modifiers',
-    './unit/mixins',
-    './unit/bmixins',
-    './unit/api'
+    './compose/inheritance',
+    './compose/modifiers',
+    './compose/mixins',
+    './compose/api'
 ]);

@@ -38,9 +38,6 @@ define(function(require, exports, module) {
         // setup observationable attributes
         addAttribute: function(key, initVal, annotations)
         {
-            // no objects, yet
-            if (_(initVal).isObject())
-                throw new Error('Model does not support object attributes, yet');
 
             // if it is already setup, then just update
             if (this[key] === this.attributes[key]) {
