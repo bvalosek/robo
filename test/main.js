@@ -16,5 +16,6 @@ require([
     './compose/modifiers',
     './compose/mixins',
     './compose/api',
-    './compose/types'
+    './compose/types',
+    './compose/accessors'
 ]);

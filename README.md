@@ -157,17 +157,40 @@ on top of.
 
 ### Modifier Annotations
 
-Modifier annotations change the accessibility of members.
+Modifier annotations change the accessibility of members or describe the
+semantics involving class properties.
+
+##### proto
+
+This annotation is required when defining a member variable that is not a
+primitive type or a function. This is because setting an object on the
+prototype can often lead to unexpected side effects.
 
 ##### hidden
 
+Using this annotation will prevent a member from appearing during enumation.
+E.g, it won't show up in `for (key in obj)` type loops. Uses `enumberable:
+false` in the `Object.defineProperty` call.
+
 ##### readonly
+
+Changing the value of this member will have no effect; it will always retain
+its initial value, and any attempts to change it will silently fail. Uses
+`writable: false` in the `Object.defineProperty` call.
 
 ##### const
 
+This annotation is the same as `readonly`, except that any attempts to change
+this member will result in an error thrown.
+
 ##### sealed
 
+Prevent any overriding of this member, even with the `new` annotation.
+
 ##### static
+
+This member will be added to the constructor object directly, instead of on the
+prototype.
 
 ### Constructor Annotation
 

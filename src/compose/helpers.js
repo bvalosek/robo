@@ -286,9 +286,14 @@ define(function(require, exports, module) {
         // handle all accessor-type info
         processAccessors: function(proto, key, val, annotations)
         {
-            var prettyKey = helpers.prettyPrint(proto.constructor, key, annotations);
-
+            var prettyKey    = helpers.prettyPrint(proto.constructor, key, annotations);
             var accessorMods = 0;
+            var _key         = '_' + key;
+
+            // make sure we only use primatives and functions
+            if (!_(val).isFunction() && _(val).isObject() && !annotation.PROTO)
+                throw new Error('Must use proto annotation for "' + prettyKey +
+                    '" if initializing to an object');
 
             // getters and setters ... accessor stuff
             if (annotations.GET) {
@@ -310,8 +315,7 @@ define(function(require, exports, module) {
             // result annotation leverages underscore 'result' function
             if (annotations.PROPERTY && annotations.RESULT) {
                 accessorMods++;
-                var _key = '_' + key;
-                proto[_key] = val;
+                helpers.defHidden(proto, _key, val);
                 Object.defineProperty(proto, key, {
                     get: function() { return _(this).result(_key); },
                     set: function(v) { this[_key] = _(v).isFunction() ? v.bind(this) : v; },
@@ -321,10 +325,24 @@ define(function(require, exports, module) {
             // just property means expect get / set
             } else if (annotations.PROPERTY) {
                 accessorMods++;
-                Object.defineProperty(proto, key, {
-                    get: val.get, set: val.set,
-                    enumerable: true, configurable: true
-                });
+
+                // if we have a get/set hash, then assume we want to explicitly
+                // define them
+                if (val.get !== undefined || val.set !== undefined) {
+                    Object.defineProperty(proto, key, {
+                        get: val.get, set: val.set,
+                        enumerable: true, configurable: true
+                    });
+
+                // otherwise assume this is just the initial value
+                } else {
+                    helpers.defHidden(proto, _key, val);
+                    Object.defineProperty(proto, key, {
+                        get: function() { return this[_key]; },
+                        set: function(v) { this[_key] = v; },
+                        enumerable: true, configurable: true
+                    });
+                }
             }
 
             // throws an error when attempting to write, but at the expense of
