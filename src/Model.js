@@ -13,7 +13,7 @@ define(function(require, exports, module) {
         {
             Model.Super.apply(this, arguments);
 
-            // check for any view events to bizzzzind
+            // create initial attributes
             _(this.constructor.__annotations__).each(function(a, key) {
                 if(a.ATTRIBUTE) {
                     this.addAttribute(key, this[key], a);
@@ -38,13 +38,11 @@ define(function(require, exports, module) {
         // setup observationable attributes
         addAttribute: function(key, initVal, annotations)
         {
-
             // if it is already setup, then just update
             if (this[key] === this.attributes[key]) {
                 this[key] = initVal;
                 return;
             }
-
 
             var setter;
             if (annotations && annotations.READONLY)

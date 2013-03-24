@@ -43,9 +43,9 @@ define(function(require, exports, module) {
         {
             return function(obj)
             {
-                obj      = obj || {};
-                var info = helpers.processAnnotations(obj);
-                var name = obj.__name__ || null;
+                obj           = obj || {};
+                var info      = helpers.processAnnotations(obj);
+                var name      = obj.__name__ || null;
 
                 // figure out what the actuall function will be for the
                 // constructor, which will be the basis of the Class
@@ -60,6 +60,10 @@ define(function(require, exports, module) {
                 Child.prototype = new ctor();
                 helpers.defHidden(Child.prototype, { constructor: Child });
 
+                // find the annoation processor if we have one
+                var processor = obj.__processMember__ ||
+                    new ctor().__processMember__ || null;
+
                 // cool methods on prototype and actual class
                 helpers.setupPrototype(Child.prototype);
                 helpers.setupConstructor(Child, Parent, name);
@@ -69,7 +73,16 @@ define(function(require, exports, module) {
                 _(info.hash).each(function(val, key) {
                     extendMethods.processMember(
                         Child, key, val, info.annotations[key]);
+
+                    // plugin
+                    if (processor)
+                        processor(Child, key, val, info.annotations[key]);
                 });
+
+                // put the processor on the prototype so we can get to it later
+                // if we need
+                helpers.defHidden(Child.prototype,
+                    '__processMember__', processor);
 
                 // if this is an abstract class, then make sure swap
                 // constructor etc.
@@ -126,7 +139,7 @@ define(function(require, exports, module) {
 
         processMember: function(Child, key, val, annotations)
         {
-            if (key === 'constructor')
+            if (key === 'constructor' || 'key' === '')
                 return;
 
             // if this is a static member, we're operating on the actual

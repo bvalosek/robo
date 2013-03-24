@@ -247,7 +247,7 @@ define(function(require, exports, module) {
                 key             = m ? key.substring(m[0].length) : key;
 
                 // cannot have same key after removing annotations
-                if (key != 'constructor' && newHash[key] !== undefined) {
+                if (key != 'constructor' && newHash[key] !== undefined && key !== '') {
                     throw new Error('duplicate key in hash');
                 }
 
