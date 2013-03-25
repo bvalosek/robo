@@ -61,6 +61,8 @@
         equal(Child2.Super.__name__, 'Child1', 'Super name');
 
         var TestMix = compose.defineMixin({
+            __name__: 'TextMix',
+
             newMix: function ()
             {
                 return 'new mix';
@@ -73,6 +75,12 @@
         var ChildME = ChildM.extend({
             __name__: 'ChildME'
         });
+
+        console.log(helpers.prettySig(Child1));
+        console.log(helpers.prettySig(Child2));
+        console.log(helpers.prettySig(ChildM));
+        console.log(helpers.prettySig(ChildME));
+
         equal(ChildME.Super.Super.__name__, 'Child1', 'Extended mixin grandparent name');
 
         var ChildMixDirect = Child2.using(TestMix).extend({
@@ -87,6 +95,7 @@
         var fakeGlobal = '';
 
         var Base = compose.defineClass({
+            __name__: 'Base',
             __virtual__print: function ()
             {
                 fakeGlobal += '2';
@@ -94,6 +103,7 @@
         });
 
         var MixBefore = compose.defineMixin({
+            __name__: 'MixBefore',
             __before__print: function ()
             {
                 fakeGlobal += '1';
@@ -101,6 +111,7 @@
         });
 
         var MixAfter = compose.defineMixin({
+            __name__: 'MixAfter',
             __after__print: function ()
             {
                 fakeGlobal += '3';
@@ -108,6 +119,7 @@
         });
 
         var MixWrap = compose.defineMixin({
+            __name__: 'MixWrap',
             __wrapped__print: function (print)
             {
                 fakeGlobal += '0';

@@ -16,8 +16,12 @@ define(function(require, exports, module) {
         // annotation are our own props
         isMixin: function(Ctor)
         {
-            var mixins = _({}).extend(
-                Ctor.findMembers('MIXIN'), Ctor.findMembers('AUGMENTED'));
+            var mixins = _(Ctor.findMembers('MIXIN'),
+                Ctor.findMembers('AUGMENTED')).union();
+
+            return _(mixins).find(function(key) {
+                return Ctor.prototype.hasOwnProperty(key);
+            });
         },
 
         // create a function that when called, has 2 arguments: the original fn
@@ -65,7 +69,13 @@ define(function(require, exports, module) {
         {
             var sig = Class.getSignature();
 
-            var s = 'class ' + (Class.__name__ || '?');
+            var s = '';
+            if (helpers.isAbstract(Class))
+                s += 'abstract ';
+            if (helpers.isMixin(Class))
+                s += 'bare mixin ';
+
+            s += 'class ' + (Class.__name__ || '?');
 
             if (Class.Super)
                 s+= ' : ' + (Class.Super.__name__ || '?');
