@@ -5,8 +5,10 @@ require.config({
 
     // aliases
     paths: {
-        'robo'            : '../src',
-        'underscore'      : './vendor/underscore'
+        'robo'       : '../src',
+        'underscore' : './vendor/underscore',
+        'jquery'     : './vendor/jquery-1.9.1',
+        'backbone'   : './vendor/backbone'
     }
 
 });
@@ -17,5 +19,6 @@ require([
     './compose/mixins',
     './compose/api',
     './compose/types',
-    './compose/accessors'
+    './compose/accessors',
+    './model'
 ]);
