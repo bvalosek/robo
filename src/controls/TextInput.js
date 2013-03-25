@@ -5,17 +5,10 @@ define(function(require, exports, module) {
 
     var TextInput = ModelControl.extend({
 
-        __constructor__TextInput: function(opts)
-        {
-            _(opts).extend({
-                tagName: 'input',
-                attributes: {
-                    type: 'text'
-                }
-            });
+        __override__readonly__tagName: 'input',
 
-            TextInput.Super.call(this, opts);
-
+        __override__readonly__attributes: {
+            type: 'text'
         },
 
         __viewEvent__keyup: function()

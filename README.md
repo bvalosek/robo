@@ -160,12 +160,6 @@ on top of.
 Modifier annotations change the accessibility of members or describe the
 semantics involving class properties.
 
-##### proto
-
-This annotation is required when defining a member variable that is not a
-primitive type or a function. This is because setting an object on the
-prototype can often lead to unexpected side effects.
-
 ##### hidden
 
 Using this annotation will prevent a member from appearing during enumation.
@@ -177,6 +171,9 @@ false` in the `Object.defineProperty` call.
 Changing the value of this member will have no effect; it will always retain
 its initial value, and any attempts to change it will silently fail. Uses
 `writable: false` in the `Object.defineProperty` call.
+
+##### frozen
+
 
 ##### const
 

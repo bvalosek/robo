@@ -5,11 +5,11 @@ define(function(require, exports, module) {
 
     var Label = ModelControl.extend({
 
+        __override__readonly__tagName: 'span',
+
         __constructor__Label: function(opts)
         {
-            _(opts).extend({ tagName: 'span' });
-
-            Label.Super.call(this, opts);
+            Label.Super.apply(this, arguments);
 
             this.caption = opts.caption || 'Label ' + this.cid;
 

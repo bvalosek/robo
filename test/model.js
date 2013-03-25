@@ -48,7 +48,7 @@ define(function(require) {
         var M = Model.extend({
             __attribute__readonly__ro: 1,
             __attribute__hidden__hidden: 2,
-            __attribute__const__const: 3
+            __attribute__const__con: 3
         });
 
         var m = new M();
@@ -57,9 +57,9 @@ define(function(require) {
 
         m.ro = 3;
         strictEqual(m.ro, 1, 'cannot change readonly attribute');
-        raises(function() { m.const = 5; }, 'throw exception when changing const attribute');
+        raises(function() { m.con = 5; }, 'throw exception when changing const attribute');
         strictEqual(q.events.length, 0, 'no events fired when changing readonly or const attribute');
-        deepEqual(m.toJSON(), { ro:1, const:3}, 'hidden attribute not exposed in model');
+        deepEqual(m.toJSON(), { ro:1, con:3}, 'hidden attribute not exposed in model');
     });
 
 });

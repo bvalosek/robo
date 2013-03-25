@@ -5,8 +5,6 @@ define(function(require, exports, module) {
 
     var ClickControl = Control.using(Clickable).extend({
 
-        __virtual__tagName: 'div',
-
         __constructor__ClickControl: function(opts)
         {
             ClickControl.Super.apply(this, arguments);

@@ -8,18 +8,15 @@ define(function(require, exports, module) {
 
     var Table = Control.using(withControls).extend({
 
+        __override__readonly__tagName: 'table',
+
         __constructor__Table: function(opts)
         {
-            Table.Super.call(this, _(opts).extend({ tagName: 'table' }));
+            Table.Super.apply(this, arguments);
 
             this.setTemplate(require('text!./table/table.html'));
 
             this.collection = opts.collection;
-        },
-
-        __override__render: function()
-        {
-            Table.Super.prototype.render.apply(this, arguments);
         }
 
     });

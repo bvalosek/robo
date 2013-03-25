@@ -78,10 +78,9 @@ define(function(require, exports, module) {
                 });
 
                 // any additional?
-                if (v._attributes)
-                    _(v._attributes).each(function(val, key) {
-                        $new.attr(key, val);
-                    });
+                _(v.attributes).each(function(val, key) {
+                    $new.attr(key, val);
+                });
 
                 // swap n set
                 $target.after($new).remove();

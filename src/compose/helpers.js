@@ -291,9 +291,10 @@ define(function(require, exports, module) {
             var _key         = '_' + key;
 
             // make sure we only use primatives and functions
-            if (!_(val).isFunction() && _(val).isObject() && !annotation.PROTO)
-                throw new Error('Must use proto annotation for "' + prettyKey +
-                    '" if initializing to an object');
+            var valIsObject = !_(val).isFunction() && _(val).isObject();
+            if (valIsObject && !annotations.READONLY)
+                throw new Error('Member initialized to object "' + prettyKey +
+                    '" must be readonly');
 
             // getters and setters ... accessor stuff
             if (annotations.GET) {
@@ -377,6 +378,8 @@ define(function(require, exports, module) {
             // read only works if its a normal member with no access stuff
             if (annotations.READONLY && accessorMods !== 0)
                 throw new Error('Member "' + prettyKey + '" cannot be readonly');
+            else if (annotations.READONLY && valIsObject)
+                Object.freeze(val);
 
             // read only proper
             if (annotations.READONLY)

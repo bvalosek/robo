@@ -37,17 +37,34 @@ define(function(require) {
 
     });
 
-    test('force proto annotation when initializing to an object', function() {
+    test('force readonly annotation when initializing to an object', function() {
 
         raises(function () {
             var Base = compose.defineClass({ prop: {} });
         }, 'thow error when using object to init member');
 
         ok(function () {
-            var Base = compose.defineClass({ __proto__prop: {} });
+            var Base = compose.defineClass({ __readonly__prop: {} });
             return true;
-        }, 'proto keyword allows usage of object initial');
+        }, 'readonly keyword allows usage of object initial');
 
+
+    });
+
+    test('readonly for object members implicitly sets frozen', function() {
+
+        var Base = compose.defineClass({
+            __readonly__obj: { a: 1, b: 2, c: 3 }
+        });
+
+        var b = new Base();
+
+        b.obj.a = 2;
+        strictEqual(b.obj.a, 1, 'cannot change object properties');
+        b.obj.d = 1;
+        strictEqual(b.obj.d, undefined, 'cannot add new property');
+        delete b.obj.b;
+        strictEqual(b.obj.b, 2, 'cannot delete properties');
 
     });
 

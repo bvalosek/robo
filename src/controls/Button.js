@@ -4,7 +4,7 @@ define(function(require, exports, module) {
 
     var Button = ClickControl.extend({
 
-        __override__tagName: 'button',
+        __override__readonly__tagName: 'button',
 
         __constructor__Button: function(opts)
         {

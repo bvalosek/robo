@@ -5,16 +5,10 @@ define(function(require, exports, module) {
 
     var CheckBox = ModelControl.extend({
 
-        __constructor__CheckBox: function(opts)
-        {
-            _(opts).extend({
-                tagName: 'input',
-                attributes: {
-                    type: 'checkbox'
-                }
-            });
+        __override__readonly__tagName: 'input',
 
-            CheckBox.Super.call(this, opts);
+        __override__readonly__attributes: {
+            type: 'checkbox'
         },
 
         __viewEvent__click: function()
