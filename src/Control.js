@@ -10,9 +10,6 @@ define(function(require, exports, module) {
         __constructor__Control: function(opts)
         {
             Control.Super.apply(this, arguments);
-
-            if (opts && opts.attributes)
-                this._attributes = opts.attributes;
         }
 
     });

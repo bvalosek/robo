@@ -5,9 +5,9 @@ define(function(require, exports, module) {
     // interface for anything that should be able to handle a click event from
     // a view-like
     var Clickable = compose.defineMixin({
+        __name__: 'Clickable',
 
         __abstract__viewevent__click : undefined
-
     });
 
     return Clickable;

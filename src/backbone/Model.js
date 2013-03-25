@@ -6,6 +6,7 @@ define(function(require, exports, module) {
     var Model = Backbone.Model.extend();
     compose.mixin(Model.prototype, compose.withCompose);
     Model.__annotations__ = {};
+    Model.__name__ = 'BackboneModel';
 
     return Model;
 });

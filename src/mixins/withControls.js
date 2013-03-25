@@ -9,6 +9,7 @@ define(function(require, exports, module) {
     // onContolChange calls
     var withControls = compose.defineMixin(
     {
+        __name__: 'withControls',
 
         // take over the render function make sure it is only called once, and
         // then render the controls after every seperate call

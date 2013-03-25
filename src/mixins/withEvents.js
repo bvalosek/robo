@@ -7,6 +7,7 @@ define(function(require, exports, module) {
     var withEvents =  function() {
         _(this).extend(Backbone.Events);
     };
+    withEvents.__name__ = 'withEvents';
 
     return withEvents;
 

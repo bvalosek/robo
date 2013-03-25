@@ -2,7 +2,6 @@ define(function(require, exports, module) {
 
     var compose     = require('./compose');
     var Application = require('./Application');
-    var Base        = require('./Base');
     var Backbone    = require('backbone');
     var helpers     = require('./helpers');
     var _           = require('underscore');

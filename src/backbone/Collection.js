@@ -6,6 +6,7 @@ define(function(require, exports, module) {
     var Collection = Backbone.Collection.extend();
     compose.mixin(Collection.prototype, compose.withCompose);
     Collection.__annotations__ = {};
+    Collection.__name__ = 'BackboneCollection';
 
     return Collection;
 });

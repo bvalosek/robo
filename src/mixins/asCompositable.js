@@ -5,6 +5,8 @@ define(function(require, exports, module) {
 
     var asCompositable = compose.defineMixin(
     {
+        __name__: 'asCompositable',
+
         addView: function(view)
         {
             this._views = this._views || [];

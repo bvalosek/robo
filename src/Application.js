@@ -1,6 +1,5 @@
 define(function(require, exports, module) {
 
-    var Base           = require('./Base');
     var View           = require('./View');
     var log            = require('./log');
     var PageManager    = require('./PageManager');
@@ -9,8 +8,9 @@ define(function(require, exports, module) {
     var Backbone       = require('backbone');
     var _              = require('underscore');
     var $              = require('jquery');
+    var compose        = require('./compose');
 
-    var Application = Base.using(withEvents).extend({
+    var Application = compose.Object.using(withEvents).extend({
 
         __constructor__Application: function() {
             if (Application.context)
