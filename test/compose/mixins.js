@@ -76,11 +76,6 @@
             __name__: 'ChildME'
         });
 
-        console.log(helpers.prettySig(Child1));
-        console.log(helpers.prettySig(Child2));
-        console.log(helpers.prettySig(ChildM));
-        console.log(helpers.prettySig(ChildME));
-
         equal(ChildME.Super.Super.__name__, 'Child1', 'Extended mixin grandparent name');
 
         var ChildMixDirect = Child2.using(TestMix).extend({

@@ -16,8 +16,8 @@ define(function(require, exports, module) {
         // annotation are our own props
         isMixin: function(Ctor)
         {
-            var mixins = _(Ctor.findMembers('MIXIN'),
-                Ctor.findMembers('AUGMENTED')).union();
+            var mixins = Ctor.findMembers('MIXIN')
+                .concat(Ctor.findMembers('AUGMENTED'));
 
             return _(mixins).find(function(key) {
                 return Ctor.prototype.hasOwnProperty(key);

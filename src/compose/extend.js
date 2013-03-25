@@ -103,7 +103,6 @@ define(function(require, exports, module) {
                     using: mixinMethods.makeUsing(Child)
                 });
 
-                console.log(helpers.prettySig(Child));
                 return Child;
             };
         },
