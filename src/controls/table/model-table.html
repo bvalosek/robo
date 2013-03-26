@@ -1,0 +1,17 @@
+<%
+    var _            = require('underscore');
+    var TemplateView = require('robo/TemplateView');
+%>
+
+<tbody>
+<% _(model.attributes).each(function(val, key) { %>
+<tr>
+    <td><%= key %></td>
+    <td>
+        <% if (!_(val).isObject()) { %>
+            <%= val %>
+        <% } %>
+    </td>
+</tr>
+<% }) %>
+</tbody>
