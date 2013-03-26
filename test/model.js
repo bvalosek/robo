@@ -62,4 +62,44 @@ define(function(require) {
         deepEqual(m.toJSON(), { ro:1, con:3}, 'hidden attribute not exposed in model');
     });
 
+    test('nested models via propigate annotation', function() {
+        var M = Model.extend({
+            __attribute__propigate__sub: null
+        });
+
+        var Sub = Model.extend({
+            __attribute__name: 'sub module'
+        });
+
+        var m = new M();
+        var q = new helpers.Q();
+        m.on('all', function(e) { q.push(e); });
+
+        m.sub = new Sub();
+        q.take(2).then(function(a) {
+            strictEqual(helpers.sameArrays(a,
+                ['change', 'change:sub']), true,
+                'setting a propigated member triggers change');
+        });
+
+        m.sub.name = '123';
+        q.take(3).then(function(a) {
+            strictEqual(helpers.sameArrays(a,
+                ['change', 'sub:change', 'sub:change:name']), true,
+                'setting a propigated members member triggers change');
+        });
+
+        var sub = m.sub;
+        m.sub = null;
+        q.take(2).then(function(a) {
+            strictEqual(helpers.sameArrays(a,
+                ['change', 'change:sub']), true,
+                'clearing property triggers change');
+        });
+
+        sub.name = 'abcd';
+        strictEqual(q.events.length, 0, 'changing disconnected model does not trigger event in parent');
+
+    });
+
 });
