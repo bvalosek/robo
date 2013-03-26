@@ -1,9 +1,10 @@
 define(function(require) {
 
-    var Model   = require('robo/Model');
-    var $       = require('jquery');
-    var compose = require('robo/compose');
-    var helpers = require('./helpers');
+    var Model          = require('robo/Model');
+    var $              = require('jquery');
+    var compose        = require('robo/compose');
+    var composeHelpers = require('robo/compose/helpers');
+    var helpers        = require('./helpers');
 
     module('Model');
 
@@ -83,9 +84,9 @@ define(function(require) {
         });
 
         m.sub.name = '123';
-        q.take(3).then(function(a) {
+        q.take(4).then(function(a) {
             strictEqual(helpers.sameArrays(a,
-                ['change', 'sub:change', 'sub:change:name']), true,
+                ['change', 'change:sub', 'sub:change', 'sub:change:name']), true,
                 'setting a propigated members member triggers change');
         });
 
@@ -99,6 +100,56 @@ define(function(require) {
 
         sub.name = 'abcd';
         strictEqual(q.events.length, 0, 'changing disconnected model does not trigger event in parent');
+
+    });
+
+    test('nested collections via propigate', function() {
+
+        var Person = Model.extend({
+            __constructor__Person: function()
+            {
+                Person.Super.apply(this, arguments);
+                this.family = new Person.Collection();
+                this.friends = new Person.Collection();
+            },
+
+            __attribute__propigate__family : null,
+            __attribute__propigate__friends : null
+        });
+
+        window.Person = Person;
+        window.person = new Person();
+
+        var q = new helpers.Q();
+
+        person.on('all', function(e) { console.log(e); q.push(e); });
+
+
+        person.family.add({id:1, name: 'bob'});
+        q.take(3).then(function(a) {
+            strictEqual(helpers.sameArrays(a,
+                ['change', 'change:family', 'family:add']), true,
+                'adding model to collection triggers events');
+        });
+
+        person.family.get(1).name = 'billy';
+        q.take(4).then(function(a) {
+            strictEqual(helpers.sameArrays(a,
+                ['change', 'change:family', 'family:change',
+                    'family:change:name']), true,
+                'change model in collection triggers all events');
+        });
+
+        var p = person.family.get(1);
+        person.family.reset();
+        q.take(3).then(function(a) {
+            strictEqual(helpers.sameArrays(a,
+                ['change', 'change:family', 'family:reset']), true,
+                'reset collection triggers all events');
+        });
+
+        p.name = 'some name';
+        strictEqual(q.events.length, 0, 'no events fired on detached model change');
 
     });
 

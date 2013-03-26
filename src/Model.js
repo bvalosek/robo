@@ -58,8 +58,10 @@ define(function(require, exports, module) {
                         this.listenTo(v, 'all', function(e) {
                             this.trigger(key + ':' + e);
 
-                            if (e.indexOf(':') == -1)
+                            if (e.indexOf(':') == -1) {
                                 this.trigger('change');
+                                this.trigger('change:' + key);
+                            }
                         }.bind(this));
                     }
 
