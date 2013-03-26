@@ -36,12 +36,6 @@ define(function(require, exports, module) {
     var Base = function() {};
     mixinMethods.mixin(Base.prototype, withCompose);
 
-    // the annotations constants because I hate stringly type shit
-    var annotations = helpers.makeHash([
-        'override', 'virtual', 'abstract', 'new', 'get', 'set', 'property',
-        'result', 'memoize', 'once', 'before', 'after', 'wrapped', 'hidden',
-        'readonly', 'const', 'sealed', 'static']);
-
     // exposed API
     var compose = {
 

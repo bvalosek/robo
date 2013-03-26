@@ -5,6 +5,8 @@ define(function(require, exports, module) {
 
     var TemplateView = View.extend({
 
+        __virtual__template: '',
+
         __constructor__TemplateView: function()
         {
             TemplateView.Super.apply(this, arguments);
@@ -13,22 +15,22 @@ define(function(require, exports, module) {
         // generate the HTML from the template
         getHtml: function()
         {
-            if (!this._html)
+            if (!this.template)
                 return null;
 
             // cache template
-            if(!this.template) {
-                this.template = _.template(this._html);
+            if(!this._compiledTemplate) {
+                this._compiledTemplate = _.template(this.template);
             }
 
-            return this.template(this);
+            return this._compiledTemplate(this);
         },
 
         // change the template being used
         setTemplate: function(html)
         {
-            this._html = html;
-            this.template = null;
+            this.template = html;
+            this._compiledTemplate = null;
 
             return this;
         },
