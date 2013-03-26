@@ -3,6 +3,7 @@ define(function(require, exports, module) {
     var compose       = require('./compose');
     var BackboneModel = require('./backbone/Model');
     var Collection    = require('./Collection');
+    var helpers       = require('./compose/helpers');
     var _             = require('underscore');
 
     var Model = BackboneModel.extend({
@@ -15,7 +16,7 @@ define(function(require, exports, module) {
 
             // create initial attributes
             _(this.constructor.__annotations__).each(function(a, key) {
-                if(a.ATTRIBUTE) {
+                if(!a.PROPIGATE && a.ATTRIBUTE) {
                     this.addAttribute(key, this[key], a);
                 }
             }.bind(this));
@@ -23,6 +24,51 @@ define(function(require, exports, module) {
             if (obj)
                 this.setAttributes(obj);
 
+        },
+
+        // set up any event propigation
+        __processMember__: function(Child, key, val, annotations)
+        {
+            if (!annotations.PROPIGATE)
+                return;
+
+            // setup getter/setter for propigate
+            var _key = '_' + key;
+            helpers.defHidden(Child, _key, val);
+
+            Object.defineProperty(Child.prototype, key, {
+                get: function() { return this[_key]; },
+
+                set:  function(v) {
+                    if (v === this[_key])
+                        return;
+
+                    // unbind exisiting
+                    if (this[_key] && this[_key].off)
+                        this.stopListening(this[_key]);
+
+                    // define attribute to peek into model
+                    Object.defineProperty(this.attributes, key, {
+                        get: function() { return v.toJSON ? v.toJSON() : v; },
+                        enumerable: true, configurable: true
+                    });
+
+                    // pipe all events to parents namespaced to this key
+                    if (v && v.on) {
+                        this.listenTo(v, 'all', function(e) {
+                            this.trigger(key + ':' + e);
+
+                            if (e.indexOf(':') == -1)
+                                this.trigger(e);
+                        }.bind(this));
+                    }
+
+                    // ensure we also trigger a change event for this member
+                    this[_key] = v;
+                    this.trigger('change');
+                    this.trigger('change:' + key);
+                }, enumerable: true, configurable: true
+            });
         },
 
         // Static class let's us make collections via model classes
