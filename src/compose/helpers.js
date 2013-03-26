@@ -24,6 +24,19 @@ define(function(require, exports, module) {
             });
         },
 
+        // chain of parents
+        parentChain: function(Ctor, a)
+        {
+            a = a || [];
+
+            if (Ctor.Super) {
+                a.push(Ctor.Super);
+                helpers.parentChain(Ctor.Super, a);
+            }
+
+            return a;
+        },
+
         // create a function that when called, has 2 arguments: the original fn
         // function, as well as all the arguments passed to it
         wrap: function(fn, wrapper, context)
@@ -90,7 +103,7 @@ define(function(require, exports, module) {
 
                 s += '    ' + (a ? a + ' ' : '') + key;
 
-                var val = Class.prototype[key];
+                var val = annotations.STATIC ? Class[key] : Class.prototype[key];
 
                 if (_(val).isFunction()) s += '()';
                 else if (_(val).isArray()) s += ' = []';

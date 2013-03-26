@@ -59,7 +59,7 @@ define(function(require, exports, module) {
                             this.trigger(key + ':' + e);
 
                             if (e.indexOf(':') == -1)
-                                this.trigger(e);
+                                this.trigger('change');
                         }.bind(this));
                     }
 
