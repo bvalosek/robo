@@ -43,7 +43,6 @@ define(function(require, exports, module) {
         // mixins
         defineMixin : mixinMethods.defineMixin,
         defineClass : Base.extend,
-        annotations : annotations,
 
         // root object if needed
         Object      : Base,
