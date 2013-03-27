@@ -14,8 +14,9 @@ define(function(require, exports, module) {
     // new View object that is robo-like but extending from backbone.js
     var View = BackboneView.extend({
 
-        __new__virtual__readonly__tagName   : 'div',
-        __new__virtual__readonly__className : '',
+        __new__virtual__readonly__tagName    : 'div',
+        __new__virtual__readonly__className  : '',
+        __new__virtual__readonly__attributes : null,
 
         __constructor__View: function()
         {

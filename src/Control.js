@@ -4,9 +4,6 @@ define(function(require, exports, module) {
 
     var Control = TemplateView.extend({
 
-        // html tag attributes
-        __virtual__readonly__attributes: {},
-
         __constructor__Control: function(opts)
         {
             Control.Super.apply(this, arguments);

@@ -74,11 +74,6 @@ define(function(require, exports, module) {
                         theOld.attributes[x].value);
                 });
 
-                // any additional?
-                _(v.attributes).each(function(val, key) {
-                    $new.attr(key, val);
-                });
-
                 // swap n set
                 $target.after($new).remove();
                 v.setElement($new).render();
