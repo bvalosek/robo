@@ -1,6 +1,9 @@
 define(function(require, exports, module) {
 
     var ModelControl = require('./ModelControl');
+    var Control      = require('../Control');
+    var Model        = require('robo/Model');
+    var Collection   = require('robo/Collection');
 
     var ModelTable = ModelControl.extend({
 

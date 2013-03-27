@@ -1,17 +1,34 @@
 <%
     var _            = require('underscore');
     var TemplateView = require('robo/TemplateView');
+    var Model        = require('robo/Model');
+    var Collection   = require('robo/Collection');
 %>
 
-<tbody>
-<% _(model.attributes).each(function(val, key) { %>
-<tr>
-    <td><%= key %></td>
-    <td>
-        <% if (!_(val).isObject()) { %>
-            <%= val %>
-        <% } %>
-    </td>
-</tr>
-<% }) %>
-</tbody>
+<% var makeTable = function(m, skipWrapping) { %>
+    <% if (!skipWrapping) {  %><table><% } %>
+        <thead>
+            <th colspan="2"><%= m.constructor.__name__ || 'Model?' %>:<%= m.id || m.cid %></th>
+        </thead>
+        <tbody>
+        <% _(m.attributes).each(function(val, key) {
+            var mv = m[key];
+        %>
+        <tr>
+            <td><%= key %></td>
+            <td>
+                <% if (!_(val).isObject()) { %>
+                    <%= val %>
+                <% } else if (mv && mv.is && mv.is(Model)) { %>
+                    <% makeTable(m[key]) %>
+                <% } else if (mv && mv.is && mv.is(Collection)) { %>
+                    <% mv.each(function(cm) { makeTable(cm); }) %>
+                <% } %>
+            </td>
+        </tr>
+        <% }) %>
+        </tbody>
+    <% if (!skipWrapping) {  %></table><% } %>
+<% }; %>
+
+<% makeTable(model, true) %>
