@@ -62,26 +62,13 @@ define(function(require, exports, module) {
             // the assumption that the DOM will be ready as soon as the calling
             // stack frame has cleared.
             _(function() {
-                var tagName = v.$el.prop('tagName');
-
                 var $target = this.$('[data-cid="' + v.cid + '"]');
-                var $new = $('<' + tagName + '>');
-
-                // copy over all attributes
-                var theOld = v.$el[0];
-                $.each(theOld.attributes, function(x) {
-                    $new.attr(theOld.attributes[x].name,
-                        theOld.attributes[x].value);
-                });
-
-                // swap n set
-                $target.after($new).remove();
-                v.setElement($new).render();
-
+                v.setElement($target);
+                v.render();
             }.bind(this)).defer();
 
             // return placeholder text to insert
-            return  $('<div>').attr('data-cid', v.cid).prop('outerHTML');
+            return  v.$el.attr('data-cid', v.cid).prop('outerHTML');
         }
 
     });
