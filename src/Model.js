@@ -23,7 +23,6 @@ define(function(require, exports, module) {
 
             if (obj)
                 this.setAttributes(obj);
-
         },
 
         // set up any event propigation
@@ -105,7 +104,7 @@ define(function(require, exports, module) {
             if (annotations && annotations.HIDDEN) {
                 actualKey = '_' + key;
             } else {
-                this.attributes[key] = initVal;
+                this.set(key, initVal);
             }
 
             Object.defineProperty(this, key, {

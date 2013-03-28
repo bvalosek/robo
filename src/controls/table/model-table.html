@@ -22,7 +22,16 @@
                 <% } else if (mv && mv.is && mv.is(Model)) { %>
                     <% makeTable(m[key]) %>
                 <% } else if (mv && mv.is && mv.is(Collection)) { %>
-                    <% mv.each(function(cm) { makeTable(cm); }) %>
+                    <table>
+                        <thead>
+                            <th><%= mv.constructor.__name__ || 'Collection' %></th>
+                        </thead>
+                        <tbody>
+                        <% mv.each(function(cm) { %>
+                            <tr><td><% makeTable(cm); %></tr></td>
+                        <% }) %>
+                        </tbody>
+                    </table>
                 <% } %>
             </td>
         </tr>
