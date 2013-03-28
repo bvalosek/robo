@@ -86,7 +86,7 @@ define(function(require) {
         m.sub.name = '123';
         q.take(4).then(function(a) {
             strictEqual(helpers.sameArrays(a,
-                ['change', 'change:sub', 'sub:change', 'sub:change:name']), true,
+                ['change', 'change:sub', 'change:sub:change:name', 'change:sub:change']), true,
                 'setting a propigated members member triggers change');
         });
 
@@ -122,21 +122,21 @@ define(function(require) {
 
         var q = new helpers.Q();
 
-        person.on('all', function(e) { console.log(e); q.push(e); });
+        person.on('all', function(e) { q.push(e); });
 
 
         person.family.add({id:1, name: 'bob'});
         q.take(3).then(function(a) {
             strictEqual(helpers.sameArrays(a,
-                ['change', 'change:family', 'family:add']), true,
+                ['change', 'change:family', 'change:family:add']), true,
                 'adding model to collection triggers events');
         });
 
         person.family.get(1).name = 'billy';
         q.take(4).then(function(a) {
             strictEqual(helpers.sameArrays(a,
-                ['change', 'change:family', 'family:change',
-                    'family:change:name']), true,
+                ['change', 'change:family', 'change:family:change',
+                    'change:family:change:name']), true,
                 'change model in collection triggers all events');
         });
 
@@ -144,7 +144,7 @@ define(function(require) {
         person.family.reset();
         q.take(3).then(function(a) {
             strictEqual(helpers.sameArrays(a,
-                ['change', 'change:family', 'family:reset']), true,
+                ['change', 'change:family', 'change:family:reset']), true,
                 'reset collection triggers all events');
         });
 
