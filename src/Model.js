@@ -55,8 +55,10 @@ define(function(require, exports, module) {
                     // pipe all events to parents namespaced to this key
                     if (v && v.on) {
                         this.listenTo(v, 'all', function(e) {
-                            this.trigger(key + ':' + e);
+                            this.trigger('change:' + key + ':' + e);
 
+                            // the typical messages if we get to the root
+                            // change event
                             if (e.indexOf(':') == -1) {
                                 this.trigger('change');
                                 this.trigger('change:' + key);
@@ -65,6 +67,7 @@ define(function(require, exports, module) {
                     }
 
                     // ensure we also trigger a change event for this member
+                    // when actually setting the propigate
                     this[_key] = v;
                     this.trigger('change');
                     this.trigger('change:' + key);
