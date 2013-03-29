@@ -7,7 +7,7 @@
     "backbone-amd": "1.0.0",
     "underscore-amd": "1.4.4",
     "requirejs": "2.1.5",
-    "compose": "bvalosek/compose.js#0.9.1"
+    "compose.js": "bvalosek/compose.js#0.9.1"
   },
   "devDependencies": {
     "qunit": "1.11.0"
