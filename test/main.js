@@ -6,7 +6,7 @@ require.config({
     // aliases
     paths: {
         'robo'       : '../src',
-        'compose'    : '../components/compose/compose',
+        'compose'    : '../components/compose.js/compose',
         'underscore' : '../components/underscore-amd/underscore',
         'jquery'     : '../components/jquery/jquery',
         'backbone'   : '../components/backbone-amd/backbone'
@@ -15,5 +15,6 @@ require.config({
 });
 
 require([
-    './unit/model'
+    './unit/model',
+    './unit/option-provider'
 ]);
