@@ -1,10 +1,9 @@
 define(function(require, exports, module) {
 
-    var compose       = require('./compose');
     var BackboneModel = require('./backbone/Model');
     var Collection    = require('./Collection');
-    var helpers       = require('./compose/helpers');
     var _             = require('underscore');
+    var compose       = require('compose');
 
     var Model = BackboneModel.extend({
 
@@ -33,7 +32,7 @@ define(function(require, exports, module) {
 
             // setup getter/setter for propigate
             var _key = '_' + key;
-            helpers.defHidden(Child, _key, val);
+            compose.defineHidden(Child, _key, val);
 
             Object.defineProperty(Child.prototype, key, {
                 get: function() { return this[_key]; },

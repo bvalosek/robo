@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 
-    var compose = require('../compose');
     var _       = require('underscore');
+    var compose = require('compose');
 
     var asCompositable = compose.defineMixin(
     {

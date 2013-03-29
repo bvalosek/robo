@@ -1,6 +1,5 @@
 define(function(require, exports, module) {
 
-    var compose            = require('./compose');
     var Backbone           = require('backbone');
     var BackboneCollection = require('./backbone/Collection');
 

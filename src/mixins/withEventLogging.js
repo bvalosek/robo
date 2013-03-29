@@ -1,8 +1,8 @@
 define(function(require, exports, module) {
 
-    var compose = require('../compose');
     var log     = require('../log');
     var _       = require('underscore');
+    var compose = require('compose');
 
     // mixin to output any triggered events
     var withEventLogging = compose.defineMixin(

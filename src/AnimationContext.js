@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-    var compose = require('./compose');
+    var compose = require('compose');
 
     var MS_THRESHOLD = 17;
 

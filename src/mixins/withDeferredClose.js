@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-    var compose = require('robo/compose');
+    var compose = require('compose');
     var _       = require('underscore');
 
     // modify the render and close behavior to delay the removal from the DOM

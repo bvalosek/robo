@@ -1,8 +1,8 @@
 define(function(require, exports, module) {
 
     var _       = require('underscore');
+    var compose = require('compose');
     var log     = require('./log');
-    var compose = require('./compose');
 
     var PageManager = compose.defineClass({
 

@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     var helpers = require('../helpers');
     var _       = require('underscore');
     var $       = require('jquery');
-    var compose = require('../compose');
+    var compose = require('compose');
 
     // give a view the ability to create controls that are then handled via
     // onContolChange calls

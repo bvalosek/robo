@@ -8,7 +8,7 @@ define(function(require, exports, module) {
     var Backbone       = require('backbone');
     var _              = require('underscore');
     var $              = require('jquery');
-    var compose        = require('./compose');
+    var compose        = require('compose');
 
     var Application = compose.Object.using(withEvents).extend({
 
