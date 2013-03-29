@@ -39,8 +39,7 @@ define(function(require, exports, module) {
         __override__getOptions: function()
         {
             return this.options;
-        },
-
+        }
 
     });
 

@@ -11,7 +11,7 @@ define(function(require, exports, module) {
 
         __abstract__getSelectedOption: undefined,
 
-        __virtual__getDefaultOption: function() {},
+        __virtual__getDefaultOption: function() {}
 
     });
 
