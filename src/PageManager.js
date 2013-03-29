@@ -28,7 +28,8 @@ define(function(require, exports, module) {
 
             var m;
             var page = _(this.urls).find(function(p) {
-                return (m = url.match(p.pattern));
+                m = url.match(p.pattern);
+                return m;
             });
 
             if (!page) {

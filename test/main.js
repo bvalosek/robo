@@ -6,19 +6,14 @@ require.config({
     // aliases
     paths: {
         'robo'       : '../src',
-        'underscore' : './vendor/underscore',
-        'jquery'     : './vendor/jquery-1.9.1',
-        'backbone'   : './vendor/backbone'
+        'compose'    : '../components/compose/compose',
+        'underscore' : '../components/underscore-amd/underscore',
+        'jquery'     : '../components/jquery/jquery',
+        'backbone'   : '../components/backbone-amd/backbone'
     }
 
 });
 
 require([
-    './compose/inheritance',
-    './compose/modifiers',
-    './compose/mixins',
-    './compose/api',
-    './compose/types',
-    './compose/accessors',
-    './model'
+    './unit/model'
 ]);

@@ -2,9 +2,7 @@ define(function(require) {
 
     var Model          = require('robo/Model');
     var $              = require('jquery');
-    var compose        = require('robo/compose');
-    var composeHelpers = require('robo/compose/helpers');
-    var helpers        = require('./helpers');
+    var helpers        = require('../helpers');
 
     module('Model');
 
