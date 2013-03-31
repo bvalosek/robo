@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 
     var Control   = require('../Control');
-    var Clickable = require('../mixins/Clickable');
+    var Clickable = require('../interfaces/Clickable');
 
     var ClickControl = Control.using(Clickable).extend({
 

@@ -16,5 +16,6 @@ require.config({
 
 require([
     './unit/model',
+    './unit/observable',
     './unit/option-provider'
 ]);
