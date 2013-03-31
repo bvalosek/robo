@@ -23,9 +23,8 @@ define(function(require, exports, module) {
 
             this.pageManager = new PageManager(this);
 
-            this.window = new View()
-                .setElement('body')
-                .mixin(asCompositable);
+            this.window = new (View.using(asCompositable))()
+                .setElement('body');
 
             var d = this.onStart();
 

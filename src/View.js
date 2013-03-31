@@ -1,15 +1,11 @@
 define(function(require, exports, module) {
 
-    var compose     = require('compose');
-    var Application = require('./Application');
-    var Backbone    = require('backbone');
-    var helpers     = require('./helpers');
-    var _           = require('underscore');
-    var $           = require('jquery');
-
-    // create BackboneView object that has the compose.js goodies baked in
-    var BackboneView = Backbone.View.extend();
-    compose.mixin(BackboneView.prototype, compose.withCompose);
+    var compose      = require('compose');
+    var Application  = require('./Application');
+    var helpers      = require('./helpers');
+    var _            = require('underscore');
+    var $            = require('jquery');
+    var BackboneView = require('./backbone/View');
 
     // new View object that is robo-like but extending from backbone.js
     var View = BackboneView.extend({
