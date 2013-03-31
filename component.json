@@ -1,6 +1,6 @@
 {
   "name": "robo",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Robo is a comprehensive Javascript framework for large-scale client applications.",
   "dependencies": {
     "jquery": "1.9.1",

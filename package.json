@@ -1,6 +1,6 @@
 {
   "name": "robo",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "Robo is a comprehensive Javascript framework for large-scale client applications.",
   "main": "src/Application.js",
   "directories": {
