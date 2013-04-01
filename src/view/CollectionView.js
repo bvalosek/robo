@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 
-    var ViewGroup = require('./ViewGroup');
+    var ViewGroup    = require('./ViewGroup');
+    var TemplateView = require('./TemplateView');
 
     // Take a collection and a View to render for each collection, manage
     // intelligent populating / removing of all the children
@@ -12,11 +13,18 @@ define(function(require, exports, module) {
 
             this._viewCache = {};
 
+            this.View = this.View || CollectionView.BasicView;
+
             // blindly re-render the whole list on these events, not best if
             // they are being called frequently
             this.listenTo(this.collection, 'add', this.render);
             this.listenTo(this.collection, 'reset', this.reset);
         },
+
+        // shitty basic view
+        __static__BasicView: TemplateView.extend({
+            __override__template: '<%= id || cid %>',
+        }),
 
         // given an index, fetch the view and bind the model
         getView: function(model)
