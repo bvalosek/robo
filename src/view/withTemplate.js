@@ -1,18 +1,13 @@
 define(function(require, exports, module) {
 
-    var View = require('./View');
-    var _    = require('underscore');
+    var compose = require('compose');
+    var _       = require('underscore');
 
-    var TemplateView = View.extend({
+    // transforms a view-like into something that uses underscore templates
+    var withTemplate = compose.defineMixin({
+        __name__: 'withTemplate',
 
-        __virtual__template: '',
-
-        __constructor__TemplateView: function()
-        {
-            TemplateView.Super.apply(this, arguments);
-        },
-
-        // generate the HTML from the template
+        // generate the HTML from the template, caching the templating function
         getHtml: function()
         {
             if (!this.template)
@@ -26,7 +21,8 @@ define(function(require, exports, module) {
             return this._compiledTemplate(this);
         },
 
-        // change the template being used
+        // change the template being used, but doesn't compile until first
+        // getHtml call
         setTemplate: function(html)
         {
             this.template = html;
@@ -35,16 +31,14 @@ define(function(require, exports, module) {
             return this;
         },
 
-        // clobber render
-        __override__render: function()
+        // Will completely set the internal HTML of the element
+        __before__render: function()
         {
-            TemplateView.Super.prototype.render.call(this);
-
             this.$el.html(this.getHtml());
             return this;
         }
 
     });
 
-    return TemplateView;
+    return withTemplate;
 });

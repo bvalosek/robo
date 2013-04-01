@@ -2,8 +2,7 @@ define(function(require, exports, module) {
 
     var compose = require('compose');
 
-    // any object that implements the backbone-style events, means we can call
-    // listenTo(obj) on it
+    // ensure that we can listen to an object
     var Observable = compose.defineMixin({
 
         __abstract__on: undefined,

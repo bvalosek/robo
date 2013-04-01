@@ -1,15 +1,14 @@
 define(function(require, exports, module) {
 
-    var Control   = require('../Control');
-    var Clickable = require('../interfaces/Clickable');
+    var View      = require('../view/View');
+    var Clickable = require('./Clickable');
 
-    var ClickControl = Control.using(Clickable).extend({
+    var ClickControl = View.using(Clickable).extend({
 
         __constructor__ClickControl: function(opts)
         {
             ClickControl.Super.apply(this, arguments);
 
-            opts = opts || {};
             this._onClick = opts.onClick.bind(opts.context || opts.parentView);
         },
 

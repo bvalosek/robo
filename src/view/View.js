@@ -1,11 +1,9 @@
 define(function(require, exports, module) {
 
     var compose      = require('compose');
-    var Application  = require('./Application');
-    var helpers      = require('./helpers');
     var _            = require('underscore');
     var $            = require('jquery');
-    var BackboneView = require('./backbone/View');
+    var BackboneView = require('../backbone/View');
 
     // new View object that is robo-like but extending from backbone.js
     var View = BackboneView.extend({
@@ -17,6 +15,10 @@ define(function(require, exports, module) {
         __constructor__View: function()
         {
             View.Super.apply(this, arguments);
+
+            // forget about the crap on options, keep it all on the view
+            _(this).extend(this.options);
+            this.options = [];
 
             _(this.constructor.findMembers('VIEWEVENT')).each(function(key) {
                 this.delegate(key, this[key]);
@@ -125,6 +127,7 @@ define(function(require, exports, module) {
             return this.$el.attr('class');
         },
 
+        // override to actually do something
         __new__virtual__render: function()
         {
             return this;

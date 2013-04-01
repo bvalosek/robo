@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-    var helpers = require('../helpers');
+    var helpers = require('../util/helpers');
     var _       = require('underscore');
     var $       = require('jquery');
     var compose = require('compose');
@@ -34,8 +34,12 @@ define(function(require, exports, module) {
         __before__close: function()
         {
             this._close = true;
+            this.controls.forEach(function(c) { c.close(); });
         },
 
+        // member function that will spit out some HTML placeholder for a new
+        // control, and then once the html hits the dom, replace with our
+        // actual control
         controlFactory: function(View, opts)
         {
             // apply all the arguments to the constructor, give the control a
@@ -48,9 +52,6 @@ define(function(require, exports, module) {
             // add to control list if parent wants it
             this.controls = this.controls || [];
             this.controls.push(v);
-
-            // make sure to close thew new v when this view closes
-            this.on('close', v.close.bind(v));
 
             // and remove this shit from parent when it closes
             this.listenTo(v, 'close', function() {

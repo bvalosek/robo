@@ -11,11 +11,19 @@ define(function(require, exports, module) {
         {
             Label.Super.apply(this, arguments);
 
-            this.caption = opts.caption || 'Label ' + this.cid;
-
             // bind function to parent
             if (_(this.caption).isFunction())
                 this.caption = this.caption.bind(opts.parentView);
+
+            // provided mode and attribute but no caption
+            else if (this.model && this.attribute && !this.caption)
+                this.caption = function() {
+                    return this.model.get(this.attribute);
+                }.bind(this);
+
+            // no model or attribute
+            else (!this.model || !this.attribute)
+                this.caption = this.caption || 'Label ' + this.cid;
         },
 
         getCaption: function()

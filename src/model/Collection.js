@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 
     var Backbone           = require('backbone');
-    var BackboneCollection = require('./backbone/Collection');
+    var BackboneCollection = require('../backbone/Collection');
 
     var Collection = BackboneCollection.extend({
 

@@ -10,8 +10,7 @@ define(function(require, exports, module) {
         {
             Button.Super.apply(this, arguments);
 
-            opts = opts || {};
-            this.caption  = opts.caption || 'Button ' + this.cid;
+            this.caption  = this.caption || 'Button ' + this.cid;
         },
 
         // just update the button caption on render

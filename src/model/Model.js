@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-    var BackboneModel = require('./backbone/Model');
+    var BackboneModel = require('../backbone/Model');
     var Collection    = require('./Collection');
     var _             = require('underscore');
     var compose       = require('compose');

@@ -11,7 +11,7 @@ define(function(require, exports, module) {
         __constructor__RadioGroup: function()
         {
             RadioGroup.Super.apply(this, arguments);
-        },
+        }
 
     });
 

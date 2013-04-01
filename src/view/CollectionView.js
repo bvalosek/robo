@@ -1,19 +1,14 @@
 define(function(require, exports, module) {
 
-    var Control        = require('../Control');
-    var asCompositable = require('../mixins/asCompositable');
-    var View           = require('../View');
-    var _              = require('underscore');
-    var TemplateView   = require('../TemplateView');
+    var ViewGroup = require('./ViewGroup');
 
-    var CollectionView = Control.using(asCompositable).extend({
+    // Take a collection and a View to render for each collection, manage
+    // intelligent populating / removing of all the children
+    var CollectionView = ViewGroup.extend({
 
-        __constructor__CollectionView: function(opts)
+        __constructor__CollectionView: function()
         {
             CollectionView.Super.apply(this, arguments);
-
-            this.collection = opts.collection;
-            this.View       = opts.View;
 
             this._viewCache = {};
 
@@ -56,10 +51,7 @@ define(function(require, exports, module) {
 
         __override__render: function()
         {
-            // remove all current views
-            // this.closeViews();
-
-            // add each one to our DOM #expensive
+            // add each one to our DOM. Skips if already added
             this.collection.each(function(model) {
                 var v = this.getView(model);
                 if (v)

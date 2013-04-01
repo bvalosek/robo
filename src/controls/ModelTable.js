@@ -1,13 +1,16 @@
 define(function(require, exports, module) {
 
+    var _            = require('underscore');
+    var Model        = require('robo/model/Model');
+    var Collection   = require('robo/model/Collection');
+    var TemplateView = require('robo/view/TemplateView');
+    var withTemplate = require('../view/withTemplate');
     var ModelControl = require('./ModelControl');
-    var Control      = require('../Control');
-    var Model        = require('robo/Model');
-    var Collection   = require('robo/Collection');
 
-    var ModelTable = ModelControl.extend({
+    var ModelTable = ModelControl.using(withTemplate).extend({
 
-        __override__template : require('text!./table/model-table.html'),
+        template : require('text!./table/model-table.html'),
+
         __override__readonly__tagName : 'table',
 
         __constructor__ModelTable: function()

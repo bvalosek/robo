@@ -8,7 +8,6 @@ define(function(require, exports, module) {
     // used on a renderable
     var withTimers = compose.defineMixin(
     {
-
         createTimer: function(fn, timeout, context)
         {
             this._timers = this._timers || [];
