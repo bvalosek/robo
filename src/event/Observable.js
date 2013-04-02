@@ -4,6 +4,7 @@ define(function(require, exports, module) {
 
     // ensure that we can listen to an object
     var Observable = compose.defineMixin({
+        __name__: 'Observable',
 
         __abstract__on: undefined,
         __abstract__off: undefined,

@@ -7,7 +7,7 @@ define(function(require, exports, module) {
 
     // mixin backbone events
     var withEvents =  compose.using(Observable).defineMixin(Backbone.Events);
-    withEvents.__name__ = 'withEvents';
+    compose.defineHidden(withEvents, { __name__: 'withEvents' });
 
     return withEvents;
 
