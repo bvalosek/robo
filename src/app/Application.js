@@ -5,6 +5,7 @@ define(function(require, exports, module) {
     var Log        = require('robo/util/Log');
     var compose    = require('compose');
 
+    // Starting point for a Robo app. Call Application#start() to boot up
     return compose.class('Application')
         .uses(WithEvents)
         .implements(Observable).define({

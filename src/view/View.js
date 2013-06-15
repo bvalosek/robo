@@ -5,9 +5,11 @@ define(function(require) {
 
     return compose.class('View').uses(WithEvents).define({
 
+        // initial values for creation only
         __virtual__readonly__tagName: 'div',
         __virtual__readonly__className: '',
 
+        // Create the cids and make sure we have an element to rock
         constructor: function(args)
         {
             // mixin stuff easily
@@ -27,6 +29,7 @@ define(function(require) {
 
             this.element = el;
             el.roboView = this;
+            return this;
         },
 
         unsetElement: function()
@@ -36,15 +39,23 @@ define(function(require) {
 
             this.element.roboView = undefined;
             this.element = undefined;
+            return this;
         },
 
-        // make sure we're pointing to a host DOM element
+        // Make sure we're pointing to a host DOM element
         ensureElement: function()
         {
             if (!this.element)
                 this.element = document.createElement(this.tagName);
 
             this.setElement(this.element);
+            return this;
+        },
+
+        // Should probably only be used for debugging
+        print: function(s)
+        {
+            this.element.innerText += s + '\n';
         }
     });
 
