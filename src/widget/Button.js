@@ -10,7 +10,7 @@ define(function(require) {
 
         __override__readonly__tagName: 'button',
 
-        __virtual__event__click: function(event) { }
+        __virtual__event__click: function(event) { console.log('hey'); }
 
     });
 

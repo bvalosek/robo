@@ -2,9 +2,10 @@ define(function(require) {
 
     var compose    = require('compose');
     var WithEvents = require('robo/event/WithEvents');
+    var PipeToDom  = require('robo/event/PipeToDom');
 
     // Any object that can be ansigned to a DOM node
-    return compose.class('View').uses(WithEvents).define({
+    return compose.class('View').uses(WithEvents, PipeToDom).define({
 
         // Initial values for creation only, should not be read during run-time
         // as assigning a new element to the View could potential mean that
@@ -17,6 +18,8 @@ define(function(require) {
         {
             // mixin stuff easily
             _(this).extend(args);
+
+            this.initEvents();
 
             this.cid = _.uniqueId(this.__name__ || 'view').toLowerCase();
             this.ensureElement();
@@ -32,6 +35,23 @@ define(function(require) {
 
             this.element = el;
             el.roboView = this;
+
+            // update events
+            var _this = this;
+            _(this._events).each(function(info, event) {
+                _(info).each(function(i) {
+                    _this.element.addEventListener(event, i.callback);
+                });
+            });
+
+            return this;
+        },
+
+        // Add a new robo view to an existing view
+        __fluent__appendView: function(view)
+        {
+            this.element.appendChild(view.element);
+            view.render();
             return this;
         },
 
@@ -53,25 +73,37 @@ define(function(require) {
 
         // Remove the the view from the DOM and destroy all events. This kills
         // the view and it is no longer usable after
-        close: function()
+        __fluent__close: function()
         {
+            return this;
         },
 
-        // Make sure we're pointing to a host DOM element
+        // Make sure we have a DOM element either in memory or already setup
         ensureElement: function()
         {
             if (!this.element)
                 this.element = document.createElement(this.tagName);
 
             this.setElement(this.element);
-            return this;
+        },
+
+        // Get any child nodes that have a robo View attached to them
+        getChildViews: function()
+        {
+            var views = [];
+
+            var nodes = this.element.childNodes;
+
+            for(var i = 0; i < nodes.length; i++)
+                if (nodes[i].roboView) views.push(nodes[i].roboView);
+
+            return views;
         },
 
         // Should probably only be used for debugging
-        __fluent__print: function(s)
+        print: function(s)
         {
             this.element.innerText += s + '\n';
-            return this;
         }
     });
 
