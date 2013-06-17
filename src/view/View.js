@@ -21,7 +21,7 @@ define(function(require) {
 
             this.initEvents();
 
-            this.cid = _.uniqueId(this.constructor.__name__ || 'View');
+            this.cid = _.uniqueId(this.constructor.__name__);
 
             // instantiate a dom node if we dont have one
             if (!this.element)
