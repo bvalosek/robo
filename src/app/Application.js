@@ -15,10 +15,11 @@ define(function(require, exports, module) {
             this.initEvents();
         },
 
-        __virtual__start: function()
+        __virtual__fluent__start: function()
         {
             Log.d('Application started');
             this.trigger('init');
+            return this;
         },
 
     });
