@@ -1,11 +1,11 @@
 define(function(require) {
 
-    var compose    = require('compose');
-    var WithEvents = require('robo/event/WithEvents');
-    var PipeToDom  = require('robo/event/PipeToDom');
+    var compose       = require('compose');
+    var WithEvents    = require('robo/event/WithEvents');
+    var WithDomEvents = require('robo/event/WithDomEvents');
 
     // Any object that can be ansigned to a DOM node
-    return compose.class('View').uses(WithEvents, PipeToDom).define({
+    return compose.class('View').uses(WithEvents, WithDomEvents).define({
 
         // Initial values for creation only, should not be read during run-time
         // as assigning a new element to the View could potential mean that
@@ -22,7 +22,12 @@ define(function(require) {
             this.initEvents();
 
             this.cid = _.uniqueId(this.__name__ || 'view').toLowerCase();
-            this.ensureElement();
+
+            // instantiate a dom node if we dont have one
+            if (!this.element)
+                this.element = document.createElement(this.tagName);
+
+            this.setElement(this.element);
         },
 
         // change the DOM element this guy is hosted by, and ensure the DOM
@@ -36,7 +41,7 @@ define(function(require) {
             this.element = el;
             el.roboView = this;
 
-            // update events
+            // update events on the DOM
             var _this = this;
             _(this._events).each(function(info, event) {
                 _(info).each(function(i) {
@@ -55,13 +60,25 @@ define(function(require) {
             return this;
         },
 
+        // Disconnect the DOM element from the view, should ONLY happen when
+        // we're about to re-assign the element as it is expected a View always
+        // has an element
         __fluent__unsetElement: function()
         {
             if (!this.element)
                 return;
 
+            // rmeove all events
+            var _this = this;
+            _(this._events).each(function(info, event) {
+                _(info).each(function(i) {
+                    _this.element.removeEventListener(event, i.callback);
+                });
+            });
+
             this.element.roboView = undefined;
             this.element = undefined;
+
             return this;
         },
 
@@ -75,16 +92,10 @@ define(function(require) {
         // the view and it is no longer usable after
         __fluent__close: function()
         {
+            this.getChildViews().forEach(function(v) { v.close(); });
+            this.element.parentNode.removeChild(this.element);
+
             return this;
-        },
-
-        // Make sure we have a DOM element either in memory or already setup
-        ensureElement: function()
-        {
-            if (!this.element)
-                this.element = document.createElement(this.tagName);
-
-            this.setElement(this.element);
         },
 
         // Get any child nodes that have a robo View attached to them
