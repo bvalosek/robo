@@ -1,7 +1,7 @@
 define(function(require) {
 
     var compose = require('compose');
-    var RJson   = require('robo/util/RJson');
+    var Parser  = require('robo/util/Parser');
 
     return compose.mixin('WithControls').define({
 
@@ -9,17 +9,22 @@ define(function(require) {
         // render
         process: function(element)
         {
-            var controlModule  = element.getAttribute('data-robo-control');
-            var controlOptions = element.getAttribute('data-robo-options');
-
-            var opts = controlOptions ? RJson.parse(controlOptions) : {};
+            var mod      = element.getAttribute('data-robo-control');
+            var options  = element.getAttribute('data-robo-options');
+            var bindings = element.getAttribute('data-robo-binding');
 
             // hope it has been loaded properly first
-            var Ctor = require(controlModule.replace(/\./g, '/'));
+            var Ctor = require(mod.replace(/\./g, '/'));
 
-            controlOptions         = opts;
+            // parse out bindings
+            var binds = Parser.parseOptions(bindings);
 
-            var v = new Ctor(controlOptions).setElement(element);
+            _(binds).each(function(target, key) {
+                console.log('binding', key, 'to', target);
+            });
+
+            // create and render
+            var v = new Ctor().setElement(element);
             v.render();
         },
 
