@@ -28,7 +28,6 @@ define(function(require) {
             var controls = this.element.querySelectorAll('[data-robo-control]');
             for (var i = 0; i < controls.length; i++)
                 this.process(controls[i]);
-
         },
 
         // take over the render function make sure it is only called once, and

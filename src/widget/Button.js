@@ -1,12 +1,12 @@
 define(function(require) {
 
     var compose       = require('compose');
-    var Widget        = require('robo/widget/Widget');
+    var View          = require('robo/view/View');
     var ClickListener = require('robo/view/ClickListener');
     var Log           = require('robo/util/Log');
 
     return compose.class('Button')
-        .extends(Widget)
+        .extends(View)
         .implements(ClickListener).define({
 
         __override__readonly__tagName: 'button',
