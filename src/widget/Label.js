@@ -7,7 +7,7 @@ define(function(require) {
 
         __override__readonly__tagName: 'button',
 
-        caption: 'hey',
+        __observable__caption: 'hey',
 
         __override__fluent__render: function()
         {

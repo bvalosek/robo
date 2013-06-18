@@ -9,9 +9,8 @@ define(function(require) {
         .extends(View)
         .implements(ClickListener).define({
 
-        __override__readonly__tagName: 'button',
-
-        caption: 'Button',
+        __override__readonly__tagName : 'button',
+        __observable__caption         : 'Button',
 
         __virtual__event__click: function(event)
         {

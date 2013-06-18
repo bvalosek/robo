@@ -23,6 +23,9 @@ define(function(require) {
 
             this.cid = _.uniqueId(this.constructor.__name__);
 
+            // redraw if an observable triggers
+            this.on('change', this.render.bind(this));
+
             // instantiate a dom node if we dont have one
             if (!this.element)
                 this.element = document.createElement(this.tagName);
