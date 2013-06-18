@@ -16,7 +16,7 @@ define(function(require) {
         },
 
         // Make sure to setup a static Collection that uses the stuff from the
-        // model object
+        // model object and getting the attributes ready
         __ondefine__: function(M)
         {
             var className  = M.__name__ + 'Collection';
@@ -31,8 +31,22 @@ define(function(require) {
 
             M[memberName] = C;
             M.__annotations__[memberName] = {STATIC: true};
-        }
 
+            // all the attributes
+            var _this = this;
+            _(M.__annotations__).each(function(a, key) {
+                if (a.ATTRIBUTE) {
+                    Object.defineProperty(M.prototype, key, {
+                        configurable: true, enumberable: true,
+                        get: function() {
+                            return this.attributes[key];
+                        },
+                        set: function(v) {
+                            this.set(key, v);
+                        }
+                    });
+                }
+            });
+        },
     });
-
 });

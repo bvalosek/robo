@@ -29,13 +29,13 @@ define(function(require, exports, module) {
                     Object.defineProperty(_this, key, {
                         configurable: true, enumberable: true,
                         get: function() {
-                            return _this._observables[key];
+                            return this._observables[key];
                         },
                         set: function(v) {
                             if (v === _this._observables[key]) return;
-                            _this._observables[key] = v;
-                            _this.trigger('change');
-                            _this.trigger('change:' + key);
+                            this._observables[key] = v;
+                            this.trigger('change');
+                            this.trigger('change:' + key);
                         }
                     });
                 }
