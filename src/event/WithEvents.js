@@ -25,6 +25,8 @@ define(function(require, exports, module) {
                     _this._observables      = _this.observables || {};
                     _this._observables[key] = _this[key];
 
+                    Log.d(key + ' is observable on ' + _this.constructor.__name__);
+
                     // install the getter/setter
                     Object.defineProperty(_this, key, {
                         configurable: true, enumberable: true,

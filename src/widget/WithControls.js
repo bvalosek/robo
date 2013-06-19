@@ -1,7 +1,8 @@
 define(function(require) {
 
-    var compose = require('compose');
-    var Parser  = require('robo/util/Parser');
+    var compose       = require('compose');
+    var Parser        = require('robo/util/Parser');
+    var RoboException = require('robo/util/RoboException');
 
     return compose.mixin('WithControls').define({
 
@@ -16,16 +17,49 @@ define(function(require) {
             // hope it has been loaded properly first
             var Ctor = require(mod.replace(/\./g, '/'));
 
-            // parse out bindings
-            var binds = Parser.parseOptions(bindings);
-
-            _(binds).each(function(target, key) {
-                console.log('binding', key, 'to', target);
-            });
-
             // create and render
             var v = new Ctor().setElement(element);
             v.render();
+
+            // parse out bindings and link everything up
+            var binds = Parser.parseOptions(bindings);
+            var _this = this;
+            _(binds).each(function(target, key) {
+                _this._handleBind(target, key, v);
+            });
+
+        },
+
+        // Key is what is in the DOM, target is our this member
+        _handleBind: function(target, key, view)
+        {
+            console.log('binding', key, 'to', target);
+            var _this = this;
+
+            switch (key)
+            {
+                case 'click':
+                    f = this[target].bind(this);
+                    this.listenTo(view, 'click', f);
+                    break;
+
+                // must be observable data
+                default:
+                    // ensure that the key is observable
+                    if (!this.constructor.__annotations__[target].OBSERVABLE)
+                        throw new RoboException('Cannot bind to non-observable member');
+
+                    view[key] = _this[target];
+
+                    this.on('change:' + target, function() {
+                        view[key] = _this[target];
+                    });
+
+                    view.on('change:' + key, function() {
+                        _this[target] = view[key];
+                    });
+            }
+
         },
 
         processAll: function()
@@ -43,6 +77,7 @@ define(function(require) {
                 this._rendered = true;
                 render.call(this);
                 this.processAll();
+            } else {
             }
         },
 

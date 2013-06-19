@@ -5,13 +5,18 @@ define(function(require) {
 
     return compose.class('Label').extends(View).define({
 
-        __override__readonly__tagName: 'button',
+        __override__readonly__tagName: 'span',
 
-        __observable__caption: '',
+        __observable__html: undefined,
+        __observable__text: '',
 
         __override__fluent__render: function()
         {
-            this.element.innerHTML = this.caption;
+            if (this.html !== undefined)
+                this.element.innerHTML = this.html;
+            else
+                this.element.innerText = this.text;
+
             return this;
         }
 

@@ -1,8 +1,8 @@
 define(function(require) {
 
-    var compose       = require('compose');
-    var WithEvents    = require('robo/event/WithEvents');
-    var WithDomEvents = require('robo/event/WithDomEvents');
+    var compose         = require('compose');
+    var WithEvents      = require('robo/event/WithEvents');
+    var WithDomEvents   = require('robo/event/WithDomEvents');
 
     // Any object that can be ansigned to a DOM node
     return compose.class('View').uses(WithEvents, WithDomEvents).define({
@@ -24,7 +24,12 @@ define(function(require) {
             this.cid = _.uniqueId(this.constructor.__name__);
 
             // redraw if an observable triggers
-            this.on('change', this.render.bind(this));
+            var _this = this;
+            this.on('change', function(e) {
+                _this.render();
+                e.stopPropagation();
+                return false;
+            });
 
             // instantiate a dom node if we dont have one
             if (!this.element)

@@ -8,8 +8,9 @@ define(function(require) {
         .extends(View)
         .implements(ClickListener).define({
 
-        __override__readonly__tagName : 'button',
-        __observable__caption         : null,
+        __override__readonly__tagName: 'button',
+
+        __observable__text: null,
 
         __virtual__event__click: function(event)
         {
@@ -17,10 +18,10 @@ define(function(require) {
 
         __override__fluent__render: function()
         {
-            if (this.caption === null)
+            if (this.text === null)
                 return;
 
-            this.element.innerText = this.caption;
+            this.element.innerText = this.text;
             return this;
         }
 
