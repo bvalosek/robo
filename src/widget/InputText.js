@@ -3,6 +3,8 @@ define(function(require) {
     var compose = require('compose');
     var View    = require('robo/view/View');
 
+    compose.namespace('robo.widget');
+
     return compose.class('InputText').extends(View).define({
 
         __override__readonly__tagName: 'input',

@@ -5,9 +5,11 @@ define(function(require) {
     var WithControls    = require('robo/widget/WithControls');
     var View            = require('robo/view/View');
 
+    compose.namespace('robo.view');
+
     return compose.class('TemplateView')
         .extends(View)
-        .uses(WithTemplate, WithControls).define({
+        .uses(WithTemplate).define({
 
         __virtual__template: ''
 

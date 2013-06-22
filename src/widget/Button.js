@@ -4,6 +4,8 @@ define(function(require) {
     var View          = require('robo/view/View');
     var ClickListener = require('robo/view/ClickListener');
 
+    compose.namespace('robo.widget');
+
     return compose.class('Button')
         .extends(View)
         .implements(ClickListener).define({

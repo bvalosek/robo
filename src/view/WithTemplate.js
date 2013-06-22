@@ -3,6 +3,8 @@ define(function(require) {
     var compose = require('compose');
     var _       = require('underscore');
 
+    compose.namespace('robo.view');
+
     return compose.mixin('WithTemplate').define({
 
         // generate the HTML from the template, caching the templating function

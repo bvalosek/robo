@@ -3,6 +3,8 @@ define(function(require) {
     var View    = require('robo/view/View');
     var compose = require('compose');
 
+    compose.namespace('robo.widget');
+
     return compose.class('Label').extends(View).define({
 
         __override__readonly__tagName: 'span',

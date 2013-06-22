@@ -13,6 +13,8 @@ define(function(require) {
         blocked = false;
     };
 
+    compose.namespace('robo.util');
+
     // Output stuff when
     return compose.mixin('WithViewLogging').define({
 

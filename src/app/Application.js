@@ -8,6 +8,8 @@ define(function(require, exports, module) {
     var compose       = require('compose');
     var RoboException = require('robo/util/RoboException');
 
+    compose.namespace('robo.app');
+
     // Starting point for a Robo app. Call Application#start() to boot up
     return compose.class('Application')
         .uses(WithEvents)

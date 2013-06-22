@@ -2,17 +2,19 @@ define(function(require) {
 
     var compose = require('compose');
 
+    compose.namespace('robo.app');
+
     return compose.class('Controller').define({
 
         // Make sure to stash the application context
         constructor: function(context) {
-            this.applicationContext = context;
+            this.app = context;
         },
 
         // Signal we want to route
         route: function(uri)
         {
-            this.applicationContext.route(uri);
+            this.app.route(uri);
         },
 
         // Setup a ROUTES static constant that points route to a key on an

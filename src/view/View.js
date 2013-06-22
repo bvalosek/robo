@@ -4,6 +4,8 @@ define(function(require) {
     var WithEvents      = require('robo/event/WithEvents');
     var WithDomEvents   = require('robo/event/WithDomEvents');
 
+    compose.namespace('robo.view');
+
     // Any object that can be ansigned to a DOM node
     return compose.class('View').uses(WithEvents, WithDomEvents).define({
 
@@ -22,14 +24,6 @@ define(function(require) {
             this.initEvents();
 
             this.cid = _.uniqueId(this.constructor.__name__);
-
-            // redraw if an observable triggers
-            var _this = this;
-            this.on('change', function(e) {
-                _this.render();
-                e.stopPropagation();
-                return false;
-            });
 
             // instantiate a dom node if we dont have one
             if (!this.element)
@@ -63,8 +57,8 @@ define(function(require) {
         // Add a new robo view to an existing view
         __fluent__appendView: function(view)
         {
-            this.element.appendChild(view.element);
             view.render();
+            this.element.appendChild(view.element);
             return this;
         },
 

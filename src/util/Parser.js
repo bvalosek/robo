@@ -2,6 +2,8 @@ define(function(require) {
 
     var compose = require('compose');
 
+    compose.namespace('robo.util');
+
     return compose.class('Parser').define({
 
         __static__parseOptions: function(opts)
