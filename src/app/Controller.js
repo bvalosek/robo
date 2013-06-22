@@ -4,6 +4,17 @@ define(function(require) {
 
     return compose.class('Controller').define({
 
+        // Make sure to stash the application context
+        constructor: function(context) {
+            this.applicationContext = context;
+        },
+
+        // Signal we want to route
+        route: function(uri)
+        {
+            this.applicationContext.route(uri);
+        },
+
         // Setup a ROUTES static constant that points route to a key on an
         // instantiated controller to use
         __ondefine__: function(Ctor)
@@ -16,9 +27,9 @@ define(function(require) {
                     var route = key == 'index' ? '' : key;
                     var args = compose.getFunctionSignature(Ctor.prototype[key]);
 
-                    args.forEach(function(a) { 
-                        
-                        route += a[0] === '_' ? '(/:x)' : '/:x'; 
+                    args.forEach(function(a) {
+
+                        route += a[0] === '_' ? '(/:x)' : '/:x';
                     });
 
                     routes[route] = key;

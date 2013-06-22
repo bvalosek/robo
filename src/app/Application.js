@@ -15,9 +15,17 @@ define(function(require, exports, module) {
 
         _started: false,
 
+        // Ensure we setup our events
         constructor: function()
         {
             this.initEvents();
+        },
+
+        // Route to something
+        __fluent__route: function(uri)
+        {
+            this.router.navigate(uri, {trigger: true});
+            return this;
         },
 
         // Called when
@@ -41,10 +49,11 @@ define(function(require, exports, module) {
         __fluent__setupRoutes: function(routes)
         {
             var routeHash = {};
+            var _this = this;
 
             _(routes).each(function(C, key) {
                 var name = C.__name__;
-                var controller = new C();
+                var controller = new C(_this);
 
                 _(C.ROUTES).each(function(fk, route) {
                     var fn = C.prototype[fk];
@@ -56,7 +65,7 @@ define(function(require, exports, module) {
             });
 
             // startup backbone router
-            new (Backbone.Router.extend({ routes: routeHash }))();
+            this.router = new (Backbone.Router.extend({ routes: routeHash }))();
             Backbone.history.start({ pushState: true });
 
             return this;
