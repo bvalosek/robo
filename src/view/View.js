@@ -62,6 +62,14 @@ define(function(require) {
             return this;
         },
 
+        // Convience combo of clear and append
+        __fluent__setView: function(view)
+        {
+            this.getChildViews().forEach(function(v) { v.close(); });
+            this.appendView(view);
+            return this;
+        },
+
         // Disconnect the DOM element from the view, should ONLY happen when
         // we're about to re-assign the element as it is expected a View always
         // has an element
