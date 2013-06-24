@@ -32,6 +32,14 @@ define(function(require) {
             this.setElement(this.element);
         },
 
+        // Where the magic happens. Bind to and underlying ViewModel and update
+        // our shit correspondingly. Essentially runs over the DOM to find all
+        // declaritive bindings and then makes it happen
+        __fluent__dataBindTo: function(vm)
+        {
+            return this;
+        },
+
         // change the DOM element this guy is hosted by, and ensure the DOM
         // node points back to the view as well. Need to un-delegate and
         // re-delegate events as well
