@@ -60,7 +60,7 @@ define(function(require) {
         _setStatic: function(value)
         {
             if (this.source) {
-                this.stopListening(source);
+                this.stopListening(this.source);
                 this.source = null;
                 this.property = null;
             }
@@ -74,7 +74,7 @@ define(function(require) {
         _setObjectAndProperty: function(obj, prop)
         {
             if (this.source)
-                this.stopListening(source);
+                this.stopListening(this.source);
 
             this.source   = obj;
             this.property = prop;
