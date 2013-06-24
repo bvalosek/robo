@@ -1,19 +1,14 @@
 define(function(require, exports, module) {
 
-    var Observable    = require('robo/event/Observable');
     var WithEvents    = require('robo/event/WithEvents');
     var Log           = require('robo/util/Log');
     var View          = require('robo/view/View');
-    var Backbone      = require('backbone');
     var compose       = require('compose');
-    var RoboException = require('robo/util/RoboException');
 
     compose.namespace('robo.app');
 
-    // Starting point for a Robo app. Call Application#start() to boot up
-    return compose.class('Application')
-        .uses(WithEvents)
-        .implements(Observable).define({
+    // Starting point for a Robo app. Call start() to boot up
+    return compose.class('Application').uses(WithEvents).define({
 
         _started: false,
 
@@ -34,7 +29,7 @@ define(function(require, exports, module) {
         __fluent__start: function()
         {
             if (this._started)
-                throw new RoboException('Application already started');
+                throw new Error('Application already started');
 
             // stash <body>
             this.rootView = new View()
@@ -61,7 +56,6 @@ define(function(require, exports, module) {
                     var fn = C.prototype[fk];
                     var r = key + route;
                     routeHash[r] = controller[fk].bind(controller);
-                    Log.d('Route added: "' + r + '" -> ' + C.__name__ + '::' + fk);
                 });
 
             });

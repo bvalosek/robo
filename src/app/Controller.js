@@ -4,6 +4,7 @@ define(function(require) {
 
     compose.namespace('robo.app');
 
+    // Controllers are used to handle routes
     return compose.class('Controller').define({
 
         // Make sure to stash the application context

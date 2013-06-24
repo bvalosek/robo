@@ -2,8 +2,9 @@ define(function(require) {
 
     var compose       = require('compose');
     var BackboneModel = require('robo/backbone/Model');
-    var Observable    = require('robo/event/Observable');
     var Collection    = require('robo/model/Collection');
+
+    compose.namespace('robo.model');
 
     return compose.class('Model').extends(BackboneModel).define({
 

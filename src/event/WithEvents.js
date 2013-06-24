@@ -5,6 +5,10 @@ define(function(require, exports, module) {
     var _        = require('underscore');
     var Log      = require('robo/util/Log');
 
+    compose.namespace('robo.event');
+
+    // Mixin used to add eventing ability to an object and add support for
+    // OBSERVABLE and EVENT handler annotations if initEvents() is called
     return compose.mixin('WithEvents').define(_({
 
         // Called to scan anything we've got with annotations and set up the
@@ -15,12 +19,12 @@ define(function(require, exports, module) {
 
             _(this.constructor.__annotations__).each(function(a, key) {
 
-                // listen for any events
+                // Listen for any events
                 if (a.EVENT) {
                     _this.on(key, _this[key], _this);
                 }
 
-                // create observable members
+                // Create observable members
                 if (a.OBSERVABLE) {
                     _this._observables      = _this.observables || {};
                     _this._observables[key] = _this[key];
@@ -43,6 +47,14 @@ define(function(require, exports, module) {
                 }
             });
         },
+
+        // Output events to the log for this object
+        logEvents: function()
+        {
+            this.on('all', function(e) {
+                console.log(this.constructor.__fullName__ + ' -> ' + e);
+            });
+        }
 
     }).extend(Backbone.Events));
 
