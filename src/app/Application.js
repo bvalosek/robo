@@ -30,11 +30,11 @@ define(function(require, exports, module) {
             // got em
             this._started = true;
             Log.d('Application started');
-            this.trigger('applicationStart');
+            this.onStart();
             return this;
         },
 
-        // Link up stuff, should only be called once
+        // Link up stuff, should only be called once and probably by the App
         __fluent__setupRoutes: function(routes)
         {
             var routeHash = {};
@@ -44,10 +44,18 @@ define(function(require, exports, module) {
                 var name = C.__name__;
                 var controller = new C(_this);
 
-                _(C.ROUTES).each(function(fk, route) {
-                    var fn = C.prototype[fk];
-                    var r = key + route;
-                    routeHash[r] = controller[fk].bind(controller);
+                // For each member, route our hashes
+                _(compose.signature(C)).each(function(info, key) {
+                    if (info.decorations.ROUTE) {
+                        var route = key == 'index' ? '' : key;
+                        var args = compose.getFunctionSignature(info.value);
+
+                        args.forEach(function(a) {
+                            route += a.required ? '/:x' : '(/:x)';
+                        });
+
+                        routeHash[route] = controller[key].bind(controller);
+                    }
                 });
 
             });
@@ -57,7 +65,10 @@ define(function(require, exports, module) {
             Backbone.history.start({ pushState: true });
 
             return this;
-        }
+        },
+
+        // Override to do stuff on app boot
+        __virtual__onStart: function() {}
 
     });
 
