@@ -16,7 +16,7 @@ define(function(require) {
                 this._compiledTemplate = _.template(this.template);
             }
 
-            return this._compiledTemplate(this);
+            return this._compiledTemplate(this.dataContext || this);
         },
 
         // change the template being used, but doesn't compile until first

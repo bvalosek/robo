@@ -57,7 +57,6 @@ define(function(require, exports, module) {
                         routeHash[route] = controller[key].bind(controller);
                     }
                 });
-
             });
 
             // startup backbone router

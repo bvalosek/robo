@@ -11,8 +11,8 @@ define(function(require) {
         // Initial values for creation only, should not be read during run-time
         // as assigning a new element to the View could potential mean that
         // this would no longer reflect the actual tag
-        __virtual__readonly__tagName: 'div',
-        __virtual__readonly__className: '',
+        __virtual__readonly__tagName   : 'div',
+        __virtual__readonly__className : '',
 
         // Create the cids and make sure we have an element to rock
         __constructor__: function(args)
@@ -29,7 +29,7 @@ define(function(require) {
             this.setElement(this.element);
         },
 
-        // change the DOM element this guy is hosted by, and ensure the DOM
+        // Change the DOM element this guy is hosted by, and ensure the DOM
         // node points back to the view as well. Need to un-delegate and
         // re-delegate events as well
         __fluent__setElement: function(el)
