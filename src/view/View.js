@@ -5,8 +5,6 @@ define(function(require) {
     var WithDomEvents    = require('robo/event/WithDomEvents');
     var ObservableObject = require('robo/event/ObservableObject');
 
-    compose.namespace('robo.view');
-
     // Any object that can be ansigned to a DOM node
     return compose.class('View').extends(ObservableObject).uses(WithDomEvents).define({
 
