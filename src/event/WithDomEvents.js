@@ -2,8 +2,6 @@ define(function(require) {
 
     var compose = require('compose');
 
-    compose.namespace('robo.event');
-
     // Handle binding stuff to actual DOM pieces. Expects there to be a
     // this.element object
     return compose.mixin('WithDomEvents').define({

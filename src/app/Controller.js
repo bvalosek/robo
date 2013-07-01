@@ -2,13 +2,14 @@ define(function(require) {
 
     var compose = require('compose');
 
-    compose.namespace('robo.app');
-
     // Controllers are used to handle routes
     return compose.class('Controller').define({
 
+        app: null,
+
         // Make sure to stash the application context
-        constructor: function(context) {
+        __constructor__: function(context)
+        {
             this.app = context;
         },
 
@@ -25,13 +26,12 @@ define(function(require) {
             var root   = Ctor.__name__.toLowerCase();
             var routes = {};
 
-            _(Ctor.__annotations__).each(function(info, key) {
-                if (info.ROUTE) {
+            _(Ctor.__signature__).each(function(info, key) {
+                if (info.decorations.ROUTE) {
                     var route = key == 'index' ? '' : key;
                     var args = compose.getFunctionSignature(Ctor.prototype[key]);
 
                     args.forEach(function(a) {
-
                         route += a[0] === '_' ? '(/:x)' : '/:x';
                     });
 
@@ -40,7 +40,6 @@ define(function(require) {
             });
 
             Ctor.ROUTES = routes;
-            Ctor.__annotations__.ROUTES = {PUBLIC: true, STATIC: true};
         }
 
     });

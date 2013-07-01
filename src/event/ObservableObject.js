@@ -34,9 +34,10 @@ define(function(require) {
         },
 
         // Hard set
-        set: function(key, v)
+        __fluent__set: function(key, v)
         {
             this[key] = v;
+            return this;
         },
 
         // Hard get

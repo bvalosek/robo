@@ -1,13 +1,14 @@
 define(function(require) {
 
-    var compose         = require('compose');
-    var WithEvents      = require('robo/event/WithEvents');
-    var WithDomEvents   = require('robo/event/WithDomEvents');
+    var compose          = require('compose');
+    var WithEvents       = require('robo/event/WithEvents');
+    var WithDomEvents    = require('robo/event/WithDomEvents');
+    var ObservableObject = require('robo/event/ObservableObject');
 
     compose.namespace('robo.view');
 
     // Any object that can be ansigned to a DOM node
-    return compose.class('View').uses(WithEvents, WithDomEvents).define({
+    return compose.class('View').extends(ObservableObject).uses(WithDomEvents).define({
 
         // Initial values for creation only, should not be read during run-time
         // as assigning a new element to the View could potential mean that
@@ -16,12 +17,10 @@ define(function(require) {
         __virtual__readonly__className: '',
 
         // Create the cids and make sure we have an element to rock
-        constructor: function(args)
+        __constructor__: function(args)
         {
             // mixin stuff easily
             _(this).extend(args);
-
-            this.initEvents();
 
             this.cid = _.uniqueId(this.constructor.__name__);
 
@@ -30,14 +29,6 @@ define(function(require) {
                 this.element = document.createElement(this.tagName);
 
             this.setElement(this.element);
-        },
-
-        // Where the magic happens. Bind to and underlying ViewModel and update
-        // our shit correspondingly. Essentially runs over the DOM to find all
-        // declaritive bindings and then makes it happen
-        __fluent__dataBindTo: function(vm)
-        {
-            return this;
         },
 
         // change the DOM element this guy is hosted by, and ensure the DOM
@@ -59,6 +50,7 @@ define(function(require) {
                 });
             });
 
+            this.render();
             return this;
         },
 

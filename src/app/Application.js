@@ -5,18 +5,10 @@ define(function(require, exports, module) {
     var View          = require('robo/view/View');
     var compose       = require('compose');
 
-    compose.namespace('robo.app');
-
     // Starting point for a Robo app. Call start() to boot up
     return compose.class('Application').uses(WithEvents).define({
 
         _started: false,
-
-        // Ensure we setup our events
-        constructor: function()
-        {
-            this.initEvents();
-        },
 
         // Route to something
         __fluent__route: function(uri)
@@ -42,7 +34,7 @@ define(function(require, exports, module) {
             return this;
         },
 
-        // Link up stuff
+        // Link up stuff, should only be called once
         __fluent__setupRoutes: function(routes)
         {
             var routeHash = {};

@@ -2,8 +2,6 @@ define(function(require) {
     var compose    = require('compose');
     var WithEvents = require('robo/event/WithEvents');
 
-    compose.namespace('robo.binding');
-
     // A class that is used to connect a binding Target (such as a UI element)
     // to a binding Source (an object that implements Observable with
     // properties)
@@ -31,6 +29,17 @@ define(function(require) {
 
         // The mode
         mode: 'ONE_WAY',
+
+        // The ability to acutally set the binding of a target
+        __static__setBinding: function(target, prop, binding)
+        {
+            // One-way binding
+            target.listenTo(binding,
+                'robo.binding.Binding.SOURCE_PROPERTY_CHANGED',
+                function() {
+                    this[prop] = binding.value;
+                });
+        },
 
         // Either set the static or our corresponding source object/property
         __property__value: {
