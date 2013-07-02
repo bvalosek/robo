@@ -11,11 +11,16 @@ define(function(require) {
         .define(_({
 
         // Output events to the log for this object
-        logEvents: function()
+        __fluent__logEvents: function()
         {
+            var tag = this.cid || this.id || this.TAG ||
+                this.constructor.__name__;
+
             this.on('all', function(e) {
-                console.log(this.constructor.__name__ + ' -> ' + e);
+                console.log(tag + ' -> ' + e);
             });
+
+            return this;
         }
 
     }).extend(Backbone.Events));
