@@ -2,6 +2,7 @@ define(function(require) {
 
     var compose    = require('compose');
     var WithEvents = require('robo/event/WithEvents');
+    var IEvents    = require('robo/event/IEvents');
 
     // A class that is used to connect a binding Target (such as a UI element)
     // to a binding Source (an object that implements Observable with
@@ -10,6 +11,7 @@ define(function(require) {
 
         __static__readonly__ONE_ONE                 : 1001,
         __static__readonly__SOURCE_PROPERTY_CHANGED : 1002,
+        __static__readonly__TARGET_PROPERTY_CHANGED : 1003,
 
         // Provide a reference to our source and the property we're looking for
         // to change. Source must be an ObservableObject
@@ -24,9 +26,18 @@ define(function(require) {
         {
             var _this = this;
             target[prop] = this.value;
+
+            // Ensure that when the source changes, we update the target
             this.on(Binding.SOURCE_PROPERTY_CHANGED, function() {
                 target[prop] = _this.value;
             });
+
+            // is target bindable?
+            if (compose.is(target, IEvents)) {
+                this.listenTo(target, Binding.TARGET_PROPERTY_CHANGED, function(v) {
+                    _this.value = target[prop];
+                });
+            }
 
             return this;
         },
