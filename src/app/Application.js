@@ -6,9 +6,14 @@ define(function(require, exports, module) {
     var compose       = require('compose');
 
     // Starting point for a Robo app. Call start() to boot up
-    return compose.class('Application').uses(WithEvents).define({
+    var Application = compose.class('Application').uses(WithEvents).define({
 
         _started: false,
+
+        __constructor__: function()
+        {
+            Application.instance = this;
+        },
 
         // Route to something
         __fluent__route: function(uri)
@@ -16,6 +21,8 @@ define(function(require, exports, module) {
             this.router.navigate(uri, {trigger: true});
             return this;
         },
+
+        __static__instance: null,
 
         // Called when
         __fluent__start: function()
@@ -70,5 +77,7 @@ define(function(require, exports, module) {
         __virtual__onStart: function() {}
 
     });
+
+    return Application;
 
 });
