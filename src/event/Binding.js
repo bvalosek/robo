@@ -19,15 +19,16 @@ define(function(require) {
         // Also can set a static value
         valueWhenNull: null,
 
-        // The ability to acutally set the binding of a target
-        __static__setBinding: function(target, prop, binding)
+        // Bind to a target property
+        __fluent__setTarget: function(target, prop)
         {
-            // One-way binding
-            target.listenTo(binding,
-                Binding.SOURCE_PROPERTY_CHANGED,
-                function() {
-                    this[prop] = binding.value;
-                });
+            var _this = this;
+            target[prop] = this.value;
+            this.on(Binding.SOURCE_PROPERTY_CHANGED, function() {
+                target[prop] = _this.value;
+            });
+
+            return this;
         },
 
         // Either set the static or our corresponding source object/property
@@ -47,12 +48,14 @@ define(function(require) {
         },
 
         // smart set source
-        setSource: function(source, prop)
+        __fluent__setSource: function(source, prop)
         {
             if (arguments.length == 2)
                 this._setObjectAndProperty(source, prop);
             else
                 this._setStatic(source);
+
+            return this;
         },
 
         _setStatic: function(value)

@@ -1,10 +1,10 @@
 define(function(require) {
 
-    var compose      = require('compose');
-    var TemplateView = require('robo/view/TemplateView');
+    var compose = require('compose');
+    var Layout  = require('robo/view/Layout');
 
-    // A TemplateView that is intented to be in the <body>
-    return compose.class('RootLayout').extends(TemplateView).define({
+    // A Layout that is intented to be in the <body>
+    return compose.class('RootLayout').extends(Layout).define({
 
         __override__tagName  : 'body',
 

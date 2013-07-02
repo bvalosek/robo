@@ -18,6 +18,12 @@ define(function(require) {
                 if (info.decorations.OBSERVABLE) {
                     var _key = '_' + key;
 
+                    // starting value
+                    Object.defineProperty(C.prototype, _key, {
+                        configurable: true, enumberable: false,
+                        writable: true, value: info.value
+                    });
+
                     // Cause accessor actions to trigger events
                     Object.defineProperty(C.prototype, key, {
                         configurable: true, enumberable: true,

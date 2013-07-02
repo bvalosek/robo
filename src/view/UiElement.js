@@ -6,10 +6,14 @@ define(function(require) {
     var ObservableObject = require('robo/event/ObservableObject');
 
     // Any object that can be ansigned to a DOM node
-    return compose.class('View').extends(ObservableObject).uses(WithDomEvents).define({
+    var UiElement = compose
+        .class('UiElement')
+        .extends(ObservableObject)
+        .uses(WithDomEvents)
+        .define({
 
         // Initial values for creation only, should not be read during run-time
-        // as assigning a new element to the View could potential mean that
+        // as assigning a new element to the element could potential mean that
         // this would no longer reflect the actual tag
         __virtual__readonly__tagName   : 'div',
         __virtual__readonly__className : '',
@@ -29,16 +33,28 @@ define(function(require) {
             this.setElement(this.element);
         },
 
+        // Create a new UI element and set dom
+        __static__fromSelector: function(selector)
+        {
+            return UiElement.fromDom(document.querySelector(selector));
+        },
+
+        // If we've already selected a dom element
+        __static__fromDom: function(el)
+        {
+            return new UiElement().setElement(el);
+        },
+
         // Change the DOM element this guy is hosted by, and ensure the DOM
-        // node points back to the view as well. Need to un-delegate and
-        // re-delegate events as well
+        // node points back to the robo element as well. Need to un-delegate
+        // and re-delegate events as well
         __fluent__setElement: function(el)
         {
             if (el && el !== this.element)
                 this.unsetElement();
 
             this.element = el;
-            el.roboView = this;
+            el.roboElement = this;
 
             // update events on the DOM
             var _this = this;
@@ -52,25 +68,15 @@ define(function(require) {
             return this;
         },
 
-        // Add a new robo view to an existing view
-        __fluent__appendView: function(view)
+        // Instrucut an element to draw itself
+        __virtual__fluent__render: function()
         {
-            view.render();
-            this.element.appendChild(view.element);
             return this;
         },
 
-        // Convience combo of clear and append
-        __fluent__setView: function(view)
-        {
-            this.getChildViews().forEach(function(v) { v.close(); });
-            this.appendView(view);
-            return this;
-        },
-
-        // Disconnect the DOM element from the view, should ONLY happen when
-        // we're about to re-assign the element as it is expected a View always
-        // has an element
+        // Disconnect the DOM element from the robo element, should ONLY happen
+        // when we're about to re-assign the element as it is expected a View
+        // always has an element
         __fluent__unsetElement: function()
         {
             if (!this.element)
@@ -84,46 +90,21 @@ define(function(require) {
                 });
             });
 
-            this.element.roboView = undefined;
+            this.element.roboElement = undefined;
             this.element = undefined;
 
             return this;
         },
 
-        // Draw the element
-        __fluent__virtual__render: function()
-        {
-            return this;
-        },
-
-        // Remove the the view from the DOM and destroy all events. This kills
-        // the view and it is no longer usable after
+        // Remove the the robo element from the DOM and destroy all events.
+        // This kills the element and it is no longer usable after
         __fluent__close: function()
         {
-            this.getChildViews().forEach(function(v) { v.close(); });
             this.element.parentNode.removeChild(this.element);
-
             return this;
         },
-
-        // Get any child nodes that have a robo View attached to them
-        getChildViews: function()
-        {
-            var views = [];
-
-            var nodes = this.element.childNodes;
-
-            for(var i = 0; i < nodes.length; i++)
-                if (nodes[i].roboView) views.push(nodes[i].roboView);
-
-            return views;
-        },
-
-        // Should probably only be used for debugging
-        print: function(s)
-        {
-            this.element.innerText += s + '\n';
-        }
     });
+
+    return UiElement;
 
 });

@@ -2,7 +2,6 @@ define(function(require, exports, module) {
 
     var WithEvents    = require('robo/event/WithEvents');
     var Log           = require('robo/util/Log');
-    var View          = require('robo/view/View');
     var compose       = require('compose');
 
     // Starting point for a Robo app. Call start() to boot up
@@ -37,10 +36,6 @@ define(function(require, exports, module) {
         {
             if (this._started)
                 throw new Error('Application already started');
-
-            // stash <body>
-            this.rootView = new View()
-                .setElement(document.querySelector('body'));
 
             // got em
             this._started = true;
