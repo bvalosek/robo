@@ -47,7 +47,7 @@ define(function(require) {
             }
         },
 
-        // smart set source
+        // Bolt into an observable source
         __fluent__setSource: function(source, prop)
         {
             if (arguments.length == 2)
