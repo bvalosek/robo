@@ -1,41 +1,30 @@
 define(function(require) {
+
     var compose    = require('compose');
     var WithEvents = require('robo/event/WithEvents');
 
     // A class that is used to connect a binding Target (such as a UI element)
     // to a binding Source (an object that implements Observable with
     // properties)
-    return compose.class('Binding').uses(WithEvents).define({
+    var Binding = compose.class('Binding').uses(WithEvents).define({
 
-        __enum__: [
-            'SOURCE_PROPERTY_CHANGED',
-            'TARGET_PROPERTY_CHANGED',
-            'ONE_WAY',
-            'TWO_WAY',
-            'ONE_WAY_TO_SOURCE',
-            'ONCE'
-        ],
+        __static__readonly__ONE_ONE                 : 1001,
+        __static__readonly__SOURCE_PROPERTY_CHANGED : 1002,
 
         // Provide a reference to our source and the property we're looking for
-        // to change
-        source: null,
-        property: null,
+        // to change. Source must be an ObservableObject
+        source   : null,
+        property : null,
 
         // Also can set a static value
         valueWhenNull: null,
-
-        // Something that implements IValueConverter to change between source and target
-        valueConverter: null,
-
-        // The mode
-        mode: 'ONE_WAY',
 
         // The ability to acutally set the binding of a target
         __static__setBinding: function(target, prop, binding)
         {
             // One-way binding
             target.listenTo(binding,
-                'robo.binding.Binding.SOURCE_PROPERTY_CHANGED',
+                Binding.SOURCE_PROPERTY_CHANGED,
                 function() {
                     this[prop] = binding.value;
                 });
@@ -97,9 +86,11 @@ define(function(require) {
 
         _onSourceChange: function()
         {
-            this.trigger(this.constructor.SOURCE_PROPERTY_CHANGED);
+            this.trigger(Binding.SOURCE_PROPERTY_CHANGED);
         }
 
     });
+
+    return Binding;
 
 });

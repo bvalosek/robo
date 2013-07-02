@@ -12,7 +12,15 @@ define(function(require, exports, module) {
 
         __constructor__: function()
         {
+            if (Application.instance !== null)
+                throw new Error('Can only instantiate one application at a time');
+
             Application.instance = this;
+        },
+
+        getInstance: function()
+        {
+            return Application.instance;
         },
 
         // Route to something
