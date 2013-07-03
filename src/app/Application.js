@@ -1,7 +1,6 @@
 define(function(require, exports, module) {
 
     var WithEvents    = require('robo/event/WithEvents');
-    var Log           = require('robo/util/Log');
     var compose       = require('compose');
 
     // Starting point for a Robo app. Call start() to boot up
@@ -39,7 +38,6 @@ define(function(require, exports, module) {
 
             // got em
             this._started = true;
-            Log.d('Application started');
             this.onStart();
             return this;
         },
