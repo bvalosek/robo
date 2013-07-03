@@ -8,9 +8,8 @@ define(function(require) {
     // properties)
     var Binding = compose.class('Binding').uses(WithEvents).define({
 
-        __static__readonly__ONE_ONE                 : 1001,
-        __static__readonly__SOURCE_PROPERTY_CHANGED : 1002,
-        __static__readonly__TARGET_PROPERTY_CHANGED : 1003,
+        __static__readonly__SOURCE_PROPERTY_CHANGED : 'Binding.SOURCE_PROPERTY_CHANGED',
+        __static__readonly__TARGET_PROPERTY_CHANGED : 'Binding.TARGET_PROPERTY_CHANGED',
 
         // Provide a reference to our source and the property we're looking for
         // to change. Source must be an ObservableObject
