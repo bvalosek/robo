@@ -127,7 +127,7 @@ define(function(require) {
         initEvents: function()
         {
             var _this = this;
-            _(this.constructor.__signature__).each(function(info, key) {
+            _(compose.signature(this.constructor)).each(function(info, key) {
                 if (info.decorations.EVENT) {
                     _this.on(key, info.value.bind(_this));
                 }
@@ -140,8 +140,11 @@ define(function(require) {
             var tag = this.cid || this.id || this.TAG ||
                 this.constructor.__name__;
 
-            this.on('all', function(e) {
-                Log.d(tag + ' -> ' + e);
+            this.on('all', function(e, param) {
+                var s = '';
+                if (e == 'COMMAND')
+                    s = ' ' + param.command;
+                Log.d(tag + ' -> ' + e + s);
             });
 
             return this;
