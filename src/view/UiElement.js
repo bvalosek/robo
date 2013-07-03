@@ -107,7 +107,8 @@ define(function(require) {
         {
             this.element.parentNode.removeChild(this.element);
             return this;
-        },
+        }
+
     });
 
     return UiElement;

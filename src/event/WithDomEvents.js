@@ -27,7 +27,7 @@ define(function(require) {
             var event = document.createEvent('Event');
             event.initEvent(name, true, true);
             this.element.dispatchEvent(event);
-        },
+        }
 
     });
 

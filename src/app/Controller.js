@@ -17,7 +17,7 @@ define(function(require) {
         route: function(uri)
         {
             this.app.route(uri);
-        },
+        }
 
     });
 
