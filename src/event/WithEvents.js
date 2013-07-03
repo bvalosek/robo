@@ -3,6 +3,7 @@ define(function(require) {
     var compose  = require('compose');
     var Backbone = require('backbone');
     var _        = require('underscore');
+    var Log      = require('robo/util/Log');
 
     // Mixin used to add eventing ability to an object
     return compose.mixin('WithEvents')
@@ -26,7 +27,7 @@ define(function(require) {
                 this.constructor.__name__;
 
             this.on('all', function(e) {
-                console.log(tag + ' -> ' + e);
+                Log.d(tag + ' -> ' + e);
             });
 
             return this;

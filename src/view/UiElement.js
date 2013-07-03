@@ -57,6 +57,7 @@ define(function(require) {
                 this.unsetElement();
 
             this.element = el;
+            this.style = el.style;
             el.roboElement = this;
 
             // update events on the DOM
@@ -95,6 +96,7 @@ define(function(require) {
 
             this.element.roboElement = undefined;
             this.element = undefined;
+            this.style = {};
 
             return this;
         },

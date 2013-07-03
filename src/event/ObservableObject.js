@@ -11,7 +11,7 @@ define(function(require) {
         .define({
 
         // Ensure that all observables are setup properly on define
-        __ondefine__: function(C, signature)
+        __ondefine__: function(C)
         {
             _(C.__signature__).each(function(info, key) {
                 if (info.decorations.OBSERVABLE) {

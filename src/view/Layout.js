@@ -5,44 +5,76 @@ define(function(require) {
     var WithTemplate = require('robo/view/WithTemplate');
     var UiElement    = require('robo/view/UiElement');
 
+    // A declarative HTML-powered view that is tied to a DOM element and is
+    // responsible for creating and maintaining bindings and widgets
     var Layout = compose.class('Layout')
         .extends(UiElement)
         .uses(WithTemplate).define({
+
+        __constructor__: function()
+        {
+            this.bindings = [];
+            this.widgets  = [];
+        },
 
         __virtual__template: '',
 
         __fluent__setDataContext: function(context)
         {
             this.dataContext = context;
+            var _this = this;
 
-            // Do all widgets
+            // Instantiate and attach and widgets we have specified
             _(this.element.querySelectorAll('[data-robo-widget]'))
                 .each(function(element) {
-                    var mod = element.getAttribute('data-robo-widget').replace(/\./g, '/');
-                    var C = require(mod);
-                    new C().setElement(element);
+                    var mod = element
+                        .getAttribute('data-robo-widget')
+                        .replace(/\./g, '/');
+
+                    var C      = require(mod);
+                    var widget = new C().setElement(element);
+
+                    _this.widgets.push(widget);
+
+                    // do we need to set data context?
+                    if (compose.is(widget, Layout)) {
+                        widget.setDataContext(context);
+                    }
             });
 
-            // Do all bindings
-            var _this = this;
+            // For all elements that specify a binding, create our Binding
+            // objects to the underlying data context
             _(this.element.querySelectorAll('[data-robo-binding]'))
                 .each(function(element) {
+
+                    // ensure that if this element was already bound (via sub
+                    // layout) that we don't step on that shit
+                    if (element.roboBound) {
+                        return;
+                    }
+
                     var bindings = element.getAttribute('data-robo-binding');
-                    var info = Layout.parseBindings(bindings);
+                    var info     = Layout.parseBindings(bindings);
 
                     _(info).each(function(s, t) {
                         var source = Layout.resolvePath(context, s);
-                        var target = Layout.resolvePath(element.roboElement, t);
+                        var target = Layout.resolvePath(
+                            element.roboElement || element, t);
 
-                        new Binding()
-                            .setSource(source.obj, source.key)
-                            .setTarget(target.obj, target.key);
+                        _this.bindings.push(
+                            new Binding()
+                                .setSource(source.obj, source.key)
+                                .setTarget(target.obj, target.key)
+                            );
                     });
+
+                    element.roboBound = true;
             });
 
             return this;
         },
 
+        // Return back an obj and path specified
         __static__resolvePath: function(root, path)
         {
             var s         = path.match(/^[^.]+/)[0];
@@ -55,6 +87,7 @@ define(function(require) {
             return {obj: root, key: path};
         },
 
+        // Translate a binding string into a hash
         __static__parseBindings: function(s)
         {
             var ret = {};
