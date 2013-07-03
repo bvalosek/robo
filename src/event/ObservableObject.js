@@ -5,7 +5,7 @@ define(function(require) {
 
     // An object that has get, set and observable properties via the OBSERVABLE
     // decoration
-    return compose
+    var ObservableObject = compose
         .class('ObservableObject')
         .uses(WithEvents)
         .define({
@@ -26,11 +26,32 @@ define(function(require) {
                     // Cause accessor actions to trigger events
                     Object.defineProperty(C.prototype, key, {
                         configurable: true, enumberable: true,
+
+                        // return hidden property
                         get: function() {
                             return this[_key];
                         },
+
                         set: function(v) {
                             if (v === this[_key]) return;
+
+                            // unsub from all previous events
+                            if (compose.is(this[_key], ObservableObject)) {
+                                this.stopListening(this[_key]);
+                            }
+
+                            // if we're setting to observable object, make sure
+                            // to re-broadcast events
+                            if (compose.is(v, ObservableObject)) {
+                                this.listenTo(v, 'all', function(e) {
+                                    if(e === 'change') {
+                                        this.trigger('change');
+                                        this.trigger('change:' + key);
+                                    }
+                                });
+                            }
+
+                            // Normal behavior
                             this[_key] = v;
                             this.trigger('change');
                             this.trigger('change:' + key);
@@ -38,23 +59,10 @@ define(function(require) {
                     });
                 }
             });
-        },
-
-        get: function(key)
-        {
-            return this['_' + key];
-        },
-
-        set: function(key, v)
-        {
-            var _key = '_' + key;
-            if (v === this[_key]) return;
-            this[_key] = v;
-            this.trigger('change');
-            this.trigger('change:' + key);
-        },
-
+        }
 
     });
+
+    return ObservableObject;
 
 });

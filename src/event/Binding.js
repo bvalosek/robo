@@ -45,13 +45,13 @@ define(function(require) {
         __property__value: {
             get: function() {
                 if (this.source && this.property)
-                    return this.source.get(this.property);
+                    return this.source[this.property];
                 else
                     return this.valueWhenNull;
             },
             set: function(value) {
                 if (this.source && this.property)
-                    this.source.set(this.property, value);
+                    this.source[this.property] = value;
                 else
                     this._setStatic(value);
             }
