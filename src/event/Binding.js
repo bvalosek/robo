@@ -57,6 +57,14 @@ define(function(require) {
             }
         },
 
+        // Remove all listening + clear out source
+        __fluent__reset: function()
+        {
+            this.stopListening();
+            this.source   = null;
+            this.property = null;
+        },
+
         // Bolt into an observable source
         __fluent__setSource: function(source, prop)
         {

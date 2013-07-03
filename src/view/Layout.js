@@ -31,11 +31,19 @@ define(function(require) {
             this._dataContext = context;
             var _this = this;
 
-            console.log('New data context for ' + this);
+            // Reset existing bindings
+            _(this.bindings).each(function(b) { b.reset(); });
+            this.bindings = [];
+
+            console.log('New data context for ' + this + ', ' + this.bindings.length + ' existing bindings');
 
             // Instantiate and attach and widgets we have specified
             _(this.element.querySelectorAll('[data-robo-class]'))
                 .each(function(element) {
+
+                    // Skip anything we've already built
+                    if (element.roboElement)
+                        return;
 
                     // Get the module path from the attribute, must be loaded
                     // somewhere else with a proper require() call
