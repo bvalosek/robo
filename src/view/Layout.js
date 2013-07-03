@@ -25,10 +25,10 @@ define(function(require) {
             var _this = this;
 
             // Instantiate and attach and widgets we have specified
-            _(this.element.querySelectorAll('[data-robo-widget]'))
+            _(this.element.querySelectorAll('[data-robo-class]'))
                 .each(function(element) {
                     var mod = element
-                        .getAttribute('data-robo-widget')
+                        .getAttribute('data-robo-class')
                         .replace(/\./g, '/');
 
                     var C      = require(mod);
