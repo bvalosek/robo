@@ -19,10 +19,17 @@ define(function(require) {
 
         __virtual__template: '',
 
+        __property__dataContext:
+        {
+            get: function() { return this._dataContext; },
+            set: function(v) { this.setDataContext(v); }
+        },
+
         __fluent__setDataContext: function(context)
         {
-            this.dataContext = context;
+            this._dataContext = context;
             var _this = this;
+            console.log(context.constructor.__name__);
 
             // Instantiate and attach and widgets we have specified
             _(this.element.querySelectorAll('[data-robo-class]'))
@@ -37,8 +44,15 @@ define(function(require) {
                     _this.widgets.push(widget);
 
                     // do we need to set data context?
+                    var actualContext = context;
                     if (compose.is(widget, Layout)) {
-                        widget.setDataContext(context);
+                        var sContext = element.getAttribute('data-robo-context');
+                        if (sContext) {
+                            var dc = Layout.resolvePath(context, sContext);
+                            actualContext = dc.obj[dc.key];
+                        }
+
+                        widget.setDataContext(actualContext);
                     }
             });
 
