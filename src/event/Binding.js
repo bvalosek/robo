@@ -2,7 +2,6 @@ define(function(require) {
 
     var compose    = require('compose');
     var WithEvents = require('robo/event/WithEvents');
-    var IEvents    = require('robo/event/IEvents');
 
     // A class that is used to connect a binding Target (such as a UI element)
     // to a binding Source (an object that implements Observable with
@@ -33,7 +32,7 @@ define(function(require) {
             });
 
             // is target bindable?
-            if (compose.is(target, IEvents)) {
+            if (compose.is(target, WithEvents)) {
                 this.listenTo(target, Binding.TARGET_PROPERTY_CHANGED, function(v) {
                     _this.value = target[prop];
                 });

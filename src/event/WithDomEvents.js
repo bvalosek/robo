@@ -2,8 +2,8 @@ define(function(require) {
 
     var compose = require('compose');
 
-    // Handle binding stuff to actual DOM pieces. Expects there to be a
-    // this.element object
+    // Modify an object that already has mixed in WithEvents that will route
+    // all events onto the DOM
     return compose.mixin('WithDomEvents').define({
 
         // Make sure to attach to the DOM node as well
@@ -20,7 +20,7 @@ define(function(require) {
             this.element.removeEventListener(name, callback);
         },
 
-        // use the DOM system for routing events
+        // Trigger on the DOM node instead of on our actual event bus
         __wrapped__trigger: function(fn, args)
         {
             var name = args[0];

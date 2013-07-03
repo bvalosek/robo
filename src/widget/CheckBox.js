@@ -8,12 +8,9 @@ define(function(require) {
 
         __override__tagName: 'input',
 
-        __constructor__: function()
+        __event__click: function()
         {
-            var _this = this;
-            this.on('click', function() {
-                _this.trigger(Binding.TARGET_PROPERTY_CHANGED);
-            });
+            this.trigger(Binding.TARGET_PROPERTY_CHANGED);
         },
 
         __property__checked:

@@ -2,13 +2,22 @@ define(function(require) {
 
     var compose  = require('compose');
     var Backbone = require('backbone');
-    var IEvents  = require('robo/event/IEvents');
     var _        = require('underscore');
 
     // Mixin used to add eventing ability to an object
     return compose.mixin('WithEvents')
-        .implements(IEvents)
         .define(_({
+
+        // Bind any events that we've declared via decorations
+        initEvents: function()
+        {
+            var _this = this;
+            _(this.constructor.__signature__).each(function(info, key) {
+                if (info.decorations.EVENT) {
+                    _this.on(key, info.value.bind(_this));
+                }
+            });
+        },
 
         // Output events to the log for this object
         __fluent__logEvents: function()

@@ -24,6 +24,9 @@ define(function(require) {
             // mixin stuff easily
             _(this).extend(args);
 
+            // bind any events with EVENT decoration
+            this.initEvents();
+
             this.cid = _.uniqueId(this.constructor.__name__);
 
             // instantiate a dom node if we dont have one
