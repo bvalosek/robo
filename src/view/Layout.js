@@ -35,8 +35,6 @@ define(function(require) {
             _(this.bindings).each(function(b) { b.reset(); });
             this.bindings = [];
 
-            console.log('New data context for ' + this + ', ' + this.bindings.length + ' existing bindings');
-
             // Instantiate and attach and widgets we have specified
             _(this.element.querySelectorAll('[data-robo-class]'))
                 .each(function(element) {
