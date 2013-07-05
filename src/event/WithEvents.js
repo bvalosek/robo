@@ -1,7 +1,7 @@
 define(function(require) {
 
-    var compose  = require('compose');
-    var _        = require('underscore');
+    var compose = require('compose');
+    var _       = require('underscore');
 
     // Mixin used to add eventing ability to an object. Inspired by / stolen
     // from Backbone.js
@@ -27,8 +27,6 @@ define(function(require) {
         // Pass an optional paramter that is recieved by the callback
         __fluent__trigger: function(name, _options)
         {
-            if (this._logEvents) Log.d(this + ' -> ' + name);
-
             // Find the stack of events for this eventName
             if (!this._events) return this;
             var events = this._events[name];
