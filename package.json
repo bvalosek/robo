@@ -1,0 +1,22 @@
+{
+  "name": "RoboJS",
+  "version": "1.0.0",
+  "description": "Make awesome Javscript apps.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:bvalosek/robo.git"
+  },
+  "author": "Brandon Valosek",
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.6.0"
+  }
+}
