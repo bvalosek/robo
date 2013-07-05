@@ -72,7 +72,7 @@ define(function(require) {
 
             // For all elements that specify a binding, create our Binding
             // objects to the underlying data context
-            _(this.element.querySelectorAll('[data-robo-binding]'))
+            _(this.element.querySelectorAll('[data-robo-bind]'))
                 .each(function(element) {
 
                     // If this element was already bound by somebody else, then
@@ -81,7 +81,7 @@ define(function(require) {
                         return;
                     }
 
-                    var bindings = element.getAttribute('data-robo-binding');
+                    var bindings = element.getAttribute('data-robo-bind');
                     var info     = Layout.parseBindings(bindings);
 
                     _(info).each(function(s, t) {

@@ -2,12 +2,14 @@ define(function(require) {
 
     var compose    = require('compose');
     var WithEvents = require('robo/event/WithEvents');
+    var IEvents    = require('robo/event/IEvents');
 
     // An object that has get, set and observable properties via the OBSERVABLE
     // decoration
     var ObservableObject = compose
         .class('ObservableObject')
         .uses(WithEvents)
+        .implements(IEvents)
         .define({
 
         // Ensure that all observables are setup properly on define

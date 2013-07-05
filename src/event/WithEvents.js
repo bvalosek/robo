@@ -2,7 +2,6 @@ define(function(require) {
 
     var compose  = require('compose');
     var _        = require('underscore');
-    var Log      = require('robo/util/Log');
 
     // Mixin used to add eventing ability to an object. Inspired by / stolen
     // from Backbone.js
@@ -17,8 +16,8 @@ define(function(require) {
 
             events.push({
                 callback: callback,
-                context: _context,
-                ctx: _context || this
+                context: _context,      // used for tracking our binding
+                ctx: _context || this   // what the function bound against
             });
 
             return this;
@@ -28,16 +27,15 @@ define(function(require) {
         // Pass an optional paramter that is recieved by the callback
         __fluent__trigger: function(name, _options)
         {
+            if (this._logEvents) Log.d(this + ' -> ' + name);
+
+            // Find the stack of events for this eventName
             if (!this._events) return this;
             var events = this._events[name];
 
+            // call everything
             _(events).each(function(event) {
                 event.callback.call(event.ctx, _options);
-            });
-
-            // stuff bound to all
-            _(this._events.all).each(function(event) {
-                event.callback.call(event.ctx, name, _options);
             });
 
             return this;
@@ -123,7 +121,9 @@ define(function(require) {
             return this;
         },
 
-        // Bind any events that we've declared via decorations
+        // Bind any events that we've declared via decorations. Allows for
+        // using the EVENT decoration as a short-hand for binding to this with
+        // a basic event
         initEvents: function()
         {
             var _this = this;
@@ -132,22 +132,6 @@ define(function(require) {
                     _this.on(key, info.value.bind(_this));
                 }
             });
-        },
-
-        // Output events to the log for this object
-        __fluent__logEvents: function()
-        {
-            var tag = this.cid || this.id || this.TAG ||
-                this.constructor.__name__;
-
-            this.on('all', function(e, param) {
-                var s = '';
-                if (e == 'COMMAND')
-                    s = ' ' + param.command;
-                Log.d(tag + ' -> ' + e + s);
-            });
-
-            return this;
         }
 
     });
