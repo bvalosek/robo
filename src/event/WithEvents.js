@@ -72,7 +72,7 @@ define(function(require) {
 
             // Iterate over all (or just a single) event name, check to see if
             // we can remove this stuff
-            names = _name ? [_name] : _.keys(this._events);
+            var names = _name ? [_name] : _.keys(this._events);
             _(names).each(function(name) {
                 var events = _this._events[name];
 

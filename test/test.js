@@ -20,4 +20,6 @@ define(function(require) {
     require('unit/event-backbone');
     require('unit/event-dom');
 
+    start();
+
 });

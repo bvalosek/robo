@@ -30,7 +30,7 @@ define(function(require) {
     test('on-element trigger with DOM events', 2, function() {
         var button1 = new DomObject('#button1');
         button1.on('click', function() { ok(true); });
-        document.querySelector('#button1').click();
+        $('#button1').click();
         button1.trigger('click');
     });
 
@@ -44,7 +44,7 @@ define(function(require) {
     test('bubbling up across non-bound DOM nodes', 1, function() {
         var container1 = new DomObject('#container1');
         container1.on('click', function() { ok(true); });
-        document.querySelector('#button2').click();
+        $('#button1').click();
     });
 
 
