@@ -17,5 +17,6 @@ require.config({
 define(function(require) {
 
     require('unit/event');
+    require('unit/event-backbone');
 
 });
