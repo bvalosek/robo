@@ -7,9 +7,10 @@ define(function(require) {
     return compose.interface('IEvents').define({
 
         // Bind a callback function to an event, such that when that event is
-        // triggered, the callback is fired. Bind to an optional context. This
-        // is used when we know that *something else* will trigger an event on
-        // this object, and we want to react to it
+        // triggered, the callback is fired. Bind to an optional
+        // context(defaults to this object). This is used when we know that
+        // *something else* will trigger an event on this object, and we want
+        // to react to it
         __fluent__on : function(eventName, callback, _context) {},
 
         // Remove the event callbacks from this object. Will attempt to match

@@ -4,7 +4,8 @@ define(function(require) {
     var _       = require('underscore');
 
     // Mixin used to add eventing ability to an object. Inspired by / stolen
-    // from Backbone.js
+    // from Backbone.js. This is the implementation that is outlined by IEvents
+    // and mixed in to any Robo object taht needs to be able to do event stuff
     return compose.mixin('WithEvents').define({
 
         // Bind a callback to when an event fires on this object
@@ -81,13 +82,13 @@ define(function(require) {
                     remove = remove || !_context || (_context === info.context);
 
                     if (remove)
-                        delete events[index];
+                        events.splice(index, 1);
 
                 });
 
                 // no more ?
                 if (!events.length)
-                    delete _this.events[name];
+                    delete _this._events[name];
             });
 
             return this;

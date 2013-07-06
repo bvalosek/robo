@@ -32,6 +32,33 @@ define(function(require) {
 
     });
 
+    test('Basic callback adding/removing with listenTo and stopListening', function() {
+
+        var event = 'EVENT_NAME';
+        var f     = function() { strictEqual(this, p, 'listenTo cb in correct context'); };
+        var o, p;
+
+        // setup listener hash
+        o = new EObject();
+        p = new EObject();
+        p.listenTo(o, event, f);
+        var lId = o._listenerId;
+        strictEqual(_(p._listeningTo).size(), 1, 'listeningTo updated on listenTo');
+        strictEqual(p._listeningTo[lId], o, 'listeningTo node pointing correctly');
+        strictEqual(o._events[event].length, 1, 'event handler added to listenee');
+        deepEqual(o._events[event][0],
+            {callback: f, context: p, ctx: p },
+            'event handler hash correct');
+        o.trigger(event);
+
+        // removing listening with stopListening()
+        p.stopListening(o);
+        strictEqual(_(p._listeningTo).size(), 0, 'listening to empty after stop');
+        strictEqual(_(o._events[event]).size(), 0, 'events hash empty after stop');
+
+
+    });
+
     test('Value of this when left unset', function() {
 
         var o;
