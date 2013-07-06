@@ -13,7 +13,8 @@ define(function(require) {
 
         __before__fluent__off : function(_name, _callback, _context)
         {
-            Log.d(this + ' is no longer listening for ' + (name || '[anything]'));
+            Log.d(this + ' is no longer listening for ' +
+                (name || '[anything]'));
         },
 
         __before__fluent__listenTo : function(obj, name, callback)
@@ -23,7 +24,8 @@ define(function(require) {
 
         __before__fluent__stopListening : function(_obj, _name, _callback)
         {
-            Log.d(this + ' is no listening to ' + (obj || '[anything]') + ' for ' + (name || '[anything]'));
+            Log.d(this + ' is no listening to ' + (_obj || '[anything]') +
+                ' for ' + (name || '[anything]'));
         },
 
         __before__trigger__ : function(name, _options)

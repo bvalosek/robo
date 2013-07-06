@@ -18,5 +18,6 @@ define(function(require) {
 
     require('unit/event');
     require('unit/event-backbone');
+    require('unit/event-dom');
 
 });
