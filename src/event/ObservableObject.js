@@ -35,21 +35,22 @@ define(function(require) {
                         },
 
                         set: function(v) {
-                            if (v === this[_key]) return;
+                            var oldValue = this[_key];
+                            if (v === oldValue) return;
 
-                            // unsub from all previous events
-                            if (compose.is(this[_key], ObservableObject)) {
-                                this.stopListening(this[_key]);
+                            // unsub from all previous events (if we
+                            // potentially were listening, in the case of
+                            // having an observable observable object)
+                            if (compose.is(oldValue, ObservableObject)) {
+                                this.stopListening(oldValue);
                             }
 
                             // if we're setting to observable object, make sure
                             // to re-broadcast events
                             if (compose.is(v, ObservableObject)) {
-                                this.listenTo(v, 'all', function(e) {
-                                    if(e === 'change') {
-                                        this.trigger('change');
-                                        this.trigger('change:' + key);
-                                    }
+                                this.listenTo(v, 'change', function(e) {
+                                    this.trigger('change');
+                                    this.trigger('change:' + key);
                                 });
                             }
 
