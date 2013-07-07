@@ -17,7 +17,6 @@ require.config({
 define(function(require) {
 
     require('unit/event');
-    require('unit/event-backbone');
     require('unit/event-dom');
     require('unit/binding');
     require('unit/observable');
