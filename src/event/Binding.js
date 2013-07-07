@@ -19,16 +19,16 @@ define(function(require) {
         // Also can set a static value
         valueWhenNull: null,
 
-        // Bind to a target property
+        // Bind to a target property. Multiple targets could be bound
         __fluent__setTarget: function(target, prop)
         {
             var _this = this;
             target[prop] = this.value;
 
-            // Ensure that when the source changes, we update the target
+            // Using binding to edit the target's value
             this.on(Binding.SOURCE_PROPERTY_CHANGED, function() {
-                target[prop] = _this.value;
-            });
+                this[prop] = _this.value;
+            }, target);
 
             // is target bindable?
             if (compose.is(target, WithEvents)) {
@@ -38,6 +38,14 @@ define(function(require) {
             }
 
             return this;
+        },
+
+        __fluent__removeTarget: function(target)
+        {
+            this.off(null, null, target);
+
+            if (compose.is(target, WithEvents))
+                this.stopListening(target, Binding.TARGET_PROPERTY_CHANGED);
         },
 
         // Either set the static or our corresponding source object/property

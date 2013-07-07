@@ -49,4 +49,19 @@ define(function(require) {
 
     });
 
+    test('Setting target', function() {
+        var o = new (compose.class('O').extends(ObservableObject).define({
+            __observable__prop: undefined
+        }))();
+        var p = {foo:  123};
+        var b = new Binding().setSource(o, 'prop').setTarget(p, 'foo');
+
+        strictEqual(p.foo, undefined, 'init value');
+        o.prop = 555;
+        strictEqual(p.foo, 555, 'changed via source');
+        b.value = 666;
+        strictEqual(p.foo, 666, 'changed via binding value');
+
+    });
+
 });
