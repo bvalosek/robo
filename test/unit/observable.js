@@ -1,6 +1,5 @@
 var compose          = require('compose');
 var ObservableObject = require('../../lib/event/ObservableObject');
-var WithEventLogging = require('../../lib/event/WithEventLogging');
 
 QUnit.module('ObservableObject');
 
