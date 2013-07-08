@@ -40,6 +40,8 @@ define(function(require) {
             return this;
         },
 
+        // Remove a target. IS LESS GRANULAR THAN setTarget in that it will
+        // remove anything with the target object completely, semi djankx
         __fluent__removeTarget: function(target)
         {
             this.off(null, null, target);
