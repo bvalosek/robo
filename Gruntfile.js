@@ -1,29 +1,48 @@
 module.exports = function(grunt) {
+    'use strict';
 
     // Project configuration.
     grunt.initConfig({
 
-        pkg: grunt.file.readJSON('package.json'),
-
         jshint: {
             all: [
-                'src/**/*.js'
-            ]
+                'Gruntfile.js',
+                'lib/**/*.js',
+                'test/unit/**/*.js',
+                'test/main.js'
+            ],
         },
 
-        qunit: {
-            all: ['test/index.html']
+        browserify: {
+            test: {
+                src: ['test/main.js'],
+                dest: 'test/bin/main.debug.js',
+                options: { debug: true }
+            }
+        },
+
+        watch: {
+            files: [
+                'Gruntfile.js',
+                'lib/**/*.js',
+                'test/index.html',
+                'test/unit/**/*.js',
+                'test/unit/main.js',
+                'node_modules/compose/compose.js'
+            ],
+            tasks: ['build']
         }
 
     });
 
     // plugins
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-qunit');
 
     // tasks
     grunt.registerTask('lint', ['jshint']);
-    grunt.registerTask('test', ['lint', 'qunit']);
+    grunt.registerTask('build', ['lint', 'browserify']);
+    grunt.registerTask('default', ['build']);
 
 };
