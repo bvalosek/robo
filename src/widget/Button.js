@@ -5,7 +5,7 @@ define(function(require) {
 
     return compose.class('Button').extends(TextControl).define({
 
-        __override__tag: 'button'
+        __override__readonly__tagName: 'button'
 
     });
 

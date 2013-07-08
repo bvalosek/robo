@@ -6,7 +6,7 @@ define(function(require) {
     // A Layout that is intented to be in the <body>
     return compose.class('RootLayout').extends(Layout).define({
 
-        __override__tagName  : 'body',
+        __override__readonly__tagName  : 'body',
 
         __fluent__inflate: function()
         {

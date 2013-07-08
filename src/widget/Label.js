@@ -5,7 +5,7 @@ define(function(require) {
 
     return compose.class('Label').extends(TextControl).define({
 
-        __override__tag: 'span'
+        __override__readonly__tagName: 'span'
 
     });
 

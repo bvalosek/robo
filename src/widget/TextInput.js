@@ -6,7 +6,7 @@ define(function(require) {
 
     return compose.class('TextInput').extends(ValueControl).define({
 
-        __override__tagName: 'input',
+        __override__readonly__tagName: 'input',
 
         __event__keyup: function()
         {

@@ -6,7 +6,7 @@ define(function(require) {
 
     return compose.class('CheckBox').extends(TextControl).define({
 
-        __override__tagName: 'input',
+        __override__readonly__tagName: 'input',
 
         __event__click: function()
         {
