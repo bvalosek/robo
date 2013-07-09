@@ -5,12 +5,9 @@ module.exports = function(grunt) {
     grunt.initConfig({
 
         jshint: {
-            all: [
-                'Gruntfile.js',
-                'lib/**/*.js',
-                'test/unit/**/*.js',
-                'test/main.js'
-            ],
+            lib: ['lib/**/*.js'],
+            test: ['test/main.js', 'test/unit/*.js'],
+            grunt: ['Gruntfile.js']
         },
 
         browserify: {
@@ -22,23 +19,25 @@ module.exports = function(grunt) {
         },
 
         watch: {
-            files: [
-                'Gruntfile.js',
-                'lib/**/*.js',
-                'test/index.html',
-                'test/unit/**/*.js',
-                'test/unit/main.js',
-                'node_modules/compose/compose.js'
-            ],
-            tasks: ['build']
-        }
+            all: {
+                files: [
+                    'lib/**/*.js',
+                    'test/main.js',
+                    'test/unit/**/*.js'
+                ],
+                tasks: ['default'],
+                options: {
+                    livereload: 35729
+                }
+            }
+        },
 
     });
 
     // plugins
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-browserify');
 
     // tasks
     grunt.registerTask('lint', ['jshint']);
