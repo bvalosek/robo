@@ -1,6 +1,6 @@
 {
-  "name": "RoboJS",
-  "version": "1.0.0",
+  "name": "robo",
+  "version": "0.0.1",
   "description": "Make awesome Javscript apps.",
   "main": "index.js",
   "directories": {
@@ -22,7 +22,6 @@
     "browserify": "~2.23.1"
   },
   "dependencies": {
-    "underscore": "~1.5.1",
-    "q": "~0.9.6"
+    "compose.js": ">0.10.1"
   }
 }
