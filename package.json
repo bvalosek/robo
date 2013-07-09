@@ -19,9 +19,9 @@
     "grunt": "~0.4.1",
     "grunt-contrib-jshint": "~0.6.0",
     "grunt-contrib-watch": "~0.4.4",
-    "browserify": "~2.23.1"
+    "grunt-browserify": "~1.2.0"
   },
   "dependencies": {
-    "compose.js": ">0.10.1"
+    "typedef": "~0.10.3"
   }
 }
