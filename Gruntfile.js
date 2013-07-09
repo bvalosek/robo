@@ -43,5 +43,4 @@ module.exports = function(grunt) {
     grunt.registerTask('lint', ['jshint']);
     grunt.registerTask('build', ['lint', 'browserify']);
     grunt.registerTask('default', ['build']);
-
 };
