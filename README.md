@@ -1,4 +1,4 @@
-# RoboJS
+# Robo
 Make awesome Javascript apps.
 
 ## Architecture Overview
@@ -25,5 +25,5 @@ grunt test
 ## License
 Copyright 2013 Brandon Valosek
 
-**Typedef** is released under the MIT licenses.
+**Robo** is released under the MIT licenses.
 
