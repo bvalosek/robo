@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "typedef": "~0.10.4",
-    "underscore": "~1.5.1"
+    "underscore": "~1.5.1",
+    "q": "~0.9.6"
   }
 }
