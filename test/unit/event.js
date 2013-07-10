@@ -1,9 +1,9 @@
 var WithEvents       = require('../../lib/event/WithEvents');
-var compose          = require('compose');
+var typedef          = require('typedef');
 var _                = require('underscore');
 
 // Basic object w/ events
-var EObject = compose
+var EObject = typedef
     .class('EObject')
     .uses(WithEvents)
     .define();

@@ -1,10 +1,10 @@
-var compose          = require('compose');
+var typedef          = require('typedef');
 var Binding          = require('../../lib/event/Binding');
 var WithEvents       = require('../../lib/event/WithEvents');
 var ObservableObject = require('../../lib/event/ObservableObject');
 
 // Basic object w/ events
-var EObject = compose
+var EObject = typedef
     .class('EObject')
     .uses(WithEvents)
     .define();
@@ -33,7 +33,7 @@ test('Setting value directly', 4, function() {
 test('Setting an ObservableObject as source', function() {
 
     var b = new Binding();
-    var o = new (compose.class('O').extends(ObservableObject).define({
+    var o = new (typedef.class('O').extends(ObservableObject).define({
         __observable__prop: undefined
     }))();
 
@@ -48,7 +48,7 @@ test('Setting an ObservableObject as source', function() {
 });
 
 test('Setting target', function() {
-    var O = compose.class('O').extends(ObservableObject).define({
+    var O = typedef.class('O').extends(ObservableObject).define({
         __observable__prop: undefined
     });
 

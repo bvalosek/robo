@@ -1,11 +1,11 @@
-var compose          = require('compose');
+var typedef          = require('typedef');
 var ObservableObject = require('../../lib/event/ObservableObject');
 
 QUnit.module('ObservableObject');
 
 test('Simple change trigger', 4, function() {
 
-    var O = compose.class('O').extends(ObservableObject).define({
+    var O = typedef.class('O').extends(ObservableObject).define({
         __observable__prop: 123
     });
 
@@ -24,7 +24,7 @@ test('Simple change trigger', 4, function() {
 
 test('specific value change', 1, function() {
 
-    var O = compose.class('O').extends(ObservableObject).define({
+    var O = typedef.class('O').extends(ObservableObject).define({
         __observable__prop: 123,
         __observable__foo: 123
     });
@@ -39,7 +39,7 @@ test('specific value change', 1, function() {
 });
 
 test('observable observable', 4, function() {
-    var O = compose.class('O').extends(ObservableObject).define({
+    var O = typedef.class('O').extends(ObservableObject).define({
         __observable__prop: 123,
         __observable__foo: 123
     });

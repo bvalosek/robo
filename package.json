@@ -22,6 +22,7 @@
     "grunt-browserify": "~1.2.0"
   },
   "dependencies": {
-    "typedef": "~0.10.3"
+    "typedef": "~0.10.4",
+    "underscore": "~1.5.1"
   }
 }
