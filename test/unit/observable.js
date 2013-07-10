@@ -57,3 +57,13 @@ test('observable observable', 4, function() {
 
 });
 
+test('reflection stuff', function() {
+
+    var O = typedef.class('O').extends(ObservableObject).define({
+        __observable__someProp: 1,
+    });
+
+    strictEqual(O.somePropChanged, 'change:someProp', 'changed event string');
+    strictEqual(O.somePropProperty, 'someProp', 'property constant');
+
+});
