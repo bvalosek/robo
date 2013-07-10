@@ -8,6 +8,7 @@ module.exports = function(grunt) {
         jshint: {
             lib: ['lib/**/*.js'],
             test: ['test/main.js', 'test/unit/*.js'],
+            example: ['example/src/**/*.js'],
             grunt: ['Gruntfile.js']
         },
 
@@ -16,20 +17,35 @@ module.exports = function(grunt) {
                 src: ['test/main.js'],
                 dest: 'test/bin/main.debug.js',
                 options: { debug: true }
+            },
+            example: {
+                src: ['example/src/main.js'],
+                dest: 'example/bin/ExampleApp.debug.js',
+                options: { debug: true }
             }
         },
 
         watch: {
-            all: {
-                files: [
-                    'lib/**/*.js',
-                    'test/main.js',
-                    'test/unit/**/*.js'
-                ],
-                tasks: ['default'],
-                options: {
-                    livereload: 35729
-                }
+
+            // If the lib changes, rebuild errthing
+            lib: {
+                files: ['lib/**/*.js'],
+                tasks: ['build']
+            },
+
+            // Example app
+            example: {
+                files: ['example/src/**/*.js'],
+                tasks: ['jshint:example', 'browserify:example']
+            },
+
+            test: {
+                files: ['test/unit/**/*.js', 'test/main.js'],
+                tasks: ['jshint:test', 'browserify:test']
+            },
+
+            options: {
+                livereload: 35729
             }
         },
 
@@ -40,8 +56,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-browserify');
 
-    // tasks
-    grunt.registerTask('lint', ['jshint']);
-    grunt.registerTask('build', ['lint', 'browserify']);
+    // build it all by default
+    grunt.registerTask('build', ['jshint', 'browserify']);
     grunt.registerTask('default', ['build']);
 };
