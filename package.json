@@ -1,6 +1,6 @@
 {
   "name": "robo",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Make awesome Javscript apps.",
   "main": "index.js",
   "directories": {
