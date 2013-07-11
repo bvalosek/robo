@@ -35,8 +35,8 @@ module.exports = function(grunt) {
 
             // Example app
             example: {
-                files: ['example/src/**/*.js'],
-                tasks: ['jshint:example', 'browserify:example']
+                files: ['example/src/**/*.{js,html,xml,css,less}', '!example/src/res/resource.js'],
+                tasks: ['jshint:example', 'resify:example', 'browserify:example']
             },
 
             test: {
@@ -49,14 +49,22 @@ module.exports = function(grunt) {
             }
         },
 
+        resify: {
+            example: {
+                src: ['example/src/res/**/*.*', '!example/res/resource.js'],
+                dest: 'example/src/res/resource.js'
+            }
+        }
+
     });
 
     // plugins
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-browserify');
+    grunt.loadNpmTasks('grunt-resify');
 
     // build it all by default
-    grunt.registerTask('build', ['jshint', 'browserify']);
+    grunt.registerTask('build', ['jshint', 'resify', 'browserify']);
     grunt.registerTask('default', ['build']);
 };
