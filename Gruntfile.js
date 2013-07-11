@@ -35,7 +35,7 @@ module.exports = function(grunt) {
 
             // Example app
             example: {
-                files: ['example/src/**/*.{js,html,xml,css,less}', '!example/src/res/resource.js'],
+                files: ['example/src/**/*.*'],
                 tasks: ['jshint:example', 'resify:example', 'browserify:example']
             },
 
@@ -51,8 +51,11 @@ module.exports = function(grunt) {
 
         resify: {
             example: {
-                src: ['example/src/res/**/*.*', '!example/res/resource.js'],
-                dest: 'example/src/res/resource.js'
+                src: ['example/src/**/*.{json,html,xml,css,less}'],
+                dest: 'example/src/R.js',
+                options: {
+                    base: 'example/src/'
+                }
             }
         }
 
