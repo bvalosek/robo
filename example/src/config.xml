@@ -1,0 +1,19 @@
+<config>
+    <title>something</title>
+    <somethingElse>yah</somethingElse>
+    <aKey>got em</aKey>
+    <options>
+        <option>34</option>
+        <option>32</option>
+        <option>35</option>
+        <option>40</option>
+    </options>
+    <het>
+        <something>abc</something>
+        <something>
+            <name>a name</name>
+            <value>a value</value>
+        </something>
+        <something>efg</something>
+    </het>
+</config>
