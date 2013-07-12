@@ -1,5 +1,6 @@
 var typedef          = require('typedef');
 var ObservableObject = require('../../lib/event/ObservableObject');
+var WithEventLogging = require('../../lib/util/WithEventLogging');
 
 QUnit.module('ObservableObject');
 
@@ -64,5 +65,26 @@ test('reflection stuff', function() {
     });
 
     strictEqual(O.somePropProperty, 'someProp', 'property constant');
+
+});
+
+test('computed basics', 3, function() {
+
+    var Obv = typedef
+    .class('Obv') .extends(ObservableObject) .define({
+        __observable__firstName : 'John',
+        __observable__lastName  : 'Doe',
+        __computed__fullName    : function() { return this.firstName + ' ' + this.lastName; }
+    });
+
+    var o = new Obv();
+
+    o.on('change:fullName', function() { ok(1, 'change triggered'); });
+
+
+    strictEqual(o.fullName, 'John Doe', 'basic access with default observable values');
+
+    o.firstName = 'Bob';
+    strictEqual(o.fullName, 'Bob Doe', 'basic access with mutated observable values');
 
 });
