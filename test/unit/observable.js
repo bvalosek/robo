@@ -63,7 +63,6 @@ test('reflection stuff', function() {
         __observable__someProp: 1,
     });
 
-    strictEqual(O.somePropChanged, 'change:someProp', 'changed event string');
     strictEqual(O.somePropProperty, 'someProp', 'property constant');
 
 });
