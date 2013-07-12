@@ -117,7 +117,7 @@ test('computed with code branches', 6, function() {
 
 });
 
-test('nested deps', function() {
+test('nested deps', 4, function() {
 
     var Obv = typedef
     .class('Obv') .extends(ObservableObject) .define({
@@ -135,5 +135,9 @@ test('nested deps', function() {
     o.on('change:fullName', function() { ok(1, 'change triggered'); });
 
     strictEqual(o.fullName, 'Mr. John Doe', 'initial val');
-    o.sex = 'female';
+    o.sex = 'female'; // fire event
+    strictEqual(o.fullName, 'Mrs. John Doe', 'initial val');
+    o.title = 'asdf'; // no-op, is computed
+    o.sex = 'male'; // fire event
+
 });
