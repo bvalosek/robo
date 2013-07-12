@@ -88,3 +88,52 @@ test('computed basics', 3, function() {
     strictEqual(o.fullName, 'Bob Doe', 'basic access with mutated observable values');
 
 });
+
+test('computed with code branches', 6, function() {
+
+    var Obv = typedef
+    .class('Obv') .extends(ObservableObject) .define({
+        __observable__firstName : 'John',
+        __observable__lastName  : 'Doe',
+        __observable__hideName  : true,
+        __computed__fullName    : function() {
+            if (this.hideName)
+                return '***';
+            else
+                return this.firstName + ' ' + this.lastName;
+        }
+    });
+
+    var o = new Obv();
+    o.on('change:fullName', function() { ok(1, 'change triggered'); });
+
+    strictEqual(o.fullName, '***', 'initial val');
+    o.firstName = 'Bob';
+    strictEqual(o.fullName, '***', 'change out of path doesnt affect');
+    o.hideName = false; // change fired
+    strictEqual(o.fullName, 'Bob Doe', 'branch condition change');
+    o.lastName = 'Saget'; // change fired
+    strictEqual(o.fullName, 'Bob Saget', 'branch condition change');
+
+});
+
+test('nested deps', function() {
+
+    var Obv = typedef
+    .class('Obv') .extends(ObservableObject) .define({
+        __observable__firstName : 'John',
+        __observable__lastName  : 'Doe',
+        __observable__sex       : 'male',
+
+        __computed__title       : function() {
+            return this.sex == 'male' ? 'Mr.' : 'Mrs.'; },
+        __computed__fullName    : function() {
+            return this.title + ' ' + this.firstName + ' ' + this.lastName; }
+    });
+
+    var o = new Obv();
+    o.on('change:fullName', function() { ok(1, 'change triggered'); });
+
+    strictEqual(o.fullName, 'Mr. John Doe', 'initial val');
+    o.sex = 'female';
+});
