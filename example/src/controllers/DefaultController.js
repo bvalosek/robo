@@ -21,6 +21,7 @@ typedef.class('DefaultController').extends(Controller).define({
         // Instantiate controls
         var input = new TextInput().setElement(document.querySelector('input'));
         var button = document.querySelector('button');
+        var span = document.querySelector('span');
 
         // Instantiate view model
         var vm = new HomeViewModel();
@@ -28,6 +29,8 @@ typedef.class('DefaultController').extends(Controller).define({
         // Bind VM observables to controls
         new Binding().setSource(vm, 'text').setTarget(input, 'value');
         new Binding().setSource(vm, 'disableSubmit').setTarget(button, 'disabled');
+        new Binding().setSource(vm, 'submitCaption').setTarget(button, 'innerText');
+        new Binding().setSource(vm, 'message').setTarget(span, 'innerText');
 
         global.vm = vm;
     }
