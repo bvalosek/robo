@@ -141,3 +141,40 @@ test('nested deps', 4, function() {
     o.sex = 'male'; // fire event
 
 });
+
+test('addProperty on instance', 5, function() {
+
+    var o = new ObservableObject();
+    var o2 = new ObservableObject();
+
+    o.addProperties({ a: 123, b: 456, });
+    o.on('change', function() { ok(1, 'change all triggered'); });
+    o.on('change:a', function() { ok(1, 'change a triggered'); });
+    o.on('change:b', function() { ok(1, 'change b triggered'); });
+
+    strictEqual(o.a, 123, 'init value');
+    o.a = 789; // 2x triggers
+    strictEqual(o.a, 789, 'init value');
+
+    strictEqual(o2.a, undefined, 'not on other instance');
+});
+
+test('nested obs with addProperty', 8, function() {
+    var O = typedef.class('O')
+        .extends(ObservableObject).uses(WithEventLogging).define();
+
+    var o = new O();
+    o.addProperties({ a: 123, b: 456 });
+    var p = new O();
+    p.addProperties({ c: 678, obv: o });
+
+    o.on('change', function() { ok(1, 'change o all triggered'); });
+    o.on('change:a', function() { ok(1, 'change o a triggered'); });
+    p.on('change', function() { ok(1, 'change p all triggered'); });
+    p.on('change:obv', function() { ok(1, 'change p obv triggered'); });
+
+    o.a   = 456; // 4x trigger
+    p.obv = 567; // 2x trigger
+    o.a   = 777; // only trigger 2x
+});
+
