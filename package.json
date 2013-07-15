@@ -23,7 +23,7 @@
     "grunt-resify": "~0.1.1"
   },
   "dependencies": {
-    "typedef": "~0.11.0",
+    "typedef": "~0.12.0",
     "underscore": "~1.5.1",
     "q": "~0.9.6"
   }
