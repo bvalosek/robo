@@ -161,12 +161,10 @@ test('addProperty on instance', 5, function() {
 
 test('nested obs with addProperty', 8, function() {
     var O = typedef.class('O')
-        .extends(ObservableObject).uses(WithEventLogging).define();
+        .extends(ObservableObject).define();
 
-    var o = new O();
-    o.addProperties({ a: 123, b: 456 });
-    var p = new O();
-    p.addProperties({ c: 678, obv: o });
+    var o = new O({ a: 123, b: 456 });
+    var p = new O({ c: 678, obv: o });
 
     o.on('change', function() { ok(1, 'change o all triggered'); });
     o.on('change:a', function() { ok(1, 'change o a triggered'); });
