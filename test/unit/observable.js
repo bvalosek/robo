@@ -64,16 +64,13 @@ test('computed basics', 3, function() {
     .class('Obv') .extends(ObservableObject) .define({
         __observable__firstName : 'John',
         __observable__lastName  : 'Doe',
-        __computed__fullName    : function() { return this.firstName + ' ' + this.lastName; }
+        __observable__fullName    : function() { return this.firstName + ' ' + this.lastName; }
     });
 
     var o = new Obv();
 
     o.on('change:fullName', function() { ok(1, 'change triggered'); });
-
-
     strictEqual(o.fullName, 'John Doe', 'basic access with default observable values');
-
     o.firstName = 'Bob';
     strictEqual(o.fullName, 'Bob Doe', 'basic access with mutated observable values');
 
@@ -86,7 +83,7 @@ test('computed with code branches', 6, function() {
         __observable__firstName : 'John',
         __observable__lastName  : 'Doe',
         __observable__hideName  : true,
-        __computed__fullName    : function() {
+        __observable__fullName    : function() {
             if (this.hideName)
                 return '***';
             else
@@ -115,9 +112,9 @@ test('nested deps', 4, function() {
         __observable__lastName  : 'Doe',
         __observable__sex       : 'male',
 
-        __computed__title       : function() {
+        __observable__title       : function() {
             return this.sex == 'male' ? 'Mr.' : 'Mrs.'; },
-        __computed__fullName    : function() {
+        __observable__fullName    : function() {
             return this.title + ' ' + this.firstName + ' ' + this.lastName; }
     });
 
