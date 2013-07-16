@@ -41,7 +41,7 @@ module.exports = function(grunt) {
 
             test: {
                 files: ['test/unit/**/*.js', 'test/main.js'],
-                tasks: ['jshint:test', 'browserify:test']
+                tasks: ['jshint:test', 'resify:test', 'browserify:test']
             },
 
             options: {
@@ -50,6 +50,14 @@ module.exports = function(grunt) {
         },
 
         resify: {
+            test: {
+                src: ['test/**/*.xml'],
+                dest: 'test/R.js',
+                options: {
+                    base: 'test/'
+                }
+            },
+
             example: {
                 src: ['example/src/**/*.{json,html,xml,css,less}'],
                 dest: 'example/src/R.js',

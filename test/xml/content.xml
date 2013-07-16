@@ -1,0 +1,7 @@
+<ContentControl
+    xmlns="typedef:robo.control"
+    name="theContentControl">
+
+    Here is some content.
+
+</ContentControl>
