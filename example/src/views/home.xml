@@ -1,0 +1,16 @@
+<robo:Layout
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:robo="http://robojs.org/schema">
+
+    <robo:TextInput
+        type="text"
+        value="{Binding messageInput}" />
+
+    <button
+        robo:command="saveMessage">
+        Save
+    </button>
+
+    <p innerText="{Binding messageFeedback}" />
+
+</robo:Layout>
