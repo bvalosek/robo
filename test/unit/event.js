@@ -18,15 +18,15 @@ test('Basic callback adding and removing with on/off', function() {
     // with on/off(name, cb)
     o = new EObject();
     o.on('EVENT_NAME', f);
-    strictEqual(_(o._events).size(), 1, 'using on(name, cb) adds to _events');
+    strictEqual(_(o.__events).size(), 1, 'using on(name, cb) adds to __events');
     o.off('EVENT_NAME', f);
-    strictEqual(_(o._events).size(), 0, 'using off(name, cb) removes event node when empty');
+    strictEqual(_(o.__events).size(), 0, 'using off(name, cb) removes event node when empty');
 
     // off with no args
     o = new EObject();
     o.on('EVENT_NAME', f);
     o.off();
-    deepEqual(o._events, {}, 'off() clears all');
+    deepEqual(o.__events, {}, 'off() clears all');
 
 });
 
@@ -41,18 +41,18 @@ test('Basic callback adding/removing with listenTo and stopListening', function(
     p = new EObject();
     p.listenTo(o, event, f);
     var lId = o._listenerId;
-    strictEqual(_(p._listeningTo).size(), 1, 'listeningTo updated on listenTo');
-    strictEqual(p._listeningTo[lId], o, 'listeningTo node pointing correctly');
-    strictEqual(o._events[event].length, 1, 'event handler added to listenee');
-    deepEqual(o._events[event][0],
+    strictEqual(_(p.__listeningTo).size(), 1, 'listeningTo updated on listenTo');
+    strictEqual(p.__listeningTo[lId], o, 'listeningTo node pointing correctly');
+    strictEqual(o.__events[event].length, 1, 'event handler added to listenee');
+    deepEqual(o.__events[event][0],
         {callback: f, context: p, ctx: p },
         'event handler hash correct');
     o.trigger(event);
 
     // removing listening with stopListening()
     p.stopListening(o);
-    strictEqual(_(p._listeningTo).size(), 0, 'listening to empty after stop');
-    strictEqual(_(o._events[event]).size(), 0, 'events hash empty after stop');
+    strictEqual(_(p.__listeningTo).size(), 0, 'listening to empty after stop');
+    strictEqual(_(o.__events[event]).size(), 0, 'events hash empty after stop');
 
 
 });
