@@ -163,3 +163,66 @@ test('nested obs with addProperty', 8, function() {
     o.a   = 777; // only trigger 2x
 });
 
+test('getter setter observable', function() {
+
+    var O = typedef.class().extends(ObservableObject).define({
+
+        __observable__prop:
+        {
+            get: function()
+            {
+                access++;
+                return this.val;
+            },
+
+            set: function(v) { this.val = v; }
+        }
+
+    });
+
+    var access = 0;
+    var change = 0;
+
+    var o = new O();
+
+    o.on('change:prop', function() { change++; });
+
+    var x = o.prop; // access
+    strictEqual(access, 1, 'getter fired');
+    o.prop = 123; // change
+    strictEqual(change, 1, 'changed fired with setter');
+    strictEqual(o.val, 123, 'setter works');
+
+});
+
+test('getter setter obs with side effects', function() {
+
+    var O = typedef.class().extends(ObservableObject).define({
+        __observable__val: '',
+        __observable__prop: {
+            get: function() { return this.val + '!'; },
+            set: function(v) { this.val = v; }
+        }
+    });
+
+    var o = new O();
+
+    var valChange  = 0;
+    var propChange = 0;
+
+    o.on('change:val', function() { valChange++; });
+    o.on('change:prop', function() { propChange++; });
+
+    o.prop = 'hey';
+    strictEqual(o.val, 'hey', 'setter worked');
+    strictEqual(o.prop, 'hey!', 'setter worked');
+    strictEqual(valChange, 1, 'val changed');
+    strictEqual(propChange, 2, 'prop changed');
+
+    o.val = 'hello';
+    strictEqual(valChange, 2, 'val changed');
+    strictEqual(propChange, 3, 'prop changed');
+
+
+
+});
