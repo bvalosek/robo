@@ -7,7 +7,8 @@
         value="{Binding messageInput}" />
 
     <robo:Button
-        command="saveMessage">
+        command="saveMessage"
+        enabled="{Binding canSave}">
         Save
     </robo:Button>
 
@@ -16,5 +17,7 @@
     <p>
         <robo:Label text="{Binding messageFeedback}" />
     </p>
+
+    <div><img src="{Binding imageUrl}" /></div>
 
 </robo:Layout>
