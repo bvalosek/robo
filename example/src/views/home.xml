@@ -11,6 +11,8 @@
         Save
     </button>
 
+    <span innerText="{Binding messageLength}" />
+
     <p innerText="{Binding messageFeedback}" />
 
 </robo:Layout>

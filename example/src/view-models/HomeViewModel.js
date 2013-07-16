@@ -6,6 +6,11 @@ module.exports = require('typedef')
 
     __observable__messageInput: '',
 
+    __computed__messageLength: function()
+    {
+        return this.messageInput.length;
+    },
+
     __computed__messageFeedback: function()
     {
         if (this.messageInput)
