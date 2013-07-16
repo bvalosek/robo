@@ -1,13 +1,14 @@
-var typedef        = require('typedef');
-var Log            = require('../../../lib/util/Log');
-var Controller     = require('../../../lib/app/Controller');
-var LayoutInflator = require('../../../lib/view/LayoutInflator');
+var typedef          = require('typedef');
+var Log              = require('../../../lib/util/Log');
+var Controller       = require('../../../lib/app/Controller');
+var LayoutInflator   = require('../../../lib/view/LayoutInflator');
 var ObservableObject = require('../../../lib/event/ObservableObject');
-var HomeViewModel  = require('../view-models/HomeViewModel');
-var R              = require('../R');
+var HomeViewModel    = require('../view-models/HomeViewModel');
+var R                = require('../R');
 
-var TextInput      = require('../../../lib/widget/TextInput');
-var Button         = require('../../../lib/widget/Button');
+var TextInput        = require('../../../lib/widget/TextInput');
+var Button           = require('../../../lib/widget/Button');
+var Label            = require('../../../lib/widget/Label');
 
 module.exports = DefaultController =
 typedef.class('DefaultController').extends(Controller).define({

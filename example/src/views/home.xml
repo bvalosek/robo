@@ -6,13 +6,15 @@
         type="text"
         value="{Binding messageInput}" />
 
-    <button
-        robo:command="saveMessage">
+    <robo:Button
+        command="saveMessage">
         Save
-    </button>
+    </robo:Button>
 
-    <span innerText="{Binding messageLength}" />
+    <robo:Label text="{Binding messageLength}" />
 
-    <p innerText="{Binding messageFeedback}" />
+    <p>
+        <robo:Label text="{Binding messageFeedback}" />
+    </p>
 
 </robo:Layout>
