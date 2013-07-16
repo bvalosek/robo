@@ -12,12 +12,8 @@
         Save
     </robo:Button>
 
-    <robo:Label text="{Binding messageLength}" />
-
     <p>
         <robo:Label text="{Binding messageFeedback}" />
     </p>
-
-    <div><img src="{Binding imageUrl}" /></div>
 
 </robo:Layout>

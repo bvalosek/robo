@@ -2,14 +2,10 @@ var ObservableObject = require('../../../lib/event/ObservableObject');
 
 module.exports = require('typedef')
 
+// View Model
 .class('HomeViewModel') .extends(ObservableObject) .define({
 
     __observable__messageInput: '',
-
-    __computed__messageLength: function()
-    {
-        return this.messageInput.length;
-    },
 
     __computed__messageFeedback: function()
     {
@@ -19,21 +15,9 @@ module.exports = require('typedef')
             return 'Type something into the box';
     },
 
-    __computed__imageUrl: function()
-    {
-        return 'http://www.cdpe.com/assets/images/accelerate/images/week-' +
-            (this.messageLength > 11 ? 12 : this.messageLength + 1) + '.png';
-    },
-
     __computed__canSave: function()
     {
-        return !!this.messageLength;
-    },
-
-    execute: function()
-    {
-        console.log('saved ' + this.messageInput);
-        this.messageInput = '';
+        return !!this.messageInput.length;
     }
 
 });
