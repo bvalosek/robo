@@ -7,7 +7,7 @@ module.exports = require('typedef')
 
     __observable__messageInput: '',
 
-    __computed__messageFeedback: function()
+    __observable__messageFeedback: function()
     {
         if (this.messageInput)
             return 'Press "Save" when done';
@@ -15,7 +15,7 @@ module.exports = require('typedef')
             return 'Type something into the box';
     },
 
-    __computed__canSave: function()
+    __observable__canSave: function()
     {
         return !!this.messageInput.length;
     }

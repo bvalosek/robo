@@ -3,17 +3,12 @@
     xmlns:robo="http://robojs.org/schema">
 
     <robo:TextInput
-        type="text"
         value="{Binding messageInput}" />
 
     <robo:Button
-        command="saveMessage"
-        enabled="{Binding canSave}">
-        Save
-    </robo:Button>
+        text="Save"
+        enabled="{Binding canSave}" />
 
-    <p>
-        <robo:Label text="{Binding messageFeedback}" />
-    </p>
+    <div><robo:Label text="{Binding messageFeedback}" /></div>
 
 </robo:Layout>
