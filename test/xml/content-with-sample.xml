@@ -2,7 +2,8 @@
     xmlns="typedef:robo.control"
     name="theContentControl">
 
-    Hello, World!
-
+    <SampleThing
+        someProp="123"
+        somethingElse="456" />
 
 </ContentControl>

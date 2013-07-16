@@ -40,7 +40,7 @@ module.exports = function(grunt) {
             },
 
             test: {
-                files: ['test/unit/**/*.js', 'test/main.js'],
+                files: ['test/unit/**/*.js', 'test/main.js', 'test/**/*.xml'],
                 tasks: ['jshint:test', 'resify:test', 'browserify:test']
             },
 

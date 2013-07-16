@@ -1,14 +1,12 @@
 var typedef          = require('typedef');
 var Log              = require('../../../lib/util/Log');
 var Controller       = require('../../../lib/app/Controller');
-var LayoutInflator   = require('../../../lib/view/LayoutInflator');
 var ObservableObject = require('../../../lib/event/ObservableObject');
+var RxParser         = require('../../../lib/xml/RxParser');
 var HomeViewModel    = require('../view-models/HomeViewModel');
 var R                = require('../R');
 
-var TextInput        = require('../../../lib/widget/TextInput');
-var Button           = require('../../../lib/widget/Button');
-var Label            = require('../../../lib/widget/Label');
+var ContentControl   = require('../../../lib/control/ContentControl');
 
 module.exports = DefaultController =
 typedef.class('DefaultController').extends(Controller).define({
@@ -17,13 +15,8 @@ typedef.class('DefaultController').extends(Controller).define({
     {
         Log.d('DefaultController::index route');
 
-        var vm = new HomeViewModel();
-
-        var layout = new LayoutInflator()
-            .setLayoutResource(R('views/home.xml'))
-            .setDomNode(document.body)
-            .inflate()
-            .setDataContext(vm);
+        var vm     = new HomeViewModel();
+        var layout = new RxParser().parse(R('views/home.xml'));
 
         global.vm   = vm;
         global.view = layout;
