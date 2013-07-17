@@ -1,12 +1,9 @@
-var typedef          = require('typedef');
-var Log              = require('../../../lib/util/Log');
-var Controller       = require('../../../lib/app/Controller');
-var ObservableObject = require('../../../lib/event/ObservableObject');
-var RxParser         = require('../../../lib/xml/RxParser');
-var HomeViewModel    = require('../view-models/HomeViewModel');
-var R                = require('../R');
-
-var ContentControl   = require('../../../lib/control/ContentControl');
+var typedef       = require('typedef');
+var Log           = require('../../../lib/util/Log');
+var Controller    = require('../../../lib/app/Controller');
+var loader        = require('../../../lib/xml/loader');
+var HomeViewModel = require('../view-models/HomeViewModel');
+var R             = require('../R');
 
 module.exports = DefaultController =
 typedef.class('DefaultController').extends(Controller).define({
@@ -16,7 +13,7 @@ typedef.class('DefaultController').extends(Controller).define({
         Log.d('DefaultController::index route');
 
         var vm     = new HomeViewModel();
-        var layout = new RxParser().parse(R('views/home.xml'));
+        var layout = loader(R('views/home.xml'), {element: document.body});
 
         global.vm   = vm;
         global.view = layout;
