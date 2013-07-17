@@ -1,23 +1,16 @@
 var ObservableObject = require('../../../lib/event/ObservableObject');
+var Person           = require('../classes/Person');
 
 module.exports = require('typedef')
 
 // View Model
 .class('HomeViewModel') .extends(ObservableObject) .define({
 
-    __observable__messageInput: '',
-
-    __observable__messageFeedback: function()
+    __constructor__: function()
     {
-        if (this.messageInput)
-            return 'Press "Save" when done';
-        else
-            return 'Type something into the box';
+        this.person = new Person();
     },
 
-    __observable__canSave: function()
-    {
-        return !!this.messageInput.length;
-    }
+    __observable__person: null,
 
 });

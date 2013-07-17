@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
 <control:ContentControl
-    xmlns:control="lib:robo/control"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:control="local:lib/control"
     xmlns:app="local:example/src/classes"
-    xmlns="http://www.w3.org/1999/xhtml">
-
-    <app:Person
-        firstName="Brandon"
-        lastName="Valosek"
-        age="26" />
-
-</control:ContentControl>
+    content="{Binding person}" />

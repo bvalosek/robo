@@ -13,10 +13,10 @@ typedef.class('DefaultController').extends(Controller).define({
         Log.d('DefaultController::index route');
 
         var vm     = new HomeViewModel();
-        var layout = loader(R('views/home.xml'), {element: document.body});
+        var view = loader(R('views/home.xml'), {element: document.body});
 
         global.vm   = vm;
-        global.view = layout;
+        global.view = view;
     }
 
 });
