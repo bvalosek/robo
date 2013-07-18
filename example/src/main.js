@@ -6,9 +6,9 @@ var Person        = require('./Person');
 
 var vm   = global.vm   = new HomeViewModel();
 var view = global.view = loader(R('home.xml'), {element: document.body});
-var me   = global.me   = new Person(); 
+var me   = global.me   = new Person();
 
-me.firstName = 'Brandon'; 
+me.firstName = 'Brandon';
 me.lastName = 'Valosek';
 
 view.setDataContext(vm);

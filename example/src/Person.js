@@ -1,4 +1,5 @@
 var ObservableObject = require('../../lib/event/ObservableObject');
+var Collection       = require('../../lib/model/Collection');
 
 module.exports = Person = require('typedef')
 
@@ -7,15 +8,16 @@ module.exports = Person = require('typedef')
     __observable__firstName : 'John',
     __observable__lastName  : 'Doe',
     __observable__age       : 26,
+    __observable__friends : null,
+
+    __constructor__: function()
+    {
+        this.friends = new Collection();
+    },
 
     __observable__fullName : function()
     {
         return this.firstName + ' ' + this.lastName;
-    },
-
-    __virtual__talk: function()
-    {
-        console.log('My name is ' + this.firstName + ' ' + this.lastName);
     }
 
 });

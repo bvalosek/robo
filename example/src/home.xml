@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<control:ContentControl
+<view:ViewGroup
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:control="local:lib/control"
-    content="{Binding person.fullName}" />
+    xmlns:view="local:lib/view">
+
+    <div>
+        <control:ContentControl content="{Binding person.fullName}" />
+    </div>
+
+
+</view:ViewGroup>
