@@ -26,9 +26,5 @@ test('Binding creation', function() {
     ds.x = 444;
     strictEqual(view.a, 333, 'old bind not stuck');
 
-    view.setDataContext({ x: 111 });
-    ds.x = ds2.x = 555;
-    strictEqual(view.a, 111, 'change of data context (static)');
-
 });
 
