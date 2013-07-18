@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+
 <control:ContentControl
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:control="local:lib/control"
-    xmlns:app="local:example/src/classes"
     content="{Binding person}" />

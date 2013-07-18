@@ -1,5 +1,5 @@
-var ObservableObject = require('../../../lib/event/ObservableObject');
-var Person           = require('../classes/Person');
+var ObservableObject = require('../../lib/event/ObservableObject');
+var Person           = require('./Person');
 
 module.exports = require('typedef')
 

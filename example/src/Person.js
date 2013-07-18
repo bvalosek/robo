@@ -1,4 +1,4 @@
-var ObservableObject = require('../../../lib/event/ObservableObject');
+var ObservableObject = require('../../lib/event/ObservableObject');
 
 module.exports = Person = require('typedef')
 
@@ -17,5 +17,10 @@ module.exports = Person = require('typedef')
     {
         console.log('My name is ' + this.firstName + ' ' + this.lastName);
     },
+
+    __override__hidden__toString: function()
+    {
+        return this.fullName;
+    }
 
 });
