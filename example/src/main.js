@@ -3,8 +3,8 @@ var loader        = require('../../lib/xml/loader');
 var HomeViewModel = require('./view-models/HomeViewModel');
 var R             = require('./R');
 
-var vm     = new HomeViewModel();
-var view = loader(R('views/home.xml'), {element: document.body});
+var vm   = global.vm   = new HomeViewModel();
+var view = global.view = loader(R('views/home.xml'), {element: document.body});
 
-global.vm   = vm;
-global.view = view;
+view.setDataContext(vm);
+
