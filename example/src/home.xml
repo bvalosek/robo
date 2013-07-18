@@ -3,4 +3,4 @@
 <control:ContentControl
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:control="local:lib/control"
-    content="{Binding person}" />
+    content="{Binding person.fullName}" />
