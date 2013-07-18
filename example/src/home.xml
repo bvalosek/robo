@@ -4,9 +4,7 @@
     xmlns:control="local:lib/control"
     xmlns:view="local:lib/view">
 
-    <div>
-        <control:ContentControl content="{Binding person.fullName}" />
-    </div>
-
+    <control:ContentControl
+        content="{Binding person.fullName}" />
 
 </view:ViewGroup>

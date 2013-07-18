@@ -11,5 +11,7 @@ var me   = global.me   = new Person();
 me.firstName = 'Brandon';
 me.lastName = 'Valosek';
 
+vm.person.friends.add(me);
+
 view.setDataContext(vm);
 
