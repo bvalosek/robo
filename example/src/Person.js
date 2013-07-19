@@ -8,7 +8,7 @@ module.exports = Person = require('typedef')
     __observable__firstName : 'John',
     __observable__lastName  : 'Doe',
     __observable__age       : 26,
-    __observable__friends : null,
+    __observable__friends   : null,
 
     __constructor__: function()
     {

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Person
+    xmlns="local:example/src"
+    firstName="Brandon"
+    lastName="Valosek">
+
+    <Person.friends>
+
+        <Person
+            firstName="Hunter"
+            lastName="Polvi">
+            <Person.friends>
+                <Person
+                    firstName="Kelli"
+                    lastName="Freeman" />
+            </Person.friends>
+        </Person>
+
+        <Person
+            firstName="Derek"
+            lastName="Ensign" />
+
+    </Person.friends>
+
+</Person>

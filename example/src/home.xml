@@ -1,10 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <view:ViewGroup
     xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:example="local:example/src"
     xmlns:control="local:lib/control"
+    xmlns:model="local:lib/model"
     xmlns:view="local:lib/view">
 
-    <control:ContentControl
-        content="{Binding person.fullName}" />
+    <!-- stuff we're using in this view -->
+    <view:ViewGroup.resources>
+        <model:Collection>
+            <example:Person
+                firstName="Brandon"
+                lastName="Valosek">
+            </example:Person>
+            <example:Person
+                firstName="Derek"
+                lastName="Ensign">
+            </example:Person>
+        </model:Collection>
+    </view:ViewGroup.resources>
+
+    <control:ContentControl>
+        This is text content
+    </control:ContentControl>
+
+    <control:ContentControl>
+        More text
+    </control:ContentControl>
 
 </view:ViewGroup>
