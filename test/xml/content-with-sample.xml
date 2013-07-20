@@ -1,9 +1,0 @@
-<ContentControl
-    xmlns="typedef:robo.control"
-    name="theContentControl">
-
-    <SampleThing
-        someProp="123"
-        somethingElse="456" />
-
-</ContentControl>
