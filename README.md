@@ -1,26 +1,13 @@
 # Robo
 Make awesome Javascript apps.
 
-## Architecture Overview
+## Shit That's Important
 
-### Application
-
-### Controller
-
-### View
-
-### ViewModel
-
-### Data Templates
-
-### Models and Collections
-
-## Tests
-
-```
-npm install
-grunt test
-```
+* MVVM
+* Data binding
+* XAML
+* `ObservableObject`
+* `IList` / `IDictionary`
 
 ## License
 Copyright 2013 Brandon Valosek
