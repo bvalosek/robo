@@ -18,6 +18,11 @@ module.exports = Person = require('typedef')
     __observable__fullName : function()
     {
         return this.firstName + ' ' + this.lastName;
+    },
+
+    __override__hidden__toString: function()
+    {
+        return this.fullName;
     }
 
 });

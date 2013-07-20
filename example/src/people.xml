@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<model:Collection
+    xmlns="local:example/src"
+    xmlns:model="local:lib/model">
+
+    <Person firstName="Angus" lastName="Apple" />
+    <Person firstName="Billy" lastName="Biscuit" />
+    <Person firstName="Charlie" lastName="Cheesecake" />
+
+</model:Collection>

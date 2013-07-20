@@ -59,7 +59,7 @@ module.exports = function(grunt) {
             },
 
             example: {
-                src: ['example/src/**/*.{json,html,xml,css,less}'],
+                src: ['example/src/**/*.xml'],
                 dest: 'example/src/R.js',
                 options: {
                     base: 'example/src/'
