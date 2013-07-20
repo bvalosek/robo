@@ -11,10 +11,18 @@
         This is text content
     </control:ContentControl>
 
-    <control:Button>
-        <example:Person
-            firstName="Brandon"
-            lastName="Valosek" />
-    </control:Button>
+    <view:ViewGroup>
+        <h3>Button control with Person content</h3>
+        <control:Button>
+            <example:Person
+                firstName="Brandon"
+                lastName="Valosek" />
+        </control:Button>
+    </view:ViewGroup>
+
+    <view:ViewGroup>
+        <h3>Button control will static</h3>
+        <control:Button content="OK" />
+    </view:ViewGroup>
 
 </view:ViewGroup>
