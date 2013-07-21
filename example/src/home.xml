@@ -3,10 +3,16 @@
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:x="http://www.robojs.org/v1/schema"
 
+    xmlns:example="local:example/src"
     xmlns:control="local:lib/control"
     xmlns:view="local:lib/view">
 
-    <control:SelectControl items="{Binding people}" />
+    <control:SelectControl>
+        <example:Person firstName="Angus" lastName="Apple" />
+        <example:Person firstName="Billy" lastName="Biscuit" />
+        <example:Person firstName="Charlie" lastName="Cheesecake" />
+    </control:SelectControl>
+
     <control:Button />
 
 </view:ViewGroup>
