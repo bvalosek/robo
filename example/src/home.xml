@@ -3,6 +3,7 @@
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:x="http://www.robojs.org/v1/schema"
 
+    xmlns:model="local:lib/model"
     xmlns:example="local:example/src"
     xmlns:control="local:lib/control"
     xmlns:view="local:lib/view">

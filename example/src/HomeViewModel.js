@@ -8,7 +8,7 @@ module.exports = require('typedef')
 // View Model
 .class('HomeViewModel') .extends(ObservableObject) .define({
 
-    __observable__people    : null,
+    __observable__people        : null,
     __observable__currentPerson : null,
 
     __constructor__: function()
