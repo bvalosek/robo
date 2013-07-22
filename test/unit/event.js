@@ -40,7 +40,7 @@ test('Basic callback adding/removing with listenTo and stopListening', function(
     o = new EObject();
     p = new EObject();
     p.listenTo(o, event, f);
-    var lId = o._listenerId;
+    var lId = o.__listenerId;
     strictEqual(_(p.__listeningTo).size(), 1, 'listeningTo updated on listenTo');
     strictEqual(p.__listeningTo[lId], o, 'listeningTo node pointing correctly');
     strictEqual(o.__events[event].length, 1, 'event handler added to listenee');

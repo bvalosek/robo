@@ -13,12 +13,12 @@ test('Basic collection', 6, function() {
     var c = new ObservableObject({ z: 3 });
 
     collection.on('change', function() { ok(true, 'change event fired'); });
-    strictEqual(collection.length, 0, '0 length to start');
+    strictEqual(collection.count(), 0, '0 length to start');
     collection.add(a); // event!
-    strictEqual(collection.length, 1, '1 after');
+    strictEqual(collection.count(), 1, '1 after');
     a.x = 111; // event!
     collection.remove(a); // event!
-    strictEqual(collection.length, 0, '0 after remove');
+    strictEqual(collection.count(), 0, '0 after remove');
     a.x = 222; // NO event!
 
 });
@@ -32,7 +32,6 @@ test('add remove events', function() {
 
     var collection = new Collection();
     collection.on('change', function() { change++; });
-    collection.on('change:length', function() { lengthChange++; });
     collection.on('add', function() { add++; });
     collection.on('remove', function() { remove++; });
 
@@ -43,12 +42,10 @@ test('add remove events', function() {
     collection.add(b); // add, change, change length
 
     strictEqual(change, 2, 'change events');
-    strictEqual(lengthChange, 2, 'change:length events');
     strictEqual(add, 2, 'add events');
 
     collection.remove(a); // add, change, change length
     strictEqual(change, 3, 'change events');
-    strictEqual(lengthChange, 3, 'change:length events');
     strictEqual(add, 2, 'add events');
     strictEqual(remove, 1, 'remove events');
 
@@ -57,7 +54,6 @@ test('add remove events', function() {
 
     collection.remove(b); // add, change, change length
     strictEqual(change, 5, 'change events');
-    strictEqual(lengthChange, 4, 'change:length events');
     strictEqual(add, 2, 'add events');
     strictEqual(remove, 2, 'remove events');
 
