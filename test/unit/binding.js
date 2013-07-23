@@ -94,3 +94,35 @@ test('Changing source', 5, function() {
     a.prop = 999; b.prop = 999; // nops
 });
 
+test('one way binding', function() {
+
+    var s = new ObservableObject({ prop: 123 });
+    var t = new ObservableObject({ prop: 456 });
+
+    var binding = new Binding()
+        .setMode(Binding.ONE_WAY)
+        .setSource(s, 'prop')
+        .setTarget(t, 'prop');
+
+    strictEqual(t.prop, 123, 'target set on bind');
+    s.prop = 555;
+    strictEqual(t.prop, 555, 'target set on source change');
+    t.prop = 666;
+    strictEqual(s.prop, 555, 'source NOT set on target change');
+
+});
+
+test('throw on mode set out of order', function() {
+
+    var s = new ObservableObject({ prop: 123 });
+    var t = new ObservableObject({ prop: 456 });
+
+    throws(function() {
+        var b = new Binding()
+            .setSource(s, 'prop')
+            .setTarget(t, 'prop')
+            .setMode(Binding.ONE_WAY);
+    });
+
+});
+
