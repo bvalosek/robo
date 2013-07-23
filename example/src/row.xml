@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<view:ViewGroup
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:x="http://www.robojs.org/v1/schema"
+
+    xmlns:control="local:lib/control"
+    xmlns:view="local:lib/view">
+
+    <span>first name: </span>
+    <control:Label content="{Binding firstName}" />
+
+</view:ViewGroup>

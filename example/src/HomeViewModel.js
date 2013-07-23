@@ -14,6 +14,7 @@ module.exports = require('typedef')
     __constructor__: function()
     {
         this.people = loader(R('people.xml'));
+        this.currentPerson = this.people.first();
     }
 
 });

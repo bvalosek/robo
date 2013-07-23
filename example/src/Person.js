@@ -9,6 +9,7 @@ module.exports = Person = require('typedef')
     __observable__lastName  : 'Doe',
     __observable__age       : 26,
     __observable__friends   : null,
+    __observable__isCool    : true,
 
     __constructor__: function()
     {
@@ -17,7 +18,7 @@ module.exports = Person = require('typedef')
 
     __observable__fullName : function()
     {
-        return this.firstName + ' ' + this.lastName;
+        return this.firstName + ' ' + this.lastName + (this.isCool ? ' (cool)' : '');
     },
 
     __override__hidden__toString: function()

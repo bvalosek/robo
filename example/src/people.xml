@@ -3,8 +3,11 @@
     xmlns="local:example/src"
     xmlns:model="local:lib/model">
 
-    <Person firstName="Angus" lastName="Apple" />
-    <Person firstName="Billy" lastName="Biscuit" />
-    <Person firstName="Charlie" lastName="Cheesecake" />
+    <Person firstName="Brandon" lastName ="Valosek" />
+    <Person firstName="Derek"   lastName ="Ensign" />
+    <Person firstName="Hunter"  lastName ="Polvi" />
+    <Person firstName="Angus"   lastName ="Apple" />
+    <Person firstName="Billy"   lastName ="Biscuit" />
+    <Person firstName="Charlie" lastName ="Cheesecake" />
 
 </model:Collection>

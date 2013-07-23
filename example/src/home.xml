@@ -8,12 +8,19 @@
     xmlns:control="local:lib/control"
     xmlns:view="local:lib/view">
 
-    <control:SelectControl>
-        <example:Person firstName="Angus" lastName="Apple" />
-        <example:Person firstName="Billy" lastName="Biscuit" />
-        <example:Person firstName="Charlie" lastName="Cheesecake" />
-    </control:SelectControl>
+    <control:SelectControl 
+        items="{Binding people}" 
+        selectedItem="{Binding currentPerson}"
+        />
 
-    <control:Button />
+    <h3>people</h3>
+    <control:ItemsControl
+        items="{Binding people}" />
+
+    <view:ViewGroup>
+        <h3>currentPerson</h3>
+        <control:Label content="{Binding currentPerson.fullName}" /><br/>
+        <control:CheckBox checked="{Binding currentPerson.isCool}" content="isCool"/>
+    </view:ViewGroup>
 
 </view:ViewGroup>
