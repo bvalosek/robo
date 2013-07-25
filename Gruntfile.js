@@ -65,17 +65,24 @@ module.exports = function(grunt) {
                     base: 'example/src/'
                 }
             }
+        },
+
+        qunit: {
+            all: ['test/index.html']
         }
 
     });
 
     // plugins
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-resify');
 
     // build it all by default
-    grunt.registerTask('build', ['jshint', 'resify', 'browserify']);
+    grunt.registerTask('lint', ['jshint']);
+    grunt.registerTask('test', ['build', 'browserify:test', 'qunit']);
+    grunt.registerTask('build', ['lint', 'resify', 'browserify']);
     grunt.registerTask('default', ['build']);
 };
