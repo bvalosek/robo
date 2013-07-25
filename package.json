@@ -20,10 +20,11 @@
     "grunt-contrib-jshint": "~0.6.0",
     "grunt-contrib-watch": "~0.4.4",
     "grunt-browserify": "~1.2.0",
-    "grunt-resify": "~0.1.1"
+    "grunt-resify": "~0.1.1",
+    "grunt-contrib-qunit": "~0.2.2"
   },
   "dependencies": {
-    "typedef": "~0.12.0",
+    "typedef": "~0.13.0",
     "underscore": "~1.5.1",
     "q": "~0.9.6"
   }
