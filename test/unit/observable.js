@@ -124,7 +124,6 @@ test('nested deps', 4, function() {
     strictEqual(o.fullName, 'Mr. John Doe', 'initial val');
     o.sex = 'female'; // fire event
     strictEqual(o.fullName, 'Mrs. John Doe', 'initial val');
-    o.title = 'asdf'; // no-op, is computed
     o.sex = 'male'; // fire event
 
 });
