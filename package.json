@@ -24,7 +24,7 @@
     "grunt-contrib-qunit": "~0.2.2"
   },
   "dependencies": {
-    "typedef": "~0.13.0",
+    "typedef": "~0.13.2",
     "underscore": "~1.5.1",
     "q": "~0.9.6"
   }
