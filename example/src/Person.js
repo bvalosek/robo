@@ -18,7 +18,7 @@ module.exports = Person = require('typedef')
 
     __observable__fullName : function()
     {
-        return this.firstName + ' ' + this.lastName + (this.isCool ? ' (cool)' : '');
+        return this.firstName + ' ' + this.lastName;
     },
 
     __override__hidden__toString: function()

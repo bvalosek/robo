@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<view:ViewGroup
+<view:Window
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:x="http://www.robojs.org/v1/schema"
 
@@ -8,19 +8,6 @@
     xmlns:control="local:lib/control"
     xmlns:view="local:lib/view">
 
-    <control:SelectControl 
-        items="{Binding people}" 
-        selectedItem="{Binding currentPerson}"
-        />
+    <control:Label>this is a label</control:Label>
 
-    <h3>people</h3>
-    <control:ItemsControl
-        items="{Binding people}" />
-
-    <view:ViewGroup>
-        <h3>currentPerson</h3>
-        <control:Label content="{Binding currentPerson.fullName}" /><br/>
-        <control:CheckBox checked="{Binding currentPerson.isCool}" content="isCool"/>
-    </view:ViewGroup>
-
-</view:ViewGroup>
+</view:Window>

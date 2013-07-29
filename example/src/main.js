@@ -9,7 +9,7 @@ Log.w('starting');
 var vm   = global.vm   = new HomeViewModel();
 Log.w('vm created');
 
-var view = global.view = loader(R('home.xml')).setElement(document.getElementById('view'));
+var view = global.view = loader(R('home.xml')).setElement(document.body);
 Log.w('view instantiated');
 
 view.setDataContext(vm);
