@@ -11,7 +11,7 @@ module.exports = class ObservableObject extends Base
   @observable: (hash) ->
     for prop, val of hash
       @::['_' + prop] = val
-      Object.defineProperty @::, prop,
+      do (prop, obj = @::) -> Object.defineProperty obj, prop,
         enumerable: true
         configurable: true
         get: -> @getProperty prop

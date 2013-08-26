@@ -14,3 +14,5 @@ module.exports = class WithObservableProperties extends WithEvents
 
   onPropertyChange: (prop, f) ->
     @on "change:#{prop}", f
+
+  onChange: (f) -> @on 'change', f
