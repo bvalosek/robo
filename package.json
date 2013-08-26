@@ -10,5 +10,8 @@
     "grunt-browserify": "~1.2.4",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-watch": "~0.5.2"
+  },
+  "dependencies": {
+    "underscore": "~1.5.1"
   }
 }

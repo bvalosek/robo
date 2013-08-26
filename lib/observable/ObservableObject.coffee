@@ -1,3 +1,4 @@
+_                        = require 'underscore'
 Base                     = require '../util/Base.coffee'
 WithObservableProperties = require '../observable/WithObservableProperties.coffee'
 
@@ -7,23 +8,55 @@ WithObservableProperties = require '../observable/WithObservableProperties.coffe
 module.exports = class ObservableObject extends Base
   @uses WithObservableProperties
 
-  # Allows use to use the @observable decoration
-  @observable: (hash) ->
-    for prop, val of hash
-      @::['_' + prop] = val
-      do (prop, obj = @::) -> Object.defineProperty obj, prop,
-        enumerable: true
-        configurable: true
-        get: -> @getProperty prop
-        set: (v) -> @setProperty prop, v
-
   constructor: (props) ->
     @__frames = []
     @__deps = {}
 
+  # Allows use to use the @observable decoration
+  @observable: (hash) ->
+    for prop, val of hash
+      do (prop, obj = @::, val) ->
+        _prop = '_' + prop
+
+        # Create the private member, either normal val or getter/setter if
+        # computed
+        if _(val).isFunction()
+          Object.defineProperty obj, _prop,
+            enumerable: true
+            configurable: true
+            get: -> @_getComputedValue prop, val
+        else
+          obj[_prop] = val
+
+        # Setup actual getters and setters to the private member
+        Object.defineProperty obj, prop,
+          enumerable: true
+          configurable: true
+          get: -> @getProperty prop
+          set: (v) -> @setProperty prop, v
+
+  # Run a member function while tracking all dependencies
+  _getComputedValue: (prop, fn) ->
+    frame = []
+
+    @__frames.push frame
+    val = fn.call this
+    @__frames.pop
+
+    @__deps[prop] = frame
+
+    return val
+
+  # Mark access to a property
+  _trackAccess: (prop) ->
+    unless @__frames.length is 0
+      @__frames[@__frames.length - 1].push prop
+
   # Change an observable property and trigger change events for it, as well as
   # any other dependent properties
   setProperty: (prop, val) ->
+    @_trackAccess prop
+
     _prop = '_' + prop
     oldValue = @[_prop]
     return if val is oldValue
@@ -38,7 +71,13 @@ module.exports = class ObservableObject extends Base
     @triggerPropertySet prop
     @triggerPropertyChange prop
 
+    # Find anything that depends on this property, set it as well
+    for p, deps of @__deps when prop in deps
+      @triggerPropertyChange p
+
   # Access a property value and track it in the case of watching dependents
   getProperty: (prop) ->
+    @_trackAccess prop
+
     @['_' + prop]
 

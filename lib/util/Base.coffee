@@ -5,6 +5,10 @@ module.exports = class Base
   # statics
   @uses: (mixins...) ->
     for mixin in mixins
-      @::[key] = value for key, value of mixin::
+
+      for key, value of mixin.prototype when key isnt 'constructor'
+        @::[key] = value
+
       @[key] = value for key, value of mixin
+
     return
