@@ -1,0 +1,14 @@
+{
+  "name": "robo",
+  "version": "0.1.0",
+  "description": "A comprehensive Coffeescript frontend framework.",
+  "author": "Brandon Valosek",
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "coffeeify": "~0.5.1",
+    "grunt-browserify": "~1.2.4",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-watch": "~0.5.2"
+  }
+}
