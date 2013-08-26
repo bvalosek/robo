@@ -39,17 +39,18 @@ module.exports = class ObservableObject extends Base
   _getComputedValue: (prop, fn) ->
     frame = []
 
+    # Fill a frame with all the accessed values and record them as dependencies
+    # for this property
     @__frames.push frame
     val = fn.call this
-    @__frames.pop
-
+    @__frames.pop()
     @__deps[prop] = frame
 
     return val
 
   # Mark access to a property
   _trackAccess: (prop) ->
-    unless @__frames.length is 0
+    if @__frames.length
       @__frames[@__frames.length - 1].push prop
 
   # Change an observable property and trigger change events for it, as well as
@@ -78,6 +79,5 @@ module.exports = class ObservableObject extends Base
   # Access a property value and track it in the case of watching dependents
   getProperty: (prop) ->
     @_trackAccess prop
-
     @['_' + prop]
 

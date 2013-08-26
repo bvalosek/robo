@@ -67,3 +67,25 @@ test 'computed basics', 3, ->
   o.firstName = 'Bob'
   strictEqual o.name, 'Bob Doe', 'basic access with mutated observables'
 
+test 'computed with code branches', 6, ->
+
+  class Person extends ObservableObject
+    @observable
+      firstName: 'John'
+      lastName: 'Doe'
+      hideName: true
+      name: ->
+        if @hideName then '***' else "#{@firstName} #{@lastName}"
+
+  p = new Person
+  p.onPropertyChange 'name', -> ok true, 'name changed'
+  p.onPropertyChange 'name', -> console.log 'name changed'
+
+  strictEqual p.name, '***', 'inital val'
+  p.firstName = 'Bob'
+  strictEqual p.name, '***', 'change out of path doesnt effect'
+  p.hideName = false # trigger
+  strictEqual p.name, 'Bob Doe', 'branch condition change'
+  p.lastName = 'Saget' # trigger
+  strictEqual p.name, 'Bob Saget', 'branch condition change'
+
