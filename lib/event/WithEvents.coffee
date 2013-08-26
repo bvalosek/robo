@@ -72,6 +72,8 @@ module.exports = class WithEvents
     return this unless other? and name? and callback?
     @__listeningTo ?= {}
 
+    return this unless other.on?
+
     # Create a unique listen id to track it as a listener, since we dont really
     # have a hash map we can use
     other.__listenId ?= nextListenId()
@@ -89,7 +91,7 @@ module.exports = class WithEvents
 
     listeningTo = @__listeningTo
 
-    if other?
+    if other? and other.off?
       other.off name, callback
       delete listeningTo[other.__listenId] unless name? callback?
     else
