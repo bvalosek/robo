@@ -1,13 +1,12 @@
-_                        = require 'underscore'
-Base                     = require '../util/Base.coffee'
-WithObservableProperties = require \
-  '../observable/WithObservableProperties.coffee'
+Base              = require '../util/Base.coffee'
+WithObsProperties = require '../observable/WithObservableProperties.coffee'
+_                 = require 'underscore'
 
 # An object that has get, set and observable properties via the OBSERVABLE
 # decoration. Serves as the base of anything we want to have dependencies and
 # observable properties
 module.exports = class ObservableObject extends Base
-  @uses WithObservableProperties
+  @uses WithObsProperties
 
   constructor: (props) ->
     @__frames = []
@@ -38,36 +37,40 @@ module.exports = class ObservableObject extends Base
 
   # Run a member function while tracking all dependencies
   _getComputedValue: (prop, fn) ->
-    frame = []
 
     # Fill a frame with all the accessed values and record them as dependencies
     # for this property
-    @__frames.push frame
+    @__frames.push []
     val = fn.call this
-    @__frames.pop()
-    @__deps[prop] = frame
-
+    @__deps[prop] = @__frames.pop()
     return val
 
   # Mark access to a property
   _trackAccess: (prop) ->
-    if @__frames.length
-      @__frames[@__frames.length - 1].push prop
+    @__frames[@__frames.length - 1].push prop if @__frames.length
+    return
 
-  _expandDependencies: (prop) ->
+  _getDependencies: (prop) ->
     return [prop] unless @__deps[prop]
+    ret = []
+    ret = ret.concat @_getDependencies p for p in @__deps[prop]
+    return ret
 
-    r = [prop]
-    for x in @__deps[prop]
-      r = r.concat x
+  _expandDependencies: (deps) ->
+    ret = []
+    ret = ret.concat @_getDependencies d for d in deps
+    return ret
 
-    return r
+  # Fire off any change events for properties that depend on prop
+  _triggerDependencies: (prop) ->
+    for p, deps of @__deps
+      @triggerPropertyChange p if prop in @_expandDependencies deps
+    return
 
   # Change an observable property and trigger change events for it, as well as
   # any other dependent properties
   setProperty: (prop, val) ->
     @_trackAccess prop
-
     _prop = '_' + prop
     oldValue = @[_prop]
     return if val is oldValue
@@ -75,16 +78,14 @@ module.exports = class ObservableObject extends Base
     # Stop listening to the old one and proxy up a property change if our new
     # one does so
     @stopListening oldValue, 'change'
-    @listenTo val, 'change', =>
-      @triggerPropertyChange prop
+    @listenTo val, 'change', => @triggerPropertyChange prop
 
     @[_prop] = val
     @triggerPropertySet prop
     @triggerPropertyChange prop
 
-    # Find anything that depends on this property, set it as well
-    for p, deps of @__deps
-      @triggerPropertyChange p if prop in @_expandDependencies p
+    # Need to trigger change notifications for any dependent properties
+    @_triggerDependencies prop
 
   # Access a property value and track it in the case of watching dependents
   getProperty: (prop) ->

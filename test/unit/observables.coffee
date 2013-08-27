@@ -89,3 +89,26 @@ test 'computed with code branches', 6, ->
   p.lastName = 'Saget' # trigger
   strictEqual p.name, 'Bob Saget', 'branch condition change'
 
+test 'nested deps', 8, ->
+
+  class Obv extends ObservableObject
+    @observable
+      firstName: 'Pat'
+      lastName: 'Doe'
+      gender: 'male'
+      title: -> if @gender is 'male' then 'Mr.' else 'Ms.'
+      fullName: -> "#{@title} #{@firstName} #{@lastName}"
+      greeting: -> "Hello, #{@fullName}!"
+
+  o = new Obv
+  o.onPropertyChange 'fullName', -> ok true, 'fullName changed'
+  o.onPropertyChange 'greeting', -> ok true, 'greeting changed'
+
+  strictEqual o.greeting, 'Hello, Mr. Pat Doe!'
+  strictEqual o.fullName, 'Mr. Pat Doe', 'init value'
+  o.gender = 'female' # trigger 2x
+  strictEqual o.fullName, 'Ms. Pat Doe', 'changed value'
+  o.gender = 'male' # trigger 2x
+  o.gender = 'male' # nop
+  strictEqual o.greeting, 'Hello, Mr. Pat Doe!'
+
