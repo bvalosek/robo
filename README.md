@@ -2,6 +2,8 @@
 
 Great things have small beginnings. Again.
 
+[![Build Status](https://travis-ci.org/bvalosek/robo.png?branch=master)](https://travis-ci.org/bvalosek/robo)
+
 ## What is Robo?
 
 **Robo** is a frontend Coffeescript framework that is effectively a combination of
