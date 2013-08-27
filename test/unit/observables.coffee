@@ -79,7 +79,6 @@ test 'computed with code branches', 6, ->
 
   p = new Person
   p.onPropertyChange 'name', -> ok true, 'name changed'
-  p.onPropertyChange 'name', -> console.log 'name changed'
 
   strictEqual p.name, '***', 'inital val'
   p.firstName = 'Bob'
