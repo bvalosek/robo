@@ -4,6 +4,14 @@
   "description": "A comprehensive Coffeescript frontend framework.",
   "author": "Brandon Valosek",
   "license": "MIT",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:bvalosek/robo.git"
+  },
+  "readmeFilename": "README.md",
   "devDependencies": {
     "grunt": "~0.4.1",
     "coffeeify": "~0.5.1",
