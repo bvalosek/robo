@@ -23,19 +23,19 @@ test 'Setting value directly', 4, ->
   strictEqual b.value, 456, 'static set'
   b.value = 456 # nop
 
-test 'Setting ObservableObject as source', ->
+test 'Setting ObservableObject as source', 4, ->
   class Obv extends ObservableObject
     @observable prop: 123
 
   o = new Obv
   b = new Binding
   b.on Binding.SOURCE_CHANGED, -> ok true, 'source changed'
-  b.setSource o, 'prop'
 
+  b.setSource o, 'prop'
   o.prop = 456
   o.prop = 456 # nop
   o.prop = null
   b.setSource 1234
-  o.prop = 333 # nop
+  o.prop = 456 # nop
 
-
+test 'Setting target', ->

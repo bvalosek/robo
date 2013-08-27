@@ -30,7 +30,7 @@ module.exports = class Binding extends Base
 
   setSource: (source, prop) ->
     return this if source is @source and prop is @prop
-    @stopListening if @source
+    @stopListening() if @source
 
     if prop?
       @source = source
