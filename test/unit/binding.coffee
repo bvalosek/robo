@@ -66,3 +66,23 @@ test 'Setting target', ->
     x.prop = 15
     strictEqual y.prop, 15, 'target changed'
 
+test 'Changing source', 5, ->
+  class Obv extends ObservableObject
+    @observable prop: 123
+
+  a = new Obv
+  b = new Obv
+  t = prop: undefined
+  b.prop = 456
+
+  binding = new Binding()
+    .setSource(a, 'prop')
+    .setTarget(t, 'prop')
+  binding.on Binding.SOURCE_CHANGED, -> ok true, 'source changed'
+
+  strictEqual t.prop, 123, 'init'
+  binding.setSource b, 'prop'
+  strictEqual t.prop, 456, 'target changed on source change'
+  a.prop = 'nope' # nop
+  binding.setSource 'static'
+  strictEqual t.prop, 'static', 'source back to static works'

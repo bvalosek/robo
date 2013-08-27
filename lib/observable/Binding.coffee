@@ -14,7 +14,6 @@ module.exports = class Binding extends Base
   constructor: ->
     @source        = null
     @property      = null
-    @twoWay        = true
     @valueWhenNull = null
 
   # Bind to a target property. Multiple targets could be bound potentially.  If
