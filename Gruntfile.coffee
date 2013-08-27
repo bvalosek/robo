@@ -7,6 +7,7 @@ module.exports = (grunt) ->
     browserify:
       options:
         transform: ['coffeeify'] # <3
+        aliasMappings: [cwd: 'lib/', src: ['**/*.coffee'], dest: 'robo/']
 
       # Semi-testing example, map robo stuff to start with 'robo/' via the
       # aliasMappings option
@@ -15,11 +16,6 @@ module.exports = (grunt) ->
         dest: 'example/bin/main.js'
         options:
           debug: true
-          aliasMappings: [
-            cwd: 'lib/'
-            src: ['**/*.coffee']
-            dest: 'robo/'
-          ]
 
       # Create the test suite
       test:
