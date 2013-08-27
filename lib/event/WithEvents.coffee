@@ -60,7 +60,7 @@ module.exports = class WithEvents
         continue if cb and ct
         event
 
-      delete @__events[name] unless @__events.length
+      delete @__events[name] unless @__events[name]?.length
 
     return this
 
@@ -92,11 +92,11 @@ module.exports = class WithEvents
     listeningTo = @__listeningTo
 
     if other? and other.off?
-      other.off name, callback
+      other.off name, callback, this
       delete listeningTo[other.__listenId] unless name? callback?
     else
       for id, other of listeningTo
-        other.off name, callback
+        other.off name, callback, this
         delete listeningTo[id] unless name? callback?
 
     return this
