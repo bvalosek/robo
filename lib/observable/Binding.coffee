@@ -33,12 +33,12 @@ module.exports = class Binding extends Base
     @stopListening() if @source
 
     if prop?
-      @source = source
-      @prop   = prop
+      @source   = source
+      @property = prop
       @listenTo source, "change:#{prop}", -> @trigger Binding.SOURCE_CHANGED
 
     else
-      @source = @prop = null
+      @source = @property = null
       return this if @valueWhenNull is source
       @valueWhenNull = source
 
@@ -49,11 +49,11 @@ module.exports = class Binding extends Base
   @property value:
 
     get: ->
-      if @source? and @property? source[property] else @valueWhenNull
+      if @source? and @property? then @source[@property] else @valueWhenNull
 
     set: (v) ->
       if @source? and @property?
-        source[property] = v
+        @source[@property] = v
       else if @valueWhenNull isnt v
         @valueWhenNull = v
         @trigger Binding.SOURCE_CHANGED
