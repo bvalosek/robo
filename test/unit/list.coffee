@@ -68,5 +68,49 @@ test 'change events w/ args passed', ->
   list.add a
   list.remove a
 
+test 'ObservableObject with list property', ->
+  class Obv extends ObservableObject
+    @observable x: undefined
+
+  parent  = new Obv
+  list    = new ObservableList
+  a       = new Obv
+
+  pChange = 0
+  lChange = 0
+  list.on 'change', -> lChange++
+  parent.on 'change', -> pChange++
+
+  parent.x = list
+  strictEqual pChange, 1, 'parent changes'
+  strictEqual lChange, 0, 'list changes'
+
+  list.add a
+  strictEqual pChange, 2, 'parent changes'
+  strictEqual lChange, 1, 'list changes'
+
+  a.x = 123
+  strictEqual pChange, 3, 'parent changes'
+  strictEqual lChange, 2, 'list changes'
+
+  list.remove a
+  strictEqual pChange, 4, 'parent changes'
+  strictEqual lChange, 3, 'list changes'
+
+  a.x = 456
+  strictEqual pChange, 4, 'parent changes'
+  strictEqual lChange, 3, 'list changes'
+
+  list.add 789
+  strictEqual pChange, 5, 'parent changes'
+  strictEqual lChange, 4, 'list changes'
+
+  parent.x = null
+  strictEqual pChange, 6, 'parent changes'
+  strictEqual lChange, 4, 'list changes'
+
+  list.add 'awesome'
+  strictEqual pChange, 6, 'parent changes'
+  strictEqual lChange, 5, 'list changes'
 
 
