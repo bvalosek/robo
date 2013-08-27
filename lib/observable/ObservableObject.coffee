@@ -1,6 +1,7 @@
 _                        = require 'underscore'
 Base                     = require '../util/Base.coffee'
-WithObservableProperties = require '../observable/WithObservableProperties.coffee'
+WithObservableProperties = require \
+  '../observable/WithObservableProperties.coffee'
 
 # An object that has get, set and observable properties via the OBSERVABLE
 # decoration. Serves as the base of anything we want to have dependencies and
@@ -53,6 +54,15 @@ module.exports = class ObservableObject extends Base
     if @__frames.length
       @__frames[@__frames.length - 1].push prop
 
+  _expandDependencies: (prop) ->
+    return [prop] unless @__deps[prop]
+
+    r = [prop]
+    for x in @__deps[prop]
+      r = r.concat x
+
+    return r
+
   # Change an observable property and trigger change events for it, as well as
   # any other dependent properties
   setProperty: (prop, val) ->
@@ -73,8 +83,8 @@ module.exports = class ObservableObject extends Base
     @triggerPropertyChange prop
 
     # Find anything that depends on this property, set it as well
-    for p, deps of @__deps when prop in deps
-      @triggerPropertyChange p
+    for p, deps of @__deps
+      @triggerPropertyChange p if prop in @_expandDependencies p
 
   # Access a property value and track it in the case of watching dependents
   getProperty: (prop) ->
