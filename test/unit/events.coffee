@@ -17,7 +17,8 @@ test 'Basic callback adding and removing with on/off', ->
   o.on name, cb
   strictEqual eventCount(o), 1, 'using on(name, cb) adds to __events'
   o.off name, cb
-  strictEqual eventCount(o), 0, 'using off(name, cb) removes event node when empty'
+  strictEqual eventCount(o), 0,
+    'using off(name, cb) removes event node when empty'
 
   o = new EObject
   o.on name, cb
@@ -49,6 +50,7 @@ test 'Value of this when left unset', ->
 
   o = new EObject
   p = new EObject
-  p.listenTo o, name, -> strictEqual this, p, 'set with listenTo is object that is listening'
+  p.listenTo o, name, -> strictEqual this, p,
+    'set with listenTo is object that is listening'
   o.trigger name
 
