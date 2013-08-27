@@ -1,4 +1,3 @@
-WithObservableProperties = require './WithObservableProperties.coffee'
 WithEvents               = require '../event/WithEvents.coffee'
 Base                     = require '../util/Base.coffee'
 
