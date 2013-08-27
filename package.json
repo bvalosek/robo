@@ -12,6 +12,7 @@
     "grunt-contrib-watch": "~0.5.2"
   },
   "dependencies": {
-    "underscore": "~1.5.1"
+    "underscore": "~1.5.1",
+    "domready": "~0.2.12"
   }
 }

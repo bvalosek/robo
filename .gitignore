@@ -1,4 +1,7 @@
 # output for tests
 test/bin
 
+# example
+example/bin
+
 node_modules

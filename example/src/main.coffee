@@ -1,7 +1,13 @@
-Log           = require 'robo/util/Log'
 HomeViewModel = require './HomeViewModel.coffee'
+Binding       = require 'robo/observable/Binding'
+Log           = require 'robo/util/Log'
+domReady      = require 'domready'
 
-Log.d 'App started'
+Log.w 'App started'
 
-global.vm = new HomeViewModel
+domReady ->
+  global.vm = new HomeViewModel
+  global.b = new Binding()
+    .setSource(vm.person, 'fullName')
+    .setTarget(document.body, 'innerHTML')
 
