@@ -3,7 +3,7 @@ ObservableObject = require 'robo/observable/ObservableObject'
 
 QUnit.module 'ObservableList'
 
-test 'Basic list', 6, ->
+test 'Basic list', 7, ->
   class Obv extends ObservableObject
     @observable x: 123
 
@@ -14,6 +14,7 @@ test 'Basic list', 6, ->
   strictEqual list.count(), 0, 'empty to start'
   list.add a
   strictEqual list.count(), 1, '1 after'
+  strictEqual list.count(), list.length, 'length property'
   a.x = 111
   list.remove a
   strictEqual list.count(), 0, '0 after remove'
@@ -113,4 +114,13 @@ test 'ObservableObject with list property', ->
   strictEqual pChange, 6, 'parent changes'
   strictEqual lChange, 5, 'list changes'
 
+test 'Removing all items', ->
+  list = new ObservableList
+
+  list.add 1
+  list.add 2
+  list.add 2
+
+  list.removeAll 2
+  strictEqual list.count(), 1, 'Removed bolth'
 

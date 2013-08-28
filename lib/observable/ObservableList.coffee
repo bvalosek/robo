@@ -1,3 +1,4 @@
+_                 = require 'underscore'
 Base              = require '../util/Base.coffee'
 WithObsProperties = require '../observable/WithObservableProperties.coffee'
 
@@ -6,9 +7,9 @@ WithObsProperties = require '../observable/WithObservableProperties.coffee'
 module.exports = class ObservableList extends Base
   @uses WithObsProperties
 
-  constructor: ->
+  constructor: (items) ->
     super
-    @_items = []
+    @_items = _.toArray items
 
   # Add new item to the collection. Will push it onto the stack, listen for
   # changes to rebroadcast, and fire off change events
@@ -28,7 +29,6 @@ module.exports = class ObservableList extends Base
     @stopListening()
     @_items = []
     @trigger 'clear'
-
     @trigger 'change'
     return this
 
@@ -45,20 +45,37 @@ module.exports = class ObservableList extends Base
   # Remove the first instance of a particular item
   remove: (item) -> @removeAt @_items.indexOf item
 
+  # Remove all instances of an object
+  removeAll: (item) ->
+    @_items = (x for x, index in @_items when x isnt item)
+
+    @stopListening item
+    @trigger 'remove', item
+    @trigger 'change'
+    return this
+
   # Item at specific index
   get: (index) -> @_items[index]
 
-  # Index of an item
+  # Index of the first location of an item
   indexOf: (item) -> @_items.indexOf item
 
   # Total number of items
   count: -> @_items.length
 
+  # noss
+  @property length: get: -> @count()
+
   # Execute iterator for each item in the list
-  each: (f) ->
-    f x for x in @_items
-    return
+  each: (f) -> @_items.forEach f
 
   # Return an array mapping items by a mutator function
-  map: (f) -> f x for x in @_items
+  map: (f) -> new ObservableList @_items.map f
+
+  # FIlter down the items
+  filter: (f) -> new ObservableList @_items.filter f
+
+  # Reduce yahh
+  reduce: (f) -> @_items.reduce f
+
 
