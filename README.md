@@ -30,7 +30,7 @@ it's in Coffeescript... so it's back to scratch one.
 
 ### Data Models
 
-* `Models`
+* `Model`
 * `Queryable`
 
 ### Views and Controls
