@@ -1,18 +1,18 @@
 # Easy peasy logging
 module.exports = class Log
-  clog = (k, m) -> console?[k]?(m)
+  log = (k, m) -> console?[k]?(m)
 
   # Debug log message
-  @d: (m) -> clog 'debug', m
+  @d: (m) -> log 'debug', m
 
   # Warning log message
-  @w: (m) -> clog 'warn', m
+  @w: (m) -> log 'warn', m
 
   # Info log message
-  @i: (m) -> clog 'info', m
+  @i: (m) -> log 'info', m
 
   # Error log message
-  @e: (m) -> clog 'error', m
+  @e: (m) -> log 'error', m
 
   # WTF log message
-  @wtf: (m) -> clog 'error', "WTF! #{m}"
+  @wtf: (m) -> log 'error', "WTF! #{m}"
