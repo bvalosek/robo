@@ -10,40 +10,10 @@ module.exports = class View extends ObservableObject
   # constructor to actually set the tag up for inflation
   tagName: 'div'
 
-  # This is observable so that we can bind to it from other things that want to
-  # depend on us for their data context
-  @observable dataContext: undefined
-
-  # CSS class name. One-way bound with DOM stuff, so can only reliably be
-  # updated via this property
-  @observable className: ''
-
-  constructor: ->
-    # Let us mess with class name
-    @onPropertyChange 'className', -> @element.className = @className
-
-  # Change the DOM element this guy is hosted by, and ensure the DOM node
-  # points back to the robo element as well. Need to un-delegate and
-  # re-delegate events as well
-  setElement: (el) ->
-    return this if el is @element
-    return @changeElement el if @element?
-
-    @element = el
-    el.roboElement = this
-
-    # Take all registered events and set them up on the DOM
-    for eventName, events of @__events
-      el.addEventListener eventName, info.callback for info in events
-
-    @render()
-    return this
-
-  # Re-assign element when already set
-  changeElement: (el) ->
-    return this unless el?
-    return @setElement el unless @element?
-    return this
+  constructor: (element) ->
+    super
+    @_setElement element ? document.createElement @tagName
+    @_initEvents()
 
   # Should update the DOM element
   render: -> return this
@@ -56,4 +26,24 @@ module.exports = class View extends ObservableObject
     @element = undefined
     @stopListening()
     return this
+
+  # Change the DOM element this guy is hosted by, and ensure the DOM node
+  # points back to the robo element as well. Need to un-delegate and
+  # re-delegate events as well
+  _setElement: (el) ->
+    return if @element?
+    @element = el
+    el.roboElement = this
+    @render()
+
+  # Take all of the decorated events on the constructor and map them to our DOM
+  # node
+  _initEvents: ->
+    for name, f of @constructor.EVENTS
+      @element.addEventListener name, f.bind this
+
+  # Use event decorater to easily define DOM event handlers
+  @event: (hash) ->
+    for name, f of hash
+      (@EVENTS ?= {})[name] = f
 
