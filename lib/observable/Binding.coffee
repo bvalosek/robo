@@ -8,11 +8,8 @@ module.exports = class Binding extends Base
   @uses WithEvents
 
   @SOURCE_CHANGE : 'bindingSourceChange'
-
   @TARGET_CHANGE : 'bindingTargetChange'
-
   @ONE_WAY       : 'bindingOneWay'
-
   @TWO_WAY       : 'bindingTwoWay'
 
   constructor: ->
@@ -22,7 +19,7 @@ module.exports = class Binding extends Base
     @mode          = Binding.TWO_WAY
 
   # Bind to a target property. Multiple targets could be bound potentially.  If
-  #tthe target is an ObservableObject, assume we can listen for change events
+  # the target is an ObservableObject, assume we can listen for change events
   setTarget: (target, prop, mode = @mode) ->
     return this unless target?
 
@@ -46,6 +43,7 @@ module.exports = class Binding extends Base
     @stopListening target
     return this
 
+  # Change the source of the data
   setSource: (source, prop) ->
     return this if source is @source and prop is @prop
     @stopListening() if @source
@@ -53,8 +51,13 @@ module.exports = class Binding extends Base
     if prop?
       @source   = source
       @property = prop
-      @listenTo source, "change:#{prop}", -> @trigger Binding.SOURCE_CHANGE
 
+      # Determine the actual root of the dot-chain property we need to listen
+      # to to know when change
+      {root} = @_resolve()
+
+      @listenTo @source, "#{Observable.CHANGE}:#{root}", ->
+        @trigger Binding.SOURCE_CHANGE
     else
       @source = @property = null
       return this if @valueWhenNull is source
@@ -71,11 +74,29 @@ module.exports = class Binding extends Base
   # Get access to the source directly
   @property value:
     get: ->
-      if @source? and @property? then @source[@property] else @valueWhenNull
+      if @source? and @property?
+        {source, property} = @_resolve()
+        source[property]
+      else
+        @valueWhenNull
     set: (v) ->
       if @source? and @property?
-        @source[@property] = v
+        {source, property} = @_resolve()
+        source[property] = v
       else if @valueWhenNull isnt v
         @valueWhenNull = v
         @trigger Binding.SOURCE_CHANGE
+
+  # Given dot-style property, resolve it to a propert source/property pair
+  _resolve: (source = @source, property = @property) ->
+    parts = @property.split '.'
+    root  = parts[0]
+
+    for part, index in parts
+      continue if index >= parts.length - 1
+      source = source?[part] ? {}
+      property = parts[index+1]
+
+    return {source, property, root}
+
 

@@ -115,3 +115,26 @@ test 'Two way binding and target removal', ->
   b.prop = 4
   strictEqual a.prop, 3, 'target doesnt change source after removal'
 
+test 'Dot-notation properties', ->
+  class Child extends ObservableObject
+    @observable prop: 123
+
+  class Parent extends ObservableObject
+    @observable child: null
+
+    constructor: ->
+      super
+      @child = new Child
+
+  a = new Parent
+  t = {val: undefined}
+
+  binding = new Binding()
+    .setSource(a, 'child.prop')
+    .setTarget(t, 'val')
+
+  strictEqual t.val, 123, 'init val'
+  a.child.prop = 456
+  strictEqual t.val, 456, 'change val'
+
+

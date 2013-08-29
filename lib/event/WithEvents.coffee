@@ -107,5 +107,5 @@ module.exports = class WithEvents
   # by using the listenId
   toHash: ->
     id = @__listenId ?= nextListenId()
-    return "[WithEvents object id=#{id}]"
+    return "robo:WithEvents:#{id}"
 
