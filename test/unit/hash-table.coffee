@@ -51,8 +51,6 @@ test 'keys() and items()', ->
   h.add false, 3
   h.add obj, 4
 
-  console.log h.keys()
-
   # should really be array comparassion irrespective of order...
   strictEqual h.keys().length, 4, 'keys()'
   strictEqual h.items().length, 4, 'items()'
