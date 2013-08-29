@@ -8,7 +8,7 @@ module.exports = class ContentControl extends Control
 
   constructor: ->
     super
-    @onPropertyChange 'content', @render
+    @onPropertyChange content: @render
 
   render: ->
     @element.innerText = @content

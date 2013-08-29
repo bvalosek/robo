@@ -21,7 +21,7 @@ module.exports = class WithEvents
 
     if callback?
       @__events[name].push callback: callback, context: context ? this
-    else
+    else # assume an object
       for n, cb of name
         @__events[n].push callback: cb, context: this
 
