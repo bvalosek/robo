@@ -1,3 +1,4 @@
+Binding          = require '../observable/Binding.coffee'
 ObservableObject = require '../observable/ObservableObject.coffee'
 
 # Any object that can be ansigned to a DOM node. This is the lowest-level
@@ -10,10 +11,14 @@ module.exports = class View extends ObservableObject
   # constructor to actually set the tag up for inflation
   tagName: 'div'
 
+  @observable dataContext: null
+
   constructor: (element) ->
     super
+    @bindings = []
     @_setElement element ? document.createElement @tagName
     @_initEvents()
+    @onPropertyChange dataContext: @_updateBindings
 
   # Should update the DOM element
   render: -> return this
@@ -27,6 +32,20 @@ module.exports = class View extends ObservableObject
     @stopListening()
     return this
 
+  # Create a new binding with an IoC, target ourselves with our data context as
+  # the source
+  addBinding: (targetProp, sourceProp) ->
+    binding = new Binding()
+      .setTarget(this, targetProp)
+      .setSource(@dataContext, sourceProp)
+
+    @bindings.push binding
+
+  # Called when the datacontext changes and we need to swap the source for all
+  # of our bindings we're managing for this view
+  _updateBindings: ->
+    b.setSource @dataContext, b.property for b in @bindings
+
   # Change the DOM element this guy is hosted by, and ensure the DOM node
   # points back to the robo element as well. Need to un-delegate and
   # re-delegate events as well
@@ -35,15 +54,18 @@ module.exports = class View extends ObservableObject
     @element = el
     el.roboElement = this
     @render()
+    return
 
   # Take all of the decorated events on the constructor and map them to our DOM
   # node
   _initEvents: ->
     for name, f of @constructor.EVENTS
       @element.addEventListener name, f.bind this
+    return
 
   # Use event decorater to easily define DOM event handlers
   @event: (hash) ->
     for name, f of hash
       (@EVENTS ?= {})[name] = f
+    return
 

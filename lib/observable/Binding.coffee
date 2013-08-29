@@ -64,7 +64,9 @@ module.exports = class Binding extends Base
     return this
 
   # Needs to be Binding.TWO_WAY or Binding.ONE_WAY
-  setMode: (m) -> @mode = m
+  setMode: (m) ->
+    @mode = m
+    return this
 
   # Get access to the source directly
   @property value:
