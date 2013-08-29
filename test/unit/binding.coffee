@@ -128,6 +128,8 @@ test 'Dot-notation properties', ->
 
   a = new Parent
   t = {val: undefined}
+  c = new Child
+  c.prop = 777
 
   binding = new Binding()
     .setSource(a, 'child.prop')
@@ -136,5 +138,7 @@ test 'Dot-notation properties', ->
   strictEqual t.val, 123, 'init val'
   a.child.prop = 456
   strictEqual t.val, 456, 'change val'
+  a.child = c
+  strictEqual t.val, 777, 'change at root'
 
 
