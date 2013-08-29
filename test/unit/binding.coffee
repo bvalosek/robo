@@ -86,3 +86,32 @@ test 'Changing source', 5, ->
   a.prop = 'nope' # nop
   binding.setSource 'static'
   strictEqual t.prop, 'static', 'source back to static works'
+
+test 'Two way binding and target removal', ->
+  class Obv extends ObservableObject
+    @observable prop: 123
+
+  a = new Obv
+  b = new Obv
+  c = new Obv
+
+  binding = new Binding()
+    .setSource(a, 'prop')
+    .setTarget(b, 'prop')
+
+  strictEqual a.prop, 123, 'init'
+  strictEqual b.prop, 123, 'init'
+  b.prop = 1
+  strictEqual a.prop, 1, 'target changed source'
+  a.prop = 2
+  strictEqual b.prop, 2, 'source changed target'
+
+  binding.setTarget c, 'prop'
+  strictEqual c.prop, 2, 'c init'
+  binding.removeTarget b
+  a.prop = 3
+  strictEqual b.prop, 2, 'source doesnt change target after removal'
+  strictEqual c.prop, 3, 'source change still affects bound targets'
+  b.prop = 4
+  strictEqual a.prop, 3, 'target doesnt change source after removal'
+

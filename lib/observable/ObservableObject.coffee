@@ -35,6 +35,31 @@ module.exports = class ObservableObject extends Base
           get: -> @getProperty prop
           set: (v) -> @setProperty prop, v
 
+  # Change an observable property and trigger change events for it, as well as
+  # any other dependent properties
+  setProperty: (prop, val) ->
+    @_trackAccess prop
+    _prop = '_' + prop
+    oldValue = @[_prop]
+    return if val is oldValue
+
+    # Stop listening to the old one and proxy up a property change if our new
+    # one does so
+    @stopListening oldValue, Observable.CHANGE
+    @listenTo val, Observable.CHANGE, => @triggerPropertyChange prop
+
+    @[_prop] = val
+    @triggerPropertySet prop
+    @triggerPropertyChange prop
+
+    # Need to trigger change notifications for any dependent properties
+    @_triggerDependencies prop
+
+  # Access a property value and track it in the case of watching dependents
+  getProperty: (prop) ->
+    @_trackAccess prop
+    @['_' + prop]
+
   # Run a member function while tracking all dependencies
   _getComputedValue: (prop, fn) ->
 
@@ -66,29 +91,4 @@ module.exports = class ObservableObject extends Base
     for p, deps of @__deps
       @triggerPropertyChange p if prop in @_expandDependencies deps
     return
-
-  # Change an observable property and trigger change events for it, as well as
-  # any other dependent properties
-  setProperty: (prop, val) ->
-    @_trackAccess prop
-    _prop = '_' + prop
-    oldValue = @[_prop]
-    return if val is oldValue
-
-    # Stop listening to the old one and proxy up a property change if our new
-    # one does so
-    @stopListening oldValue, Observable.CHANGE
-    @listenTo val, Observable.CHANGE, => @triggerPropertyChange prop
-
-    @[_prop] = val
-    @triggerPropertySet prop
-    @triggerPropertyChange prop
-
-    # Need to trigger change notifications for any dependent properties
-    @_triggerDependencies prop
-
-  # Access a property value and track it in the case of watching dependents
-  getProperty: (prop) ->
-    @_trackAccess prop
-    @['_' + prop]
 
