@@ -8,4 +8,4 @@ module.exports = class Control extends View
 
   constructor: ->
     super
-    @onPropertyChange 'enabled', -> @element.disabled = not @enabled
+    @onPropertyChange enabled: -> @element.disabled = not @enabled
