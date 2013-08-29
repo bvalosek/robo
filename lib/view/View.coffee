@@ -1,3 +1,4 @@
+_                = require 'underscore'
 Binding          = require '../observable/Binding.coffee'
 ObservableObject = require '../observable/ObservableObject.coffee'
 
@@ -15,6 +16,7 @@ module.exports = class View extends ObservableObject
 
   constructor: (element) ->
     super
+    @cid = _.uniqueId 'robo:View'
     @bindings = []
     @_setElement element ? document.createElement @tagName
     @_initEvents()
@@ -38,7 +40,6 @@ module.exports = class View extends ObservableObject
     binding = new Binding()
       .setTarget(this, targetProp)
       .setSource(@dataContext, sourceProp)
-
     @bindings.push binding
 
   # Called when the datacontext changes and we need to swap the source for all
