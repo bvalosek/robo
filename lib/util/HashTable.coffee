@@ -7,7 +7,6 @@ _ = require 'underscore'
 module.exports = class HashTable
 
   constructor: (hash) ->
-    # hashed key -> (key, value)
     @_map = {}
     for k, v of hash
       @add k, v
@@ -23,9 +22,9 @@ module.exports = class HashTable
 
   remove: (k) -> delete @_map[HashTable.hash k]
 
-  containsKey: (key) -> HashTable.hash(key) of @_map
+  containsKey: (k) -> HashTable.hash(k) of @_map
 
-  get: (key) -> @_map[HashTable.hash key]?.value
+  get: (k) -> @_map[HashTable.hash k]?.value
 
   count: -> (k for k of @_map).length
 

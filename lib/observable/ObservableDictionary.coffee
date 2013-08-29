@@ -1,19 +1,21 @@
 _                 = require 'underscore'
 Base              = require '../util/Base.coffee'
 WithObsProperties = require '../observable/WithObservableProperties.coffee'
+HashTable         = require '../util/HashTable.coffee'
 
-# An evented dictionary designed to be used as an ad-hoc key/value container
+# An evented dictionary designed to be used as an ad-hoc key/value container,
+# uses HashTable to keep track of everything
 module.exports = class ObservableDictionary extends Base
   @uses WithObsProperties
 
   constructor: (hash) ->
     super
-    @_dict = if _.isObject hash then hash else {}
+    @_ht = new HashTable hash
 
   # Insert key value pair into the dict
   add: (key, item) ->
     return this if @containsKey(key) and @get(key) is item
-    @_dict[key] = item
+    @_ht.add key, item
     @trigger 'add', key: key, value: item
     @trigger "add:#{key}", item
 
@@ -26,9 +28,9 @@ module.exports = class ObservableDictionary extends Base
   # Remove all items, triggers a clear event. does NOT triggere a remove event
   # for all objects
   clear: ->
-    return this if _.isEmpty @_dict
+    return this unless @count()
     @stopListening
-    @_dict = {}
+    @_ht.clear()
     @trigger 'clear'
     @trigger 'change'
     return this
@@ -36,26 +38,26 @@ module.exports = class ObservableDictionary extends Base
   # Delete a specific key and make sure to fire an event off
   remove: (key) ->
     return this unless @containsKey key
-    item = @get key
-    delete @_dict[key]
+    item = @get item
+    @_ht.remove key
     @trigger "remove:#{key}", item
     @trigger 'remove', key: key, value: item
     @trigger 'change'
     return this
 
   # Ensure we have a key
-  containsKey: (key) -> key of @_dict
+  containsKey: (key) -> @_ht.containsKey key
 
   # Fetch by key
-  get: (key) -> @_dict[key]
+  get: (key) -> @_ht.get key
 
   # Total number of keys
-  count: -> _.size @_dict
+  count: -> @_ht.count()
 
   # noss
   @property length: get: -> @count()
 
   # Iterate over keys and vals
-  each: (f) -> _.each @_dict
+  each: (f) -> @_ht.each f
 
 
