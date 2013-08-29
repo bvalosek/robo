@@ -6,32 +6,37 @@ Great things have small beginnings. Again.
 
 ## What is Robo?
 
-**Robo** is a frontend Coffeescript framework that is effectively a combination of
-micro-libraries, opinionated classes and patterns, and prescriptive project
+**Robo** is a frontend Coffeescript framework that is effectively a combination
+of micro-libraries, opinionated classes and patterns, and prescriptive project
 structure and build steps.
 
 ### Again
 
-**Robo** has be re-imagined, re-started, and re-written several times.  This time,
-it's in Coffeescript... so it's back to scratch one.
+**Robo** has be re-imagined, re-started, and re-written several times.  This
+time, it's in Coffeescript... so it's back to scratch one.
 
 ## Framework Components
 
 ### Events
 
 * `WithEvents`
+* `Intent`
+* `Command`
 
 ### Observables
 
 * `WithObservableProperties`
 * `ObservableObject`
 * `ObservableList`
+* `ObservableSet`
 * `ObservableDictionary`
+* `Binding`
 
-### Data Models
+### Data Models and Persistence
 
 * `Model`
 * `Queryable`
+* `RemoteContext`
 
 ### Views and Controls
 
@@ -46,9 +51,16 @@ it's in Coffeescript... so it's back to scratch one.
 
 * `grunt-robo`
 
+### Utilities
+
+* `HashTable`
+* `Map`
+* `Set`
+* `Log`
+
 ## Framework Concepts
 
-### Observable Objects and Events
+### Observable Objects, Events, and Intents
 
 ### Data Binding
 
@@ -56,7 +68,7 @@ it's in Coffeescript... so it's back to scratch one.
 
 ## Testing
 
-Install all the dev dependencies and run the test target:
+To install all the dev dependencies and run the test target:
 
 ```
 npm install
@@ -66,5 +78,4 @@ grunt test
 ## License
 Copyright 2013 Brandon Valosek
 
-**Robo** is released under the MIT licenses.
-
+**Robo** is released under the MIT license.

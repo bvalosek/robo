@@ -56,6 +56,3 @@ module.exports = class Binding extends Base
         @valueWhenNull = v
         @trigger Binding.SOURCE_CHANGED
 
-
-
-
