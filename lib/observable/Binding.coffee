@@ -6,9 +6,9 @@ Base                     = require '../util/Base.coffee'
 module.exports = class Binding extends Base
   @uses WithEvents
 
-  @SOURCE_CHANGED: 'bindingSourceChanged'
+  @SOURCE_CHANGE: 'bindingSourceChange'
 
-  @TARGET_CHANGED: 'bindingTargetChanged'
+  @TARGET_CHANGE: 'bindingTargetChange'
 
   constructor: ->
     @source        = null
@@ -23,7 +23,7 @@ module.exports = class Binding extends Base
     # Start off setting the target and setup event for future changes on this
     # binding
     target[prop] = @value
-    @on Binding.SOURCE_CHANGED, -> target[prop] = @value
+    @on Binding.SOURCE_CHANGE, -> target[prop] = @value
     return this
 
   setSource: (source, prop) ->
@@ -33,14 +33,14 @@ module.exports = class Binding extends Base
     if prop?
       @source   = source
       @property = prop
-      @listenTo source, "change:#{prop}", -> @trigger Binding.SOURCE_CHANGED
+      @listenTo source, "change:#{prop}", -> @trigger Binding.SOURCE_CHANGE
 
     else
       @source = @property = null
       return this if @valueWhenNull is source
       @valueWhenNull = source
 
-    @trigger Binding.SOURCE_CHANGED
+    @trigger Binding.SOURCE_CHANGE
     return this
 
   # Get access to the source directly
@@ -54,5 +54,5 @@ module.exports = class Binding extends Base
         @source[@property] = v
       else if @valueWhenNull isnt v
         @valueWhenNull = v
-        @trigger Binding.SOURCE_CHANGED
+        @trigger Binding.SOURCE_CHANGE
 

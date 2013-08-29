@@ -12,7 +12,7 @@ test 'Simple change triggers', 4, ->
   global.t = new O
 
   o = new O
-  o.onChange -> ok true, 'change event triggered'
+  o.on ObservableObject.CHANGE, -> ok true, 'change event triggered'
   strictEqual o.prop, 123, 'initial value'
 
   o.prop = 234
@@ -29,7 +29,7 @@ test 'specific prop change', 1, ->
       bar: 222
 
   o = new O
-  o.onPropertyChange 'foo', -> ok true, 'foo changed'
+  o.onPropertyChange foo: -> ok true, 'foo changed'
   o.foo = 444
   o.foo = 444 #nop
   o.bar = 444 #nop
@@ -43,7 +43,7 @@ test 'observable observable', 4, ->
   o = new O
   p = new O
 
-  o.onPropertyChange 'foo', -> ok true, 'foo changed'
+  o.onPropertyChange foo: -> ok true, 'foo changed'
 
   o.foo = p
   p.foo = 333
@@ -62,7 +62,7 @@ test 'computed basics', 3, ->
       name: -> "#{@firstName} #{@lastName}"
 
   o = new O
-  o.onPropertyChange 'name', -> ok true, 'name changed'
+  o.onPropertyChange name: -> ok true, 'name changed'
   strictEqual o.name, 'John Doe', 'basic access with default observables'
   o.firstName = 'Bob'
   strictEqual o.name, 'Bob Doe', 'basic access with mutated observables'
@@ -78,7 +78,7 @@ test 'computed with code branches', 6, ->
         if @hideName then '***' else "#{@firstName} #{@lastName}"
 
   p = new Person
-  p.onPropertyChange 'name', -> ok true, 'name changed'
+  p.onPropertyChange name: -> ok true, 'name changed'
 
   strictEqual p.name, '***', 'inital val'
   p.firstName = 'Bob'
@@ -100,8 +100,8 @@ test 'nested deps', 8, ->
       greeting: -> "Hello, #{@fullName}!"
 
   o = new Obv
-  o.onPropertyChange 'fullName', -> ok true, 'fullName changed'
-  o.onPropertyChange 'greeting', -> ok true, 'greeting changed'
+  o.onPropertyChange fullName: -> ok true, 'fullName changed'
+  o.onPropertyChange greeting: -> ok true, 'greeting changed'
 
   strictEqual o.greeting, 'Hello, Mr. Pat Doe!'
   strictEqual o.fullName, 'Mr. Pat Doe', 'init value'

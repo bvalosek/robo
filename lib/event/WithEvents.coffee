@@ -14,14 +14,16 @@ module.exports = class WithEvents
   # This method of attaching events is used when we know that *something else*
   # will trigger an event on this object, and we want to react to it
   on: (name, callback, context) ->
-    return this unless name? and callback?
+    return this unless name?
 
     @__events ?= {}
     @__events[name] ?= []
 
-    @__events[name].push
-      callback: callback
-      context: context ? this
+    if callback?
+      @__events[name].push callback: callback, context: context ? this
+    else
+      for n, cb of name
+        @__events[n].push callback: cb, context: this
 
     return this
 

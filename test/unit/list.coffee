@@ -10,7 +10,7 @@ test 'Basic list', 7, ->
   a    = new Obv
   list = new ObservableList
 
-  list.on 'change', -> ok true, 'change fired'
+  list.on ObservableList.CHANGE, -> ok true, 'change fired'
   strictEqual list.count(), 0, 'empty to start'
   list.add a
   strictEqual list.count(), 1, '1 after'
@@ -31,9 +31,9 @@ test 'Add and Remove events', ->
   lengthChange = 0
 
   list = new ObservableList
-  list.on 'change', -> change++
-  list.on 'add', -> add++
-  list.on 'remove', -> remove++
+  list.on ObservableList.CHANGE, -> change++
+  list.on ObservableList.ADD, -> add++
+  list.on ObservableList.REMOVE, -> remove++
   a = new Obv
   b = new Obv
 
@@ -63,8 +63,10 @@ test 'Change events w/ args passed', ->
 
   list = new ObservableList
   a = new Obv
-  list.on 'add', (item) -> strictEqual item, a, 'add item passed'
-  list.on 'remove', (item) -> strictEqual item, a, 'remove item passed'
+  list.on ObservableList.ADD, (item) ->
+    strictEqual item, a, 'add item passed'
+  list.on ObservableList.REMOVE, (item) ->
+    strictEqual item, a, 'remove item passed'
 
   list.add a
   list.remove a
@@ -79,8 +81,8 @@ test 'ObservableObject with list property', ->
 
   pChange = 0
   lChange = 0
-  list.on 'change', -> lChange++
-  parent.on 'change', -> pChange++
+  list.on ObservableList.CHANGE, -> lChange++
+  parent.on ObservableObject.CHANGE, -> pChange++
 
   parent.x = list
   strictEqual pChange, 1, 'parent changes'

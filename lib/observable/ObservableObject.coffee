@@ -1,12 +1,12 @@
-Base              = require '../util/Base.coffee'
-WithObsProperties = require '../observable/WithObservableProperties.coffee'
-_                 = require 'underscore'
+Base       = require '../util/Base.coffee'
+Observable = require '../observable/Observable.coffee'
+_          = require 'underscore'
 
 # An object that has get, set and observable properties via the OBSERVABLE
 # decoration. Serves as the base of anything we want to have dependencies and
 # observable properties
 module.exports = class ObservableObject extends Base
-  @uses WithObsProperties
+  @uses Observable
 
   constructor: (props) ->
     @__frames = []
@@ -77,8 +77,8 @@ module.exports = class ObservableObject extends Base
 
     # Stop listening to the old one and proxy up a property change if our new
     # one does so
-    @stopListening oldValue, 'change'
-    @listenTo val, 'change', => @triggerPropertyChange prop
+    @stopListening oldValue, Observable.CHANGE
+    @listenTo val, Observable.CHANGE, => @triggerPropertyChange prop
 
     @[_prop] = val
     @triggerPropertySet prop

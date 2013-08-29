@@ -1,11 +1,11 @@
-_                 = require 'underscore'
-Base              = require '../util/Base.coffee'
-WithObsProperties = require '../observable/WithObservableProperties.coffee'
+_          = require 'underscore'
+Base       = require '../util/Base.coffee'
+Observable = require '../observable/Observable.coffee'
 
 # An arbitrary, evented, observable collection of (typically, but not always)
 # observable objects. Is enumerable and list-like
 module.exports = class ObservableList extends Base
-  @uses WithObsProperties
+  @uses Observable
 
   constructor: (items) ->
     super
@@ -15,12 +15,12 @@ module.exports = class ObservableList extends Base
   # changes to rebroadcast, and fire off change events
   add: (item) ->
     @_items.push item
-    @trigger 'add', item
+    @trigger Observable.ADD, item
 
     # Proxy events if we can
-    @listenTo item, 'change', -> @trigger 'change', item
+    @listenTo item, Observable.CHANGE, -> @trigger Observable.CHANGE, item
 
-    @trigger 'change'
+    @trigger Observable.CHANGE
     return this
 
   # Remove all items, triggers a clear event. does NOT triggere a remove event
@@ -28,18 +28,18 @@ module.exports = class ObservableList extends Base
   clear: ->
     @stopListening()
     @_items = []
-    @trigger 'clear'
-    @trigger 'change'
+    @trigger Observable.CLEAR
+    @trigger Observable.CHANGE
     return this
 
   # Given an index, remove an item and fire off events
   removeAt: (index) ->
     obj = @_items[index]
-    @trigger 'remove', obj
+    @trigger Observable.REMOVE, obj
     @_items.splice index, 1
     @stopListening obj
 
-    @trigger 'change'
+    @trigger Observable.CHANGE
     return this
 
   # Remove the first instance of a particular item
@@ -50,8 +50,8 @@ module.exports = class ObservableList extends Base
     @_items = (x for x, index in @_items when x isnt item)
 
     @stopListening item
-    @trigger 'remove', item
-    @trigger 'change'
+    @trigger Observable.REMOVE, item
+    @trigger Observable.CHANGE
     return this
 
   # Item at specific index

@@ -5,7 +5,7 @@ QUnit.module 'Binding'
 
 test 'Setting source to static', 4, ->
   b = new Binding
-  b.on Binding.SOURCE_CHANGED, -> ok true, 'source changed'
+  b.on Binding.SOURCE_CHANGE, -> ok true, 'source changed'
 
   b.setSource 123
   strictEqual b.value, 123, 'static set'
@@ -15,7 +15,7 @@ test 'Setting source to static', 4, ->
 
 test 'Setting value directly', 4, ->
   b = new Binding
-  b.on Binding.SOURCE_CHANGED, -> ok true, 'source changed'
+  b.on Binding.SOURCE_CHANGE, -> ok true, 'source changed'
 
   b.value = 123
   strictEqual b.value, 123, 'static set'
@@ -29,7 +29,7 @@ test 'Setting ObservableObject as source', 4, ->
 
   o = new Obv
   b = new Binding
-  b.on Binding.SOURCE_CHANGED, -> ok true, 'source changed'
+  b.on Binding.SOURCE_CHANGE, -> ok true, 'source changed'
 
   b.setSource o, 'prop'
   o.prop = 456
@@ -78,7 +78,7 @@ test 'Changing source', 5, ->
   binding = new Binding()
     .setSource(a, 'prop')
     .setTarget(t, 'prop')
-  binding.on Binding.SOURCE_CHANGED, -> ok true, 'source changed'
+  binding.on Binding.SOURCE_CHANGE, -> ok true, 'source changed'
 
   strictEqual t.prop, 123, 'init'
   binding.setSource b, 'prop'

@@ -39,7 +39,7 @@ test 'Add and remove events', ->
 test 'Event on clear', 1, ->
   d = new ObservableDictionary
 
-  d.on 'clear', -> ok true, 'clear fired'
+  d.on ObservableDictionary.CLEAR, -> ok true, 'clear fired'
 
   d.clear() # nop
   d.add 'k', 'v'
