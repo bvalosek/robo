@@ -20,7 +20,7 @@ test 'Basic list', 7, ->
   strictEqual list.count(), 0, '0 after remove'
   a.x = 222
 
-test 'add remove events', ->
+test 'Add and Remove events', ->
   class Obv extends ObservableObject
     @observable x: 111
     @observable y: 222
@@ -56,7 +56,7 @@ test 'add remove events', ->
   strictEqual add, 2, 'add events'
   strictEqual change, 5, 'change events'
 
-test 'change events w/ args passed', ->
+test 'Change events w/ args passed', ->
   class Obv extends ObservableObject
     @observable x: 111
     @observable y: 222

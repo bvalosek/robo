@@ -101,3 +101,9 @@ module.exports = class WithEvents
 
     return this
 
+  # Ensure that if we're adding these to a HashTable we can use them as the key
+  # by using the listenId
+  toHash: ->
+    id = @__listenId ?= nextListenId()
+    return "[WithEvents object id=#{id}]"
+

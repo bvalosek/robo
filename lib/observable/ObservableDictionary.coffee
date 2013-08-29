@@ -26,6 +26,7 @@ module.exports = class ObservableDictionary extends Base
   # Remove all items, triggers a clear event. does NOT triggere a remove event
   # for all objects
   clear: ->
+    return this if _.isEmpty @_dict
     @stopListening
     @_dict = {}
     @trigger 'clear'

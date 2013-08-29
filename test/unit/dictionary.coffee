@@ -36,6 +36,15 @@ test 'Add and remove events', ->
   ok add is addProp is remove is removeProp is 1, 'add and remove events firing'
   strictEqual change, 2, 'change fired both'
 
+test 'Event on clear', 1, ->
+  d = new ObservableDictionary
+
+  d.on 'clear', -> ok true, 'clear fired'
+
+  d.clear() # nop
+  d.add 'k', 'v'
+  d.clear()
+  d.clear() #nop
 
 
 
