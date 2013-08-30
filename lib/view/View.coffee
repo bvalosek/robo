@@ -41,11 +41,19 @@ module.exports = class View extends ObservableObject
       .setTarget(this, targetProp)
       .setSource(@dataContext, sourceProp)
     @bindings.push binding
+    return
+
+  # Let us fire off an event on the DOM element
+  triggerDomEvent: (name, detail, bubbles = true, cancelable = true) ->
+    event = new CustomEvent name, {bubbles, cancelable, detail}
+    @element.dispatchEvent event
+    return
 
   # Called when the datacontext changes and we need to swap the source for all
   # of our bindings we're managing for this view
   _updateBindings: ->
     b.setSource @dataContext, b.property for b in @bindings
+    return
 
   # Change the DOM element this guy is hosted by, and ensure the DOM node
   # points back to the robo element as well. Need to un-delegate and

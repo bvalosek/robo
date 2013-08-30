@@ -10,6 +10,7 @@ module.exports = class Base
       @[key] = value for key, value of mixin
     return
 
+  # Easily setup getters and setters
   @property: (hash) ->
     for key, info of hash
       Object.defineProperty @::, key,
@@ -18,3 +19,8 @@ module.exports = class Base
         get: info.get
         set: info.set
     return
+
+  # Designate a particular property to set as the content property, used during
+  # declarative definitions of objects
+  @content: (hash) ->
+    @.CONTENT_PROP = key for key of hash # should only be one

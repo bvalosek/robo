@@ -21,7 +21,7 @@ module.exports = class ViewGroup extends View
       .setTarget(view, 'dataContext')
 
     @element.appendChild view.element
+    return
 
-  _removeChildView: (v) ->
-    v.close()
+  _removeChildView: (v) -> v.close()
 

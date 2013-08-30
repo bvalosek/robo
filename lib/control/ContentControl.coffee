@@ -10,5 +10,6 @@ module.exports = class ContentControl extends Control
     super
     @onPropertyChange content: @render
 
+  # Needs to be handled with Data Templates
   render: ->
     @element.innerText = @content
