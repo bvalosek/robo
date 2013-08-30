@@ -12,28 +12,36 @@ module.exports = class ObservableObject extends Base
     @__frames = []
     @__deps = {}
 
+  # Create a new observable property (if the value is a function, let it be
+  # evaluated as a computed value) on the target object
+  @registerProperty: (target, prop, val) ->
+    _prop = '_' + prop
+
+    # Create the private member, either normal val or getter/setter if
+    # computed
+    if _(val).isFunction()
+      Object.defineProperty target, _prop,
+        enumerable: true
+        configurable: true
+        get: -> @_getComputedValue prop, val
+    else
+      target[_prop] = val
+
+    # Setup actual getters and setters to the private member
+    Object.defineProperty target, prop,
+      enumerable: true
+      configurable: true
+      get: -> @getProperty prop
+      set: (v) -> @setProperty prop, v
+
+  # Instance version
+  registerProperty: -> ObservableObject.registerProperty this, arguments...
+
   # Allows use to use the @observable decoration
   @observable: (hash) ->
     for prop, val of hash
-      do (prop, obj = @::, val) ->
-        _prop = '_' + prop
-
-        # Create the private member, either normal val or getter/setter if
-        # computed
-        if _(val).isFunction()
-          Object.defineProperty obj, _prop,
-            enumerable: true
-            configurable: true
-            get: -> @_getComputedValue prop, val
-        else
-          obj[_prop] = val
-
-        # Setup actual getters and setters to the private member
-        Object.defineProperty obj, prop,
-          enumerable: true
-          configurable: true
-          get: -> @getProperty prop
-          set: (v) -> @setProperty prop, v
+      do (obj = @::, prop, val) ->
+        ObservableObject.registerProperty obj, prop, val
 
   # Change an observable property and trigger change events for it, as well as
   # any other dependent properties
