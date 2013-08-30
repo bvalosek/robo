@@ -1,10 +1,10 @@
-HashTable = require 'robo/util/HashTable'
+Hashtable = require 'robo/util/Hashtable'
 _         = require 'underscore'
 
-QUnit.module 'HashTable'
+QUnit.module 'Hashtable'
 
 test 'Add and get native types', ->
-  h = new HashTable
+  h = new Hashtable
 
   h.add 'a', 1
   h.add 2, 'two'
@@ -18,7 +18,7 @@ test 'Add and get native types', ->
   strictEqual h.get('not there'), undefined, 'check'
 
 test 'Throw error on unhashable key', ->
-  h = new HashTable
+  h = new Hashtable
 
   obj =
     prop: 123
@@ -28,7 +28,7 @@ test 'Throw error on unhashable key', ->
   h.add obj, 'obj value' # doesnt throw
 
 test 'Removes and count', ->
-  h = new HashTable
+  h = new Hashtable
 
   strictEqual h.count(), 0, 'init'
   h.add 1,1
@@ -43,7 +43,7 @@ test 'Removes and count', ->
   strictEqual h.count(), 0, 'removed'
 
 test 'keys() and items()', ->
-  h = new HashTable
+  h = new Hashtable
   obj = prop: 123, toHash: -> @prop
 
   h.add 1, 1
@@ -56,7 +56,7 @@ test 'keys() and items()', ->
   strictEqual h.items().length, 4, 'items()'
 
 test 'containsKey()', ->
-  h   = new HashTable
+  h   = new Hashtable
   obj = prop: 123, toHash: -> @prop
 
   h.add 1, 1

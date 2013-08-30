@@ -1,16 +1,16 @@
 _          = require 'underscore'
 Base       = require '../util/Base.coffee'
 Observable = require '../observable/Observable.coffee'
-HashTable  = require '../util/HashTable.coffee'
+Hashtable  = require '../util/Hashtable.coffee'
 
 # An evented dictionary designed to be used as an ad-hoc key/value container,
-# uses HashTable to keep track of everything
+# uses Hashtable to keep track of everything
 module.exports = class ObservableDictionary extends Base
   @uses Observable
 
   constructor: (hash) ->
     super
-    @_ht = new HashTable hash
+    @_ht = new Hashtable hash
 
   # Insert key value pair into the dict
   add: (key, item) ->
