@@ -47,7 +47,6 @@ class Eventer extends Base
   sleep: ->
     @stopListening()
     @off()
-```
 
 a = new Eventer 'a'
 b = new Eventer 'b'
