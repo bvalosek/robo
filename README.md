@@ -34,7 +34,6 @@ class Eventer extends Base
   constructor: ->
     @on alert: (m) -> console.log "alert: #{m}"
 
-
 a = new Eventer
 a.trigger 'alert', 'some message'
 ```
