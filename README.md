@@ -33,40 +33,19 @@ keeping track of the events.
 class Eventer extends Base
   @uses WithEvents # mixin pattern via robo/util/Base
 
-  constructor: (@name) ->
-    @on 'poke', -> @say 'poked!'
-    @on 'shout', -> @say 'shouting!'
+  constructor: ->
+    @on alert: (m) -> console.log "alert: #{m}"
 
-  say: (m) -> console.log "#{@name}: #{m}"
 
-  shout: -> @trigger 'shout'
-
-  listen: (other) -> @listenTo other, 'shout', ->
-    @say "shout heard from #{other.name}"
-
-  sleep: ->
-    @stopListening()
-    @off()
-
-a = new Eventer 'a'
-b = new Eventer 'b'
-
-a.trigger 'poke'
-
-# a: poked!
-
-b.listen a
-a.shout()
-
-# a: shouting!
-# b: shout heard from a
-
-a.sleep()
-a.shout()
-
-# (nothing)
+a = new Eventer
+a.trigger 'alert', 'some message'
+```
 
 ```
+alert: some message
+```
+
+[Full documentation for `WithEvents`](docs/WithEvents.markdown)
 
 #### Intent
 
