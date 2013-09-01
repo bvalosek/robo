@@ -1,10 +1,14 @@
 # WithEvents mixin
 
-`robo/event/WithEvents.coffee`
+[View source](lib/event/WithEvents.coffee)
+
+## Overview
 
 ## Methods
 
 ### on (`name`, `callback`, `context`)
+
+### on (`name:callback`)
 
 ### off (`name`, `callback`, `context`)
 
