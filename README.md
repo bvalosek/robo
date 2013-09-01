@@ -17,56 +17,75 @@ time, it's in Coffeescript... so it's back to scratch one.
 
 ## Framework Components
 
-### Events
+### Events and Intents
 
-* `WithEvents`
-* `Intent`
-* `Command`
+#### WithEvents
 
-### Observables
+Events are the low-level construct that power **Robo**'s dynamic features. The
+eventing functions are found on the `event/WithEvents` class and can be mixed
+into any class.
 
-* `WithObservableProperties`
-* `ObservableObject`
-* `ObservableList`
-* `ObservableSet`
-* `ObservableDictionary`
-* `Binding`
+It features both the `on`/`off` style of setting up callbacks for when an event
+is triggered, and `listenTo`/`stopListening` to invert the responsibility of
+keeping track of the events.
 
-### Data Models and Persistence
+#### Intent
 
-* `Model`
-* `Queryable`
-* `RemoteContext`
+### Observable Objects
+
+Most significant parts of **Robo** are built around the idea of *observable
+objects*. This lets us build dynamic applications that react to data changes
+and have rich behavior, all handled in a standard way. Robo comes stock with
+several observable types.
+
+#### ObservableObject
+
+```coffeescript
+class Person extends ObservableObject
+  @observable firstName: 'John'
+  @observable lastName: 'Doe'
+  @observable fullName: -> "#{@firstName} #{@lastName}"
+
+person = new Person
+
+person.onPropertyChange fullName: ->
+  console.log 'full name changed'
+
+# fires change event for both firstName and fullName
+person.firstName = 'Bob'
+```
+
+#### ObservableList
+
+#### ObservableSet
+
+#### ObservableDictionary
 
 ### Views and Controls
 
-* `View`
-* `ViewGroup`
-* `Window`
-* `Control`
-* `ContentControl`
-* `ItemsControl`
+#### ContentControl
 
-### Build tools
+#### ItemsControl
 
-* `grunt-robo`
-
-### Utilities
-
-* `HashTable`
-* `Map`
-* `Set`
-* `Log`
-
-## Framework Concepts
-
-### Observable Objects, Events, and Intents
+#### ViewGroup
 
 ### Data Binding
 
-### MVVM
+### Commands
+
+### View Models
+
+### Data Templates
+
+### Models and Data Persistence
+
+### Declarative XAML Files
+
+### Building with grunt-robo
 
 ## Testing
+
+Testing requires npm and grunt-cli to be installed on your system.
 
 To install all the dev dependencies and run the test target:
 
@@ -79,3 +98,4 @@ grunt test
 Copyright 2013 Brandon Valosek
 
 **Robo** is released under the MIT license.
+
