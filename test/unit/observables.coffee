@@ -9,7 +9,7 @@ test 'Simple change triggers', 4, ->
 
     @observable prop: 123
 
-  global.t = new O
+  t = new O
 
   o = new O
   o.on ObservableObject.CHANGE, -> ok true, 'change event triggered'
