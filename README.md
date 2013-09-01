@@ -44,7 +44,7 @@ Output:
 alert: some message
 ```
 
-[Full documentation for `WithEvents`](docs/WithEvents.markdown)
+[Full documentation for the `WithEvents` mixin](docs/WithEvents.markdown)
 
 ### Observable Objects
 
@@ -79,15 +79,17 @@ first name changed
 full name changed
 ```
 
-[Full documentation for `ObservableObject` and other observable types](docs/Observable.markdown)
+[Full documentation for `Observable` mixin](docs/Observable.markdown)
 
 ### Views and Controls
 
 ### Data Binding
 
-### Commands
+[Full documentation for the `Binding` class](docs/Binding.markdown)
 
 ### View Models
+
+### Commands
 
 ### Data Templates
 
