@@ -17,9 +17,7 @@ time, it's in Coffeescript... so it's back to scratch one.
 
 ## Framework Components
 
-### Events and Intents
-
-#### WithEvents
+### Events
 
 Events are the low-level construct that power **Robo**'s dynamic features. The
 eventing functions are found on the `event/WithEvents` class and can be mixed
@@ -41,13 +39,13 @@ a = new Eventer
 a.trigger 'alert', 'some message'
 ```
 
+Output:
+
 ```
 alert: some message
 ```
 
 [Full documentation for `WithEvents`](docs/WithEvents.markdown)
-
-#### Intent
 
 ### Observable Objects
 
@@ -55,9 +53,10 @@ Most significant parts of **Robo** are built around the idea of *observable
 objects*. This lets us build dynamic applications that react to data changes
 and have rich behavior, all handled in a standard way.
 
-Robo comes stock with several observable types.
+Robo comes stock with several observable types: `ObservableObject`,
+`ObservableList`, `ObservableDictionary`, `ObservableSet`.
 
-#### ObservableObject
+#### ObservableObject Example
 
 ```coffeescript
 class Person extends ObservableObject
@@ -74,24 +73,16 @@ person.onPropertyChange
 person.firstName = 'Bob'
 ```
 
+Output:
+
 ```
 first name changed
 full name changed
 ```
 
-#### ObservableList
-
-#### ObservableSet
-
-#### ObservableDictionary
+[Full documentation for `ObservableObject` and other observable types](docs/Observable.markdown)
 
 ### Views and Controls
-
-#### ContentControl
-
-#### ItemsControl
-
-#### ViewGroup
 
 ### Data Binding
 
@@ -101,7 +92,9 @@ full name changed
 
 ### Data Templates
 
-### Models and Data Persistence
+### Application, Controllers, and Routes
+
+### Models, Queryables, and Data Persistence
 
 ### Declarative XAML Files
 
@@ -109,7 +102,9 @@ full name changed
 
 ## Testing
 
-Testing requires npm and grunt-cli to be installed on your system.
+Testing requires [node/npm](http://nodejs.org) and
+[grunt-cli](https://github.com/gruntjs/grunt-cli) to be installed on your
+system.
 
 To install all the dev dependencies and run the test target:
 
