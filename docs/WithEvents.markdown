@@ -1,6 +1,6 @@
 # WithEvents mixin
 
-[View source](lib/event/WithEvents.coffee)
+[View source](../lib/event/WithEvents.coffee)
 
 ## Overview
 

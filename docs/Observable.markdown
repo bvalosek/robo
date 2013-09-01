@@ -1,6 +1,6 @@
 # Observable mixin
 
-[View source](lib/observable/Observable.coffee)
+[View source](../lib/observable/Observable.coffee)
 
 ## Overview
 
