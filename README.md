@@ -29,14 +29,55 @@ It features both the `on`/`off` style of setting up callbacks for when an event
 is triggered, and `listenTo`/`stopListening` to invert the responsibility of
 keeping track of the events.
 
+```coffeescript
+class Eventer extends Base
+  @uses WithEvents # mixin pattern via robo/util/Base
+
+  constructor: (@name) ->
+    @on 'poke', -> @say 'poked!'
+    @on 'shout', -> @say 'shouting!'
+
+  say: (m) -> console.log "#{@name}: #{m}"
+
+  shout: -> @trigger 'shout'
+
+  listen: (other) -> @listenTo other, 'shout', ->
+    @say "shout heard from #{other.name}"
+
+  sleep: ->
+    @stopListening()
+    @off()
+```
+
+a = new Eventer 'a'
+b = new Eventer 'b'
+
+a.trigger 'poke'
+
+# a: poked!
+
+b.listen a
+a.shout()
+
+# a: shouting!
+# b: shout heard from a
+
+a.sleep()
+a.shout()
+
+# (nothing)
+
+```
+
 #### Intent
 
 ### Observable Objects
 
 Most significant parts of **Robo** are built around the idea of *observable
 objects*. This lets us build dynamic applications that react to data changes
-and have rich behavior, all handled in a standard way. Robo comes stock with
-several observable types.
+and have rich behavior, all handled in a standard way.
+
+Robo comes stock with several observable types.
 
 #### ObservableObject
 
@@ -48,11 +89,16 @@ class Person extends ObservableObject
 
 person = new Person
 
-person.onPropertyChange fullName: ->
-  console.log 'full name changed'
+person.onPropertyChange
+  fullName: -> console.log 'full name changed'
+  firstName: -> console.log 'first name changed'
 
-# fires change event for both firstName and fullName
 person.firstName = 'Bob'
+```
+
+```
+first name changed
+full name changed
 ```
 
 #### ObservableList
